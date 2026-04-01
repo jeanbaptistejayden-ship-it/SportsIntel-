@@ -13,8 +13,8 @@
         <VBox alignment="CENTER" spacing="18">
             <children>
                 <ImageView fx:id="logoImage"
-                           fitWidth="110"
-                           fitHeight="110"
+                           fitWidth="500"
+                           fitHeight="500"
                            pickOnBounds="true"
                            preserveRatio="true" />
 
