@@ -20,11 +20,7 @@ public class SplashController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(
-                Objects.requireNonNull(
-                        getClass().getResource("/resources/logo.png")
-                ).toExternalForm()
-        );
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/resources/logo.png")).toExternalForm());
         logoImage.setImage(image);
 
         PauseTransition delay = new PauseTransition(Duration.seconds(2.5));
@@ -39,10 +35,7 @@ public class SplashController {
 
             Stage stage = (Stage) logoImage.getScene().getWindow();
             Scene scene = new Scene(root, 1200, 800);
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
-            );
-
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
             stage.setScene(scene);
             stage.show();
 
