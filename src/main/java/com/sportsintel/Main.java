@@ -15,8 +15,7 @@ public class Main extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 1200, 800);
-        scene.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
 
         stage.setTitle("SportsIntel");
         stage.setScene(scene);
