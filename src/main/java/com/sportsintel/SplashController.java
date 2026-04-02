@@ -21,7 +21,7 @@ public class SplashController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/logo.png")).toExternalForm());
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
         logoImage.setImage(image);
 
         FadeTransition fadeLogo = new FadeTransition(Duration.millis(1.5), logoImage);

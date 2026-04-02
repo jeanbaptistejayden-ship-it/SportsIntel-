@@ -9,3 +9,49 @@
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
+.top-bar {
+    -fx-background-color: #0c0d14;
+    -fx-pref-height: 70px;
+    -fx-min-height: 70px;
+    -fx-max-height: 70px;
+}
+
+.top-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.help-button {
+    -fx-background-color: grey;
+    -fx-text-fill: white;
+}
+
+.login-btn {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+}
+
+.signup-btn {
+    -fx-background-color: #7c4dff;
+    -fx-text-fill: white;
+}
+
+.home-btn {
+    -fx-background-color: blue;
+    -fx-text-fill: white;
+}
+.home-btn:hover {
+    -fx-background-color: #3f4be0;
+}
+
+.login-btn:hover {
+    -fx-background-color: #16a34a;
+}
+
+.signup-btn:hover {
+    -fx-background-color: #6d3df0;
+}
+.help-button:hover {
+    -fx-background-color: #6b7280;
+}
