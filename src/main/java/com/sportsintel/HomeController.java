@@ -4,7 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class HomeController {
@@ -85,6 +91,28 @@ public class HomeController {
                     "Toronto Raptors",
                     "Utah Jazz",
                     "Washington Wizards");
+        }
+    }
+
+    @FXML
+    private void handleHelpClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HelpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 900, 700);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
+            );
+
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Help & Support");
+            helpStage.setScene(scene);
+            helpStage.initModality(Modality.APPLICATION_MODAL);
+            helpStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
