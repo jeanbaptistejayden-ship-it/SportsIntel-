@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.sportsintel.HomeController"
@@ -87,4 +88,68 @@
             </children>
         </VBox>
     </left>
+    <center>
+        <StackPane styleClass="center-area">
+            <children>
+                <VBox spacing="22" maxWidth="760" styleClass="search-card" alignment="CENTER">
+                    <children>
+                        <ImageView fx:id="mainLogo"
+                                   fitWidth="300"
+                                   fitHeight="300"
+                                   preserveRatio="true" />
+                        <Label text="Analyze Player Performance vs&#10;Team"
+                               styleClass="main-title"
+                               wrapText="true" />
+                        <HBox spacing="20" alignment="CENTER">
+                            <children>
+                                <VBox spacing="6" prefWidth="260">
+                                    <children>
+                                        <Label text="Player Name" styleClass="field-label" />
+                                        <TextField fx:id="playerNameField"
+                                                   promptText="Enter player name"
+                                                   prefWidth="260" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="6" prefWidth="260">
+                                    <children>
+                                        <Label text="Sport" styleClass="field-label" />
+                                        <ComboBox fx:id="sportCombo"
+                                                  promptText="Select sport"
+                                                  prefWidth="260" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <HBox spacing="20" alignment="CENTER">
+                            <children>
+                                <VBox spacing="6" prefWidth="260">
+                                    <children>
+                                        <Label text="Opponent" styleClass="field-label" />
+                                        <ComboBox fx:id="opponentCombo"
+                                                  promptText="Select opponent"
+                                                  prefWidth="260" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="6" prefWidth="260">
+                                    <children>
+                                        <Label text="Statistic" styleClass="field-label" />
+                                        <ComboBox fx:id="statisticCombo"
+                                                  promptText="Select statistic"
+                                                  prefWidth="260" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <Button text="Search"
+                                styleClass="search-btn"
+                                prefWidth="540"
+                                prefHeight="44" />
+                    </children>
+                    <padding>
+                        <Insets top="30" right="35" bottom="30" left="35"/>
+                    </padding>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
 </BorderPane>
