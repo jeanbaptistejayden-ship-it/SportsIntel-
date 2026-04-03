@@ -7,6 +7,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.sportsintel.HomeController"
@@ -25,8 +28,8 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button text="Home" styleClass="home-btn " />
-                <Button text="Help" styleClass="help-button" />
+                <Button text="Home" styleClass="home-btn" />
+                <Button text="Help" styleClass="help-btn" />
                 <Button text="Login" styleClass="login-btn" />
                 <Button text="Sign Up" styleClass="signup-btn" />
             </children>
@@ -36,4 +39,52 @@
             </padding>
         </HBox>
     </top>
+    <left>
+        <VBox alignment="TOP_CENTER">
+            <children>
+                <Region prefHeight="100" />
+                <VBox spacing="14" styleClass="sidebar">
+                    <children>
+
+                        <Label text="Filters" styleClass="sidebar-title" />
+
+                        <VBox spacing="6">
+                            <Label text="Season Range" styleClass="field-label" />
+
+                            <HBox spacing="6">
+                                <TextField promptText="1949" prefWidth="70"/>
+                                <Label text="to" />
+                                <TextField promptText="2026" prefWidth="70"/>
+                            </HBox>
+
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <Label text="Season Type" styleClass="field-label" />
+                            <ComboBox fx:id="seasonTypeCombo" promptText="Both" />
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <Label text="Location" styleClass="field-label" />
+                            <ComboBox fx:id="locationCombo" promptText="Both" />
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <Label text="Last N Games vs Opponent" styleClass="field-label" />
+                            <TextField promptText="10" />
+                        </VBox>
+
+                        <Button text="Apply Filters" styleClass="filters-btn" />
+                        <Button text="Reset" styleClass="reset-btn" />
+
+                    </children>
+
+                    <padding>
+                        <Insets top="20" right="14" bottom="20" left="14"/>
+                    </padding>
+                </VBox>
+
+            </children>
+        </VBox>
+    </left>
 </BorderPane>

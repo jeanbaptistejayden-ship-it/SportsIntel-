@@ -22,7 +22,7 @@
     -fx-font-weight: bold;
 }
 
-.help-button {
+.help-btn {
     -fx-background-color: grey;
     -fx-text-fill: white;
 }
@@ -52,6 +52,67 @@
 .signup-btn:hover {
     -fx-background-color: #6d3df0;
 }
-.help-button:hover {
+
+.help-btn:hover {
     -fx-background-color: #6b7280;
+}
+
+.home-root {
+    -fx-background-color: #d9e6f7;
+}
+
+.sidebar {
+    -fx-background-color: #f5f6f8;
+    -fx-pref-width: 200px;
+    -fx-border-color: black;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0.3, 0, 2);
+}
+
+.sidebar-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2f3b52;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #2f3b52;
+}
+
+.text-field, .combo-box {
+    -fx-pref-height: 36px;
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d6dbe7;
+}
+
+.filters-btn {
+    -fx-background-color: #4c5cf0;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-pref-height: 36px;
+}
+
+.filters-btn:hover {
+    -fx-background-color: #3f4be0;
+}
+
+.reset-btn {
+    -fx-background-color: #e8ebf2;
+    -fx-text-fill: #2f3b52;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-pref-height: 36px;
+}
+
+.reset-btn:hover {
+    -fx-background-color: #d9dde6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.3, 0, 2);
+    -fx-cursor: hand;
 }
