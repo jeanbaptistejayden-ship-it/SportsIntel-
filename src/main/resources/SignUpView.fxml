@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsintel.SignUpController"
+           styleClass="signup-root">
+
+    <children>
+        <VBox spacing="20" maxWidth="450" styleClass="signup-card" alignment="CENTER">
+            <children>
+
+                <ImageView fx:id="signUpLogo"
+                           fitWidth="120"
+                           fitHeight="120"
+                           preserveRatio="true" />
+
+                <Label text="Sign Up" styleClass="signup-title" />
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="First Name" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Last Name" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Email" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Username" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Password" styleClass="signup-label" />
+                        <PasswordField styleClass="signup-field" prefHeight="46" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Confirm Password" styleClass="signup-label" />
+                        <PasswordField styleClass="signup-field" prefHeight="46" />
+                    </children>
+                </VBox>
+
+                <Button text="Enter"
+                        styleClass="signup-enter-btn"
+                        prefWidth="360"
+                        prefHeight="50"
+                        onAction="#handleSignUpSubmit"/>
+
+                <Hyperlink text="Back to Home"
+                           styleClass="signup-link"
+                           onAction="#handleBackToHome" />
+
+            </children>
+
+            <padding>
+                <Insets top="32" right="30" bottom="32" left="30"/>
+            </padding>
+        </VBox>
+    </children>
+</StackPane>
