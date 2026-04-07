@@ -31,7 +31,7 @@
 
                 <Button text="Home" styleClass="home-btn" />
                 <Button text="Help" styleClass="help-btn" onAction="#handleHelpClick" />
-                <Button text="Login" styleClass="login-btn" />
+                <Button text="Login" styleClass="login-btn" onAction="#handleLoginClick" />
                 <Button text="Sign Up" styleClass="signup-btn" />
             </children>
 

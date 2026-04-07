@@ -356,3 +356,67 @@
     -fx-font-size: 15px;
     -fx-font-weight: 400;
 }
+
+/*Login Popup*/
+.login-root {
+    -fx-background-color: #d9eefd;
+}
+
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 18, 0.2, 0, 4);
+}
+
+.login-title {
+    -fx-text-fill: #1f3557;
+    -fx-font-size: 30px;
+    -fx-font-weight: 700;
+}
+
+.login-label {
+    -fx-text-fill: #1f3557;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.login-field {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cfd6e4;
+    -fx-border-width: 1.2;
+    -fx-font-size: 14px;
+    -fx-padding: 0 14 0 14;
+}
+
+.login-enter-btn {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 8, 0.2, 0, 2);
+}
+
+.login-enter-btn:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.login-enter-btn:pressed {
+    -fx-background-color: #1e40af;
+}
+
+.login-link {
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 15px;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.login-link:hover {
+    -fx-text-fill: #1d4ed8;
+}
