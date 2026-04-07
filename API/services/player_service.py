@@ -32,6 +32,24 @@ def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Seaso
     data_frames = endpoint.get_data_frames()
     return data_frames[0] if data_frames else None
 
+def fetch_gamelog_range(player_id, start_season, end_season, season_type="Regular Season"):
+    import pandas as pd
+
+    # pull the starting year; for example "2021-22" -> 2021
+    start = int(start_season.split("-")[0])
+    end = int(end_season.split("-")[0])
+
+    frames = []
+    for y in range(start, end + 1):
+        # rebuild the season string for each year in the range
+        season = f"{y}-{str(y + 1)[-2:]}"
+        df = fetch_gamelog(player_id, season, season_type)
+        # skip empty seasons so we don't break the concat
+        if df is not None and not df.empty:
+            frames.append(df)
+
+    # stack all seasons into one dataframe, or return None if nothing came back
+    return pd.concat(frames, ignore_index=True) if frames else None
 
 def parse_games(gamelog_frame):
     if gamelog_frame is None or gamelog_frame.empty:
