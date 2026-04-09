@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pandas as pd
 from nba_api.stats.endpoints import playergamelog
 from nba_api.stats.static import players as nba_players
 
@@ -37,14 +38,25 @@ def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Seaso
     data_frames = endpoint.get_data_frames()
     return data_frames[0] if data_frames else None
 
+def normalize_season_type(season_type: str) -> str:
+    normalized = season_type.strip().lower()
+    if normalized in {"regular", "regular season"}:
+        return "regular"
+    if normalized == "playoffs":
+        return "playoffs"
+    if normalized == "both":
+        return "both"
+    raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
+
+
 def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regular"):
-    # handles the season type filter -- if both, pull regular and playoffs and combine them
-    if season_type == "both":
+    normalized = normalize_season_type(season_type)
+    if normalized == "both":
         reg = fetch_gamelog(player_id, season, "Regular Season")
         post = fetch_gamelog(player_id, season, "Playoffs")
         frames = [f for f in [reg, post] if f is not None and not f.empty]
         return pd.concat(frames, ignore_index=True) if frames else None
-    mapped = SEASON_TYPE_MAP.get(season_type)
+    mapped = SEASON_TYPE_MAP.get(normalized)
     if not mapped:
         raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
     return fetch_gamelog(player_id, season, mapped)
@@ -86,6 +98,17 @@ def parse_games(gamelog_frame):
             }
         )
     return games
+
+
+def filter_games_by_location(games: list[dict], location: str = "both"):
+    normalized = location.strip().lower()
+    if normalized == "both":
+        return games
+    if normalized == "home":
+        return [g for g in games if g["home"]]
+    if normalized == "away":
+        return [g for g in games if not g["home"]]
+    raise ValueError(f"Invalid location '{location}'. Use home, away, or both.")
 
 
 def build_summary(player_name: str, games: list[dict]):
