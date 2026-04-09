@@ -3,6 +3,11 @@ from datetime import datetime
 from nba_api.stats.endpoints import playergamelog
 from nba_api.stats.static import players as nba_players
 
+SEASON_TYPE_MAP = {
+    "regular": "Regular Season",
+    "playoffs": "Playoffs",
+    "both": None
+}
 
 def get_player_lookup(name: str):
     matches = nba_players.find_players_by_full_name(name)
@@ -32,6 +37,36 @@ def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Seaso
     data_frames = endpoint.get_data_frames()
     return data_frames[0] if data_frames else None
 
+def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regular"):
+    # handles the season type filter -- if both, pull regular and playoffs and combine them
+    if season_type == "both":
+        reg = fetch_gamelog(player_id, season, "Regular Season")
+        post = fetch_gamelog(player_id, season, "Playoffs")
+        frames = [f for f in [reg, post] if f is not None and not f.empty]
+        return pd.concat(frames, ignore_index=True) if frames else None
+    mapped = SEASON_TYPE_MAP.get(season_type)
+    if not mapped:
+        raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
+    return fetch_gamelog(player_id, season, mapped)
+
+def fetch_gamelog_range(player_id, start_season, end_season, season_type="Regular Season"):
+    import pandas as pd
+
+    # pull the starting year; for example "2021-22" -> 2021
+    start = int(start_season.split("-")[0])
+    end = int(end_season.split("-")[0])
+
+    frames = []
+    for y in range(start, end + 1):
+        # rebuild the season string for each year in the range
+        season = f"{y}-{str(y + 1)[-2:]}"
+        df = fetch_gamelog(player_id, season, season_type)
+        # skip empty seasons so we don't break the concat
+        if df is not None and not df.empty:
+            frames.append(df)
+
+    # stack all seasons into one dataframe, or return None if nothing came back
+    return pd.concat(frames, ignore_index=True) if frames else None
 
 def parse_games(gamelog_frame):
     if gamelog_frame is None or gamelog_frame.empty:
