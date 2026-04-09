@@ -2,7 +2,8 @@ from fastapi import APIRouter
 
 from API.services.player_service import (
     build_summary,
-    fetch_gamelog,
+    fetch_gamelog_by_type,
+    filter_games_by_location,
     get_default_season,
     get_player_lookup,
     parse_games,
@@ -12,7 +13,12 @@ router = APIRouter()
 
 
 @router.get("/player/{name}")
-def get_player_stats(name: str, season: str | None = None, season_type: str = "Regular Season"):
+def get_player_stats(
+    name: str,
+    season: str | None = None,
+    season_type: str = "regular",
+    location: str = "both",
+):
     player, error = get_player_lookup(name)
     if error:
         return error
@@ -21,15 +27,25 @@ def get_player_stats(name: str, season: str | None = None, season_type: str = "R
     player_name = player["name"]
 
     chosen_season = season or get_default_season()
-    gamelog_data = fetch_gamelog(player_id, season=chosen_season, season_type=season_type)
+    try:
+        gamelog_data = fetch_gamelog_by_type(player_id, season=chosen_season, season_type=season_type)
+    except ValueError as exc:
+        return {"error": str(exc)}
+
     games = parse_games(gamelog_data)
+    try:
+        games = filter_games_by_location(games, location=location)
+    except ValueError as exc:
+        return {"error": str(exc)}
 
     if not games:
-        return {"error": f"No games found for {player_name} ({chosen_season}, {season_type})."}
+        return {
+            "error": f"No games found for {player_name} ({chosen_season}, {season_type}, {location})."
+        }
 
     summary = build_summary(player_name, games)
     return {
         "summary": summary,
-        "meta": {"season": chosen_season, "season_type": season_type},
+        "meta": {"season": chosen_season, "season_type": season_type, "location": location},
         "games": games,
     }
