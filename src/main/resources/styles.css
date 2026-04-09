@@ -1,6 +1,6 @@
 /*Splash Screen*/
 .splash-root {
-    -fx-background-color: white;
+    -fx-background-color: #d9e6f7;
 }
 
 .splash-title {
@@ -483,4 +483,86 @@
 
 .signup-link:hover {
     -fx-text-fill: #3f9440;
+}
+/*Results Page*/
+.results-card {
+    -fx-background-color: #f5f6f8;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 18, 0.2, 0, 6);
+    -fx-alignment: center;
+}
+
+.result-summary {
+    -fx-text-fill: #2f3b52;
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+}
+
+.stat-box {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 180px;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4);
+}
+
+.avg-box {
+    -fx-background-color: #e9efff;
+}
+
+.games-box {
+    -fx-background-color: #e6f4ea;
+}
+
+.high-box {
+    -fx-background-color: #f0e9ff;
+}
+
+.low-box {
+    -fx-background-color: #fdf1e3;
+}
+
+.stat-title {
+    -fx-text-fill: #2f3b52;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+}
+
+.stat-unit {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 13px;
+}
+
+.avg-number {
+    -fx-text-fill: #3b5bdb;
+    -fx-font-size: 46px;
+    -fx-font-weight: 800;
+}
+
+.games-number {
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 46px;
+    -fx-font-weight: 800;
+}
+
+.high-number {
+    -fx-text-fill: #6f42c1;
+    -fx-font-size: 46px;
+    -fx-font-weight: 800;
+}
+
+.low-number {
+    -fx-text-fill: #c25b00;
+    -fx-font-size: 46px;
+    -fx-font-weight: 800;
+}
+
+.filter-value {
+    -fx-text-fill: #1f3557;
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
 }
