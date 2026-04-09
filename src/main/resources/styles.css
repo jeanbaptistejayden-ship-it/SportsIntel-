@@ -420,3 +420,67 @@
 .login-link:hover {
     -fx-text-fill: #1d4ed8;
 }
+
+/*Sign Up popup */
+.signup-root {
+    -fx-background-color: #d9eefd;
+}
+
+.signup-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 18, 0.2, 0, 4);
+}
+
+.signup-title {
+    -fx-text-fill: #1f3557;
+    -fx-font-size: 30px;
+    -fx-font-weight: 700;
+}
+
+.signup-label {
+    -fx-text-fill: #1f3557;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.signup-field {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cfd6e4;
+    -fx-border-width: 1.2;
+    -fx-font-size: 14px;
+    -fx-padding: 0 14 0 14;
+}
+
+.signup-enter-btn {
+    -fx-background-color: #4aa64b;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 8, 0.2, 0, 2);
+}
+
+.signup-enter-btn:hover {
+    -fx-background-color: #3f9440;
+}
+
+.signup-enter-btn:pressed {
+    -fx-background-color: #357d36;
+}
+
+.signup-link {
+    -fx-text-fill: #4aa64b;
+    -fx-font-size: 15px;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.signup-link:hover {
+    -fx-text-fill: #3f9440;
+}
