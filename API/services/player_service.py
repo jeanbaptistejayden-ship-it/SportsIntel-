@@ -111,6 +111,31 @@ def filter_games_by_location(games: list[dict], location: str = "both"):
     raise ValueError(f"Invalid location '{location}'. Use home, away, or both.")
 
 
+def filter_games_by_opponent(games: list[dict], opponent: str | None = None):
+    if opponent is None:
+        return games
+    target = opponent.strip().upper()
+    if not target:
+        return games
+    return [g for g in games if g.get("opponent", "").upper() == target]
+
+
+def limit_last_n_games(games: list[dict], last_n: int | None = None):
+    if last_n is None:
+        return games
+    if last_n <= 0:
+        raise ValueError("Invalid last_n value. Use a positive integer.")
+
+    def game_date_key(game: dict):
+        try:
+            return datetime.strptime(game["date"], "%b %d, %Y")
+        except ValueError:
+            return datetime.min
+
+    sorted_games = sorted(games, key=game_date_key, reverse=True)
+    return sorted_games[:last_n]
+
+
 def build_summary(player_name: str, games: list[dict]):
     points = [g["pts"] for g in games]
     return {
