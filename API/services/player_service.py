@@ -10,6 +10,18 @@ SEASON_TYPE_MAP = {
     "both": None
 }
 
+STAT_MAP = {
+    "points": "pts",
+    "ppg": "pts",
+    "pts": "pts",
+    "assists": "ast",
+    "apg": "ast",
+    "ast": "ast",
+    "rebounds": "reb",
+    "rpg": "reb",
+    "reb": "reb",
+}
+
 def get_player_lookup(name: str):
     matches = nba_players.find_players_by_full_name(name)
     if not matches:
@@ -136,12 +148,22 @@ def limit_last_n_games(games: list[dict], last_n: int | None = None):
     return sorted_games[:last_n]
 
 
-def build_summary(player_name: str, games: list[dict]):
-    points = [g["pts"] for g in games]
+def normalize_stat(stat: str = "points") -> str:
+    normalized = stat.strip().lower()
+    mapped = STAT_MAP.get(normalized)
+    if not mapped:
+        raise ValueError("Invalid stat. Use points/ppg, assists/apg, or rebounds/rpg.")
+    return mapped
+
+
+def build_summary(player_name: str, games: list[dict], stat: str = "points"):
+    selected_stat = normalize_stat(stat)
+    values = [float(g[selected_stat]) for g in games]
     return {
         "player": player_name,
+        "stat": selected_stat,
         "games_played": len(games),
-        "avg_pts": round(sum(points) / len(points), 1),
-        "high": max(points),
-        "low": min(points),
+        "average": round(sum(values) / len(values), 1),
+        "high": max(values),
+        "low": min(values),
     }
