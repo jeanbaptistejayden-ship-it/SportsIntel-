@@ -101,9 +101,7 @@ public class HomeController {
             Parent root = loader.load();
 
             Scene scene = new Scene(root, 900, 700);
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
-            );
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
 
             Stage helpStage = new Stage();
             helpStage.setTitle("Help & Support");
@@ -123,9 +121,7 @@ public class HomeController {
             Parent root = loader.load();
 
             Scene scene = new Scene(root, 480, 700);
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
-            );
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
 
             Stage loginStage = new Stage();
             loginStage.setTitle("Login");
@@ -133,6 +129,27 @@ public class HomeController {
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.setResizable(false);
             loginStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleSignUpClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 520, 920);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage signUpStage = new Stage();
+            signUpStage.setTitle("Sign Up");
+            signUpStage.setScene(scene);
+            signUpStage.initModality(Modality.APPLICATION_MODAL);
+            signUpStage.setResizable(false);
+            signUpStage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
