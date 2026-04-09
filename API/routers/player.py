@@ -22,6 +22,7 @@ def get_player_stats(
     location: str = "both",
     opponent: str | None = None,
     last_n: int | None = None,
+    stat: str = "points",
 ):
     player, error = get_player_lookup(name)
     if error:
@@ -52,7 +53,11 @@ def get_player_stats(
             )
         }
 
-    summary = build_summary(player_name, games)
+    try:
+        summary = build_summary(player_name, games, stat=stat)
+    except ValueError as exc:
+        return {"error": str(exc)}
+
     return {
         "summary": summary,
         "meta": {
@@ -61,6 +66,7 @@ def get_player_stats(
             "location": location,
             "opponent": opponent,
             "last_n": last_n,
+            "stat": stat,
         },
         "games": games,
     }
