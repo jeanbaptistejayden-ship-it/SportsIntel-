@@ -137,4 +137,28 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleSignupClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignupView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 480, 700);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
+            );
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Signup");
+            loginStage.setScene(scene);
+            loginStage.initModality(Modality.APPLICATION_MODAL);
+            loginStage.setResizable(false);
+            loginStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
