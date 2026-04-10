@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsintel.SignupController"
+           styleClass="login-root">
+
+    <children>
+        <VBox spacing="24" maxWidth="420" styleClass="login-card" alignment="CENTER">
+            <children>
+
+                <ImageView fx:id="signupLogo" fitWidth="120" fitHeight="120" preserveRatio="true" />
+
+                <Label text="Signup" styleClass="login-title" />
+
+                <VBox spacing="8" maxWidth="350">
+                    <children>
+                        <Label text="Username" styleClass="login-label" />
+                        <TextField promptText="" styleClass="login-field" prefHeight="48" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="350">
+                    <children>
+                        <Label text="Password" styleClass="login-label" />
+                        <PasswordField promptText="" styleClass="login-field" prefHeight="48" />
+                    </children>
+                </VBox>
+
+                <Button text="Enter" styleClass="login-enter-btn" prefWidth="350" prefHeight="52" />
+
+                <Hyperlink text="Back to Home" styleClass="login-link" onAction="#handleBackToHome" />
+
+            </children>
+
+            <padding>
+                <Insets top="35" right="30" bottom="35" left="30"/>
+            </padding>
+        </VBox>
+    </children>
+</StackPane>
