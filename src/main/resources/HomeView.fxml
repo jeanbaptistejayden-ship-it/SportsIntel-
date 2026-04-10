@@ -24,8 +24,7 @@
                            fitHeight="100"
                            preserveRatio="true" />
 
-                <Label text="SportsIntel Analytics"
-                       styleClass="top-title" />
+                <Label text="SportsIntel Analytics" styleClass="top-title" />
 
                 <Region HBox.hgrow="ALWAYS" />
 
@@ -143,7 +142,8 @@
                         <Button text="Search"
                                 styleClass="search-btn"
                                 prefWidth="540"
-                                prefHeight="44" />
+                                prefHeight="44"
+                                onAction="#handleSearchClick"/>
                     </children>
                     <padding>
                         <Insets top="30" right="35" bottom="30" left="35"/>
