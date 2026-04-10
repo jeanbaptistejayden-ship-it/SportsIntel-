@@ -1,9 +1,12 @@
 package com.sportsintel;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -16,6 +19,18 @@ public class SignupController {
         private ImageView signupLogo;
 
         @FXML
+        private TextField email_txt;
+
+    @FXML
+    private PasswordField pass_txt;
+
+    @FXML
+    private TextField phone_txt;
+
+    @FXML
+    private TextField disName_txt;
+
+    @FXML
         public void initialize() {
             Image image = new Image(
                     Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm()
@@ -29,12 +44,42 @@ public class SignupController {
             stage.close();
         }
 
-        /*public boolean userSignup{;
-            UserRecord.CreateRequest request = new UserRecord.CreateRequest();
-            /*.setEmail(getEmail())
+        @FXML
+        public boolean userSignup(){
+            UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+                .setEmail(getEmail_txt())
+                    .setEmailVerified(false)
+                    .setPassword(getPass_txt())
+                    .setPhoneNumber(getPhone_txt())
+                    .setDisplayName(getDisName_txt())
+                    .setDisabled(false);
 
+            UserRecord userRecord;
+             try {
+                 userRecord = Main.fauth.createUser(request);
+                 System.out.println("Successfully created new user: " + userRecord.getUid());
+                 return true;
 
+             } catch (FirebaseAuthException ex) {
+                // Logger.getLogger(FirestoreContext.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
 
-        }*/
+        }
 
-    }
+        public String getEmail_txt() {
+        return email_txt.getText();
+        }
+
+        public String getPass_txt() {
+        return pass_txt.getText();
+        }
+
+        public String getPhone_txt() {
+        return phone_txt.getText();
+        }
+
+        public String getDisName_txt() {
+        return disName_txt.getText();
+        }
+}

@@ -24,8 +24,6 @@ public class Main extends Application {
         fstore = contxtFirebase.firebase();
         fauth = FirebaseAuth.getInstance();
 
-
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SplashView.fxml"));
         Parent root = loader.load();
 

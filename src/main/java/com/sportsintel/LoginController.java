@@ -3,6 +3,8 @@ package com.sportsintel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -13,6 +15,12 @@ public class LoginController {
 
     @FXML
     private ImageView loginLogo;
+
+    @FXML
+    private TextField user_txt;
+
+    @FXML
+    private PasswordField pass_txt;
 
     @FXML
     public void initialize() {

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="login-root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.sportsintel.SignupController">
+<StackPane styleClass="login-root" xmlns:fx="http://javafx.com/fxml" fx:controller="com.sportsintel.SignupController">
 
     <children>
         <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="login-card">
@@ -22,31 +22,31 @@
 
                 <VBox maxWidth="350" spacing="8">
                     <children>
-                        <Label styleClass="login-label" text="Username/Email" />
-                        <TextField prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
+                        <Label styleClass="login-label" text="Email" />
+                        <TextField fx:id="email_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
                     </children>
                 </VBox>
 
                 <VBox maxWidth="350" spacing="8">
                     <children>
                         <Label styleClass="login-label" text="Password" />
-                        <PasswordField prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
+                        <PasswordField fx:id="pass_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
                     </children>
                 </VBox>
             <VBox maxWidth="350" spacing="8">
                <children>
                   <Label styleClass="login-label" text="Phone Number" />
-                  <TextField prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
+                  <TextField fx:id="phone_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
                </children>
             </VBox>
             <VBox maxWidth="350" spacing="8">
                <children>
                   <Label styleClass="login-label" text="Display Name" />
-                  <TextField prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
+                  <TextField fx:id="disName_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
                </children>
             </VBox>
 
-                <Button prefHeight="52.0" prefWidth="350" styleClass="login-enter-btn" text="Enter" />
+                <Button prefHeight="52.0" prefWidth="350" styleClass="login-enter-btn" text="Enter" onAction="#userSignup"/>
 
                 <Hyperlink onAction="#handleBackToHome" styleClass="login-link" text="Back to Home" />
 
