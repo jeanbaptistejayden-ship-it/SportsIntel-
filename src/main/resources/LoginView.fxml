@@ -36,7 +36,7 @@
                     </children>
                 </VBox>
 
-                <Button text="Enter" styleClass="login-enter-btn" prefWidth="350" prefHeight="52" />
+                <Button text="Enter" styleClass="login-enter-btn" prefWidth="350" prefHeight="52" onAction="#handleLoginSubmit" />
 
                 <Hyperlink text="Back to Home" styleClass="login-link" onAction="#handleBackToHome" />
 
