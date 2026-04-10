@@ -115,7 +115,6 @@ public class HomeController {
             e.printStackTrace();
         }
     }
-
     @FXML
     private void handleLoginClick() {
         try {
