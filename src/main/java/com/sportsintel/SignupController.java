@@ -1,5 +1,6 @@
 package com.sportsintel;
 
+import com.google.firebase.auth.UserRecord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -27,4 +28,13 @@ public class SignupController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
         }
+
+        /*public boolean userSignup{;
+            UserRecord.CreateRequest request = new UserRecord.CreateRequest();
+            /*.setEmail(getEmail())
+
+
+
+        }*/
+
     }
