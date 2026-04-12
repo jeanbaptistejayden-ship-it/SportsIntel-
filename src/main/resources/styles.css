@@ -627,3 +627,30 @@
 .logout-btn:hover {
     -fx-text-fill: #ea580c;
 }
+
+/*Compare Button*/
+.compare-btn {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+}
+
+.compare-btn:hover {
+    -fx-background-color: #c62828;
+}
+
+.compare-title {
+    -fx-text-fill: #1f3557;
+    -fx-font-size: 34px;
+    -fx-font-weight: 800;
+}
+
+.compare-subtitle {
+    -fx-text-fill: #4b5563;
+    -fx-font-size: 16px;
+}
+
+.compare-arrow {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 38px;
+    -fx-font-weight: 600;
+}

@@ -30,6 +30,7 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <Button text="Home" styleClass="home-btn" />
+                <Button text="Compare" styleClass="compare-btn" onAction="#handleCompareClick" />
                 <Button text="Help" styleClass="help-btn" onAction="#handleHelpClick" />
 
                 <HBox fx:id="authButtons" spacing="10" alignment="CENTER_RIGHT">

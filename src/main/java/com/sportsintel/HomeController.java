@@ -233,4 +233,18 @@ public class HomeController {
         authButtons.setVisible(true);
         authButtons.setManaged(true);
     }
+
+    @FXML
+    private void handleCompareClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CompareView.fxml"));
+            Parent root = loader.load();
+
+            Scene currentScene = navLogo.getScene();
+            currentScene.setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
