@@ -71,7 +71,17 @@ public class HomeController {
         }
 
         if (statisticCombo != null) {
-            statisticCombo.getItems().addAll("Points Per Game", "Assists Per Game", "Rebounds Per Game");
+            statisticCombo.getItems().addAll("Points Per Game",
+                    "Assists Per Game",
+                    "Rebounds Per Game",
+                    "Field Goal Percentage",
+                    "3pt Throw Percentage",
+                    "Free Throw Percentage",
+                    "Steals Per Game",
+                    "Blocks Per Game",
+                    "Turnovers Per Game",
+                    "Minutes Per Game",
+                    "Plus/Minus");
         }
 
         if (sportCombo != null) {

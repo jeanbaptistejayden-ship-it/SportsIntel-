@@ -194,7 +194,7 @@
                         <VBox spacing="4">
                             <children>
                                 <Label fx:id="profileNameLabel"
-                                       text="John Doe"
+                                       text="Dan Gron"
                                        styleClass="profile-name" />
                                 <Label fx:id="profileUsernameLabel"
                                        text="@ForeignStage"

@@ -39,7 +39,7 @@ public class LoginController {
     @FXML
     private void handleLoginSubmit(ActionEvent event) {
         if (homeController != null) {
-            homeController.setLoggedInUser("John Doe", "@ForeignStage");
+            homeController.setLoggedInUser("Dan Gron", "@ForeignStage");
         }
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
