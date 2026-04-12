@@ -120,6 +120,13 @@ public class HomeController {
                     "Utah Jazz",
                     "Washington Wizards");
         }
+
+        if (SessionManager.isLoggedIn()) {
+            setLoggedInUser(
+                    SessionManager.getFullName(),
+                    SessionManager.getUsername()
+            );
+        }
     }
 
     @FXML
@@ -224,6 +231,7 @@ public class HomeController {
 
     @FXML
     private void handleLogout() {
+        SessionManager.logout();
         profileMenu.setVisible(false);
         profileMenu.setManaged(false);
 

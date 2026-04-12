@@ -654,3 +654,62 @@
     -fx-font-size: 38px;
     -fx-font-weight: 600;
 }
+/*Results page profile picture*/
+.profile-circle {
+    -fx-background-color: #2f6df6;
+    -fx-background-radius: 100;
+    -fx-min-width: 42px;
+    -fx-min-height: 42px;
+    -fx-max-width: 42px;
+    -fx-max-height: 42px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.profile-circle:hover {
+    -fx-background-color: #1f4ed8;
+}
+
+.profile-icon-text {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+
+.profile-menu {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.20), 16, 0.2, 0, 4);
+    -fx-alignment: top-left;
+}
+
+.profile-name {
+    -fx-text-fill: #111827;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.profile-username {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+}
+
+.profile-history {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.logout-text {
+    -fx-text-fill: #f97316;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+}
+
+.logout-text:hover {
+    -fx-text-fill: #ea580c;
+}

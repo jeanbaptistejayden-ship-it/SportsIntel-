@@ -38,10 +38,14 @@ public class LoginController {
 
     @FXML
     private void handleLoginSubmit(ActionEvent event) {
-        if (homeController != null) {
-            homeController.setLoggedInUser("Dan Gron", "@ForeignStage");
-        }
+        SessionManager.login("John Doe", "@ForeignStage");
 
+        if (homeController != null) {
+            homeController.setLoggedInUser(
+                    SessionManager.getFullName(),
+                    SessionManager.getUsername()
+            );
+        }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

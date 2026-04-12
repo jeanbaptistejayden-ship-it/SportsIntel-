@@ -4,8 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,6 +24,21 @@ public class ResultsController {
     private ImageView centerLogo;
 
     @FXML
+    private HBox authButtons;
+
+    @FXML
+    private VBox profileBox;
+
+    @FXML
+    private VBox profileMenu;
+
+    @FXML
+    private Label profileNameLabel;
+
+    @FXML
+    private Label profileUsernameLabel;
+
+    @FXML
     public void initialize() {
         Image image = new Image(
                 Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm()
@@ -33,6 +51,7 @@ public class ResultsController {
         if (centerLogo != null) {
             centerLogo.setImage(image);
         }
+        updateLoggedInUI();
     }
 
     @FXML
@@ -70,6 +89,8 @@ public class ResultsController {
             loginStage.initModality(Modality.APPLICATION_MODAL);
             loginStage.setResizable(false);
             loginStage.showAndWait();
+
+            updateLoggedInUI();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,6 +143,52 @@ public class ResultsController {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toggleProfileMenu() {
+        boolean show = !profileMenu.isVisible();
+        profileMenu.setVisible(show);
+        profileMenu.setManaged(show);
+    }
+
+    @FXML
+    private void handleLogout() {
+        SessionManager.logout();
+
+        profileMenu.setVisible(false);
+        profileMenu.setManaged(false);
+
+        profileBox.setVisible(false);
+        profileBox.setManaged(false);
+
+        authButtons.setVisible(true);
+        authButtons.setManaged(true);
+    }
+
+    private void updateLoggedInUI() {
+        if (SessionManager.isLoggedIn()) {
+
+            authButtons.setVisible(false);
+            authButtons.setManaged(false);
+
+            profileBox.setVisible(true);
+            profileBox.setManaged(true);
+
+            profileNameLabel.setText(SessionManager.getFullName());
+            profileUsernameLabel.setText(SessionManager.getUsername());
+
+        } else {
+
+            authButtons.setVisible(true);
+            authButtons.setManaged(true);
+
+            profileBox.setVisible(false);
+            profileBox.setManaged(false);
+
+            profileMenu.setVisible(false);
+            profileMenu.setManaged(false);
         }
     }
 }

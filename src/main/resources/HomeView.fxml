@@ -45,6 +45,7 @@
                         <StackPane fx:id="profileButton"
                                    onMouseClicked="#toggleProfileMenu"
                                    styleClass="profile-circle">
+                            <Label text="👤" styleClass="profile-icon-text"/>
 
                             <ImageView fx:id="profileImage"
                                        fitWidth="32"
