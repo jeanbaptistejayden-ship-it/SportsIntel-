@@ -38,7 +38,7 @@ public class LoginController {
 
     @FXML
     private void handleLoginSubmit(ActionEvent event) {
-        SessionManager.login("John Doe", "@ForeignStage");
+        SessionManager.login("Dan Gron", "@ForeignStage");
 
         if (homeController != null) {
             homeController.setLoggedInUser(

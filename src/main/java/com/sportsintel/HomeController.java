@@ -189,6 +189,8 @@ public class HomeController {
             signUpStage.setResizable(false);
             signUpStage.showAndWait();
 
+            updateLoggedInUI();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -253,6 +255,31 @@ public class HomeController {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateLoggedInUI() {
+        if (SessionManager.isLoggedIn()) {
+
+            authButtons.setVisible(false);
+            authButtons.setManaged(false);
+
+            profileBox.setVisible(true);
+            profileBox.setManaged(true);
+
+            profileNameLabel.setText(SessionManager.getFullName());
+            profileUsernameLabel.setText(SessionManager.getUsername());
+
+        } else {
+
+            authButtons.setVisible(true);
+            authButtons.setManaged(true);
+
+            profileBox.setVisible(false);
+            profileBox.setManaged(false);
+
+            profileMenu.setVisible(false);
+            profileMenu.setManaged(false);
         }
     }
 }

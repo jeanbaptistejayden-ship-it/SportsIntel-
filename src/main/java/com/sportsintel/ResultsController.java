@@ -113,6 +113,8 @@ public class ResultsController {
             signUpStage.setResizable(false);
             signUpStage.showAndWait();
 
+            updateLoggedInUI();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
