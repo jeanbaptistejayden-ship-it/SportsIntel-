@@ -2,11 +2,14 @@ package com.sportsintel;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -37,6 +40,21 @@ public class HomeController {
     private ComboBox<String> statisticCombo;
 
     @FXML
+    private HBox authButtons;
+
+    @FXML
+    private VBox profileBox;
+
+    @FXML
+    private VBox profileMenu;
+
+    @FXML
+    private Label profileNameLabel;
+
+    @FXML
+    private Label profileUsernameLabel;
+
+    @FXML
     public void initialize() {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
         navLogo.setImage(image);
@@ -53,7 +71,17 @@ public class HomeController {
         }
 
         if (statisticCombo != null) {
-            statisticCombo.getItems().addAll("Points Per Game", "Assists Per Game", "Rebounds Per Game");
+            statisticCombo.getItems().addAll("Points Per Game",
+                    "Assists Per Game",
+                    "Rebounds Per Game",
+                    "Field Goal Percentage",
+                    "3pt Throw Percentage",
+                    "Free Throw Percentage",
+                    "Steals Per Game",
+                    "Blocks Per Game",
+                    "Turnovers Per Game",
+                    "Minutes Per Game",
+                    "Plus/Minus");
         }
 
         if (sportCombo != null) {
@@ -92,6 +120,13 @@ public class HomeController {
                     "Utah Jazz",
                     "Washington Wizards");
         }
+
+        if (SessionManager.isLoggedIn()) {
+            setLoggedInUser(
+                    SessionManager.getFullName(),
+                    SessionManager.getUsername()
+            );
+        }
     }
 
     @FXML
@@ -119,6 +154,9 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
             Parent root = loader.load();
+
+            LoginController loginController = loader.getController();
+            loginController.setHomeController(this);
 
             Scene scene = new Scene(root, 480, 700);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
@@ -151,6 +189,8 @@ public class HomeController {
             signUpStage.setResizable(false);
             signUpStage.showAndWait();
 
+            updateLoggedInUI();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -167,6 +207,79 @@ public class HomeController {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setLoggedInUser(String fullName, String username) {
+        authButtons.setVisible(false);
+        authButtons.setManaged(false);
+
+        profileBox.setVisible(true);
+        profileBox.setManaged(true);
+
+        profileNameLabel.setText(fullName);
+        profileUsernameLabel.setText(username);
+
+        profileMenu.setVisible(false);
+        profileMenu.setManaged(false);
+    }
+
+    @FXML
+    private void toggleProfileMenu() {
+        boolean show = !profileMenu.isVisible();
+        profileMenu.setVisible(show);
+        profileMenu.setManaged(show);
+    }
+
+    @FXML
+    private void handleLogout() {
+        SessionManager.logout();
+        profileMenu.setVisible(false);
+        profileMenu.setManaged(false);
+
+        profileBox.setVisible(false);
+        profileBox.setManaged(false);
+
+        authButtons.setVisible(true);
+        authButtons.setManaged(true);
+    }
+
+    @FXML
+    private void handleCompareClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CompareView.fxml"));
+            Parent root = loader.load();
+
+            Scene currentScene = navLogo.getScene();
+            currentScene.setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLoggedInUI() {
+        if (SessionManager.isLoggedIn()) {
+
+            authButtons.setVisible(false);
+            authButtons.setManaged(false);
+
+            profileBox.setVisible(true);
+            profileBox.setManaged(true);
+
+            profileNameLabel.setText(SessionManager.getFullName());
+            profileUsernameLabel.setText(SessionManager.getUsername());
+
+        } else {
+
+            authButtons.setVisible(true);
+            authButtons.setManaged(true);
+
+            profileBox.setVisible(false);
+            profileBox.setManaged(false);
+
+            profileMenu.setVisible(false);
+            profileMenu.setManaged(false);
         }
     }
 }

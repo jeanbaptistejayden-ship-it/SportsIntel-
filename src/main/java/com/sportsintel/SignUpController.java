@@ -33,25 +33,9 @@ public class SignUpController {
 
     @FXML
     private void handleSignUpSubmit(ActionEvent event) {
-        try {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.close();
+        SessionManager.login("Dan Gron", "@ForeignStage");
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root, 480, 700);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
-
-            Stage loginStage = new Stage();
-            loginStage.setTitle("Login");
-            loginStage.setScene(scene);
-            loginStage.initModality(Modality.APPLICATION_MODAL);
-            loginStage.setResizable(false);
-            loginStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

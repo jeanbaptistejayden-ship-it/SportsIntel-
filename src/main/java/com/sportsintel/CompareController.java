@@ -4,39 +4,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class ResultsController {
+public class CompareController {
 
     @FXML
     private ImageView navLogo;
 
     @FXML
-    private ImageView centerLogo;
+    private ImageView mainLogo;
 
     @FXML
-    private HBox authButtons;
-
-    @FXML
-    private VBox profileBox;
-
-    @FXML
-    private VBox profileMenu;
-
-    @FXML
-    private Label profileNameLabel;
-
-    @FXML
-    private Label profileUsernameLabel;
+    private ComboBox<String> compareOpponentCombo;
 
     @FXML
     public void initialize() {
@@ -48,10 +34,58 @@ public class ResultsController {
             navLogo.setImage(image);
         }
 
-        if (centerLogo != null) {
-            centerLogo.setImage(image);
+        if (mainLogo != null) {
+            mainLogo.setImage(image);
         }
-        updateLoggedInUI();
+
+        if (compareOpponentCombo != null) {
+            compareOpponentCombo.getItems().addAll(
+                    "Atlanta Hawks",
+                    "Boston Celtics",
+                    "Brooklyn Nets",
+                    "Charlotte Hornets",
+                    "Chicago Bulls",
+                    "Cleveland Cavaliers",
+                    "Dallas Mavericks",
+                    "Denver Nuggets",
+                    "Detroit Pistons",
+                    "Golden State Warriors",
+                    "Houston Rockets",
+                    "Indiana Pacers",
+                    "Los Angeles Clippers",
+                    "Los Angeles Lakers",
+                    "Memphis Grizzlies",
+                    "Miami Heat",
+                    "Milwaukee Bucks",
+                    "Minnesota Timberwolves",
+                    "New Orleans Pelicans",
+                    "New York Knicks",
+                    "Oklahoma City Thunder",
+                    "Orlando Magic",
+                    "Philadelphia 76ers",
+                    "Phoenix Suns",
+                    "Portland Trail Blazers",
+                    "Sacramento Kings",
+                    "San Antonio Spurs",
+                    "Toronto Raptors",
+                    "Utah Jazz",
+                    "Washington Wizards"
+            );
+        }
+    }
+
+    @FXML
+    private void handleHomeClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeView.fxml"));
+            Parent root = loader.load();
+
+            Scene currentScene = navLogo.getScene();
+            currentScene.setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -90,8 +124,6 @@ public class ResultsController {
             loginStage.setResizable(false);
             loginStage.showAndWait();
 
-            updateLoggedInUI();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,84 +145,8 @@ public class ResultsController {
             signUpStage.setResizable(false);
             signUpStage.showAndWait();
 
-            updateLoggedInUI();
-
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleHomeClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeView.fxml"));
-            Parent root = loader.load();
-
-            Scene currentScene = navLogo.getScene();
-            currentScene.setRoot(root);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleCompareClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CompareView.fxml"));
-            Parent root = loader.load();
-
-            Scene currentScene = navLogo.getScene();
-            currentScene.setRoot(root);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void toggleProfileMenu() {
-        boolean show = !profileMenu.isVisible();
-        profileMenu.setVisible(show);
-        profileMenu.setManaged(show);
-    }
-
-    @FXML
-    private void handleLogout() {
-        SessionManager.logout();
-
-        profileMenu.setVisible(false);
-        profileMenu.setManaged(false);
-
-        profileBox.setVisible(false);
-        profileBox.setManaged(false);
-
-        authButtons.setVisible(true);
-        authButtons.setManaged(true);
-    }
-
-    private void updateLoggedInUI() {
-        if (SessionManager.isLoggedIn()) {
-
-            authButtons.setVisible(false);
-            authButtons.setManaged(false);
-
-            profileBox.setVisible(true);
-            profileBox.setManaged(true);
-
-            profileNameLabel.setText(SessionManager.getFullName());
-            profileUsernameLabel.setText(SessionManager.getUsername());
-
-        } else {
-
-            authButtons.setVisible(true);
-            authButtons.setManaged(true);
-
-            profileBox.setVisible(false);
-            profileBox.setManaged(false);
-
-            profileMenu.setVisible(false);
-            profileMenu.setManaged(false);
         }
     }
 }

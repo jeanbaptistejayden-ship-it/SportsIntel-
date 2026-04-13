@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import java.lang.String?>
+<?import javafx.scene.control.Separator?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.sportsintel.ResultsController"
             styleClass="home-root">
@@ -20,6 +21,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="top-bar">
             <children>
+
                 <ImageView fx:id="navLogo"
                            fitWidth="100"
                            fitHeight="100"
@@ -30,9 +32,30 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <Button text="Home" styleClass="home-btn" onAction="#handleHomeClick" />
+                <Button text="Compare" styleClass="compare-btn" onAction="#handleCompareClick" />
                 <Button text="Help" styleClass="help-btn" onAction="#handleHelpClick" />
-                <Button text="Login" styleClass="login-btn" onAction="#handleLoginClick" />
-                <Button text="Sign Up" styleClass="signup-btn" onAction="#handleSignUpClick" />
+
+                <HBox fx:id="authButtons" spacing="10" alignment="CENTER_RIGHT">
+                    <children>
+                        <Button text="Login" styleClass="login-btn" onAction="#handleLoginClick" />
+                        <Button text="Sign Up" styleClass="signup-btn" onAction="#handleSignUpClick" />
+                    </children>
+                </HBox>
+
+                <VBox fx:id="profileBox" visible="false" managed="false">
+                    <children>
+                        <StackPane fx:id="profileButton"
+                                   onMouseClicked="#toggleProfileMenu"
+                                   styleClass="profile-circle">
+                            <Label text="👤" styleClass="profile-icon-text"/>
+
+                            <ImageView fx:id="profileImage"
+                                       fitWidth="32"
+                                       fitHeight="32"
+                                       preserveRatio="true"/>
+                        </StackPane>
+                    </children>
+                </VBox>
             </children>
 
             <padding>
@@ -86,7 +109,6 @@
                       alignment="TOP_CENTER"
                       maxWidth="760"
                       styleClass="results-card">
-
                     <children>
 
                         <VBox spacing="8" alignment="CENTER">
@@ -196,6 +218,47 @@
 
                     <padding>
                         <Insets top="28" right="35" bottom="30" left="35"/>
+                    </padding>
+                </VBox>
+
+                <VBox fx:id="profileMenu"
+                      visible="false"
+                      managed="false"
+                      maxWidth="300"
+                      prefWidth="300"
+                      spacing="12"
+                      styleClass="profile-menu"
+                      StackPane.alignment="TOP_RIGHT"
+                      translateX="-10"
+                      translateY="20">
+
+                    <children>
+                        <VBox spacing="4">
+                            <children>
+                                <Label fx:id="profileNameLabel"
+                                       text="Dan Gron"
+                                       styleClass="profile-name" />
+                                <Label fx:id="profileUsernameLabel"
+                                       text="@ForeignStage"
+                                       styleClass="profile-username" />
+                            </children>
+                        </VBox>
+
+                        <Separator />
+
+                        <Label text="No search history yet. Start searching to see your history here!"
+                               wrapText="true"
+                               styleClass="profile-history" />
+
+                        <Separator />
+
+                        <Button text="Logout"
+                                styleClass="logout-btn"
+                                onAction="#handleLogout" />
+                    </children>
+
+                    <padding>
+                        <Insets top="14" right="14" bottom="14" left="14"/>
                     </padding>
                 </VBox>
             </children>

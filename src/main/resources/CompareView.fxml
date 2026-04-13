@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.sportsintel.CompareController"
+            styleClass="home-root">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="top-bar">
+            <children>
+                <ImageView fx:id="navLogo"
+                           fitWidth="100"
+                           fitHeight="100"
+                           preserveRatio="true" />
+
+                <Label text="SportsIntel Analytics" styleClass="top-title" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button text="Home" styleClass="home-btn" onAction="#handleHomeClick" />
+                <Button text="Compare" styleClass="compare-btn" />
+                <Button text="Help" styleClass="help-btn" onAction="#handleHelpClick" />
+                <Button text="Login" styleClass="login-btn" onAction="#handleLoginClick" />
+                <Button text="Sign Up" styleClass="signup-btn" onAction="#handleSignUpClick" />
+            </children>
+
+            <padding>
+                <Insets top="16" right="20" bottom="16" left="20"/>
+            </padding>
+        </HBox>
+    </top>
+
+    <center>
+        <StackPane styleClass="center-area">
+            <children>
+                <VBox spacing="24"
+                      maxWidth="900"
+                      alignment="CENTER"
+                      styleClass="search-card">
+
+                    <children>
+                        <ImageView fx:id="mainLogo"
+                                   fitWidth="220"
+                                   fitHeight="220"
+                                   preserveRatio="true" />
+
+                        <Label text="Compare Players"
+                               styleClass="compare-title" />
+
+                        <Label text="Side-by-side performance analysis against the same opponent"
+                               styleClass="compare-subtitle" />
+
+                        <HBox spacing="40" alignment="CENTER">
+                            <children>
+
+                                <VBox spacing="8" prefWidth="330">
+                                    <children>
+                                        <Label text="Player 1" styleClass="field-label" />
+                                        <TextField fx:id="playerOneField"
+                                                   promptText="e.g., LeBron James"
+                                                   prefWidth="330" />
+                                    </children>
+                                </VBox>
+
+                                <Label text="→" styleClass="compare-arrow" />
+
+                                <VBox spacing="8" prefWidth="330">
+                                    <children>
+                                        <Label text="Player 2" styleClass="field-label" />
+                                        <TextField fx:id="playerTwoField"
+                                                   promptText="e.g., Kevin Durant"
+                                                   prefWidth="330" />
+                                    </children>
+                                </VBox>
+
+                            </children>
+                        </HBox>
+
+                        <VBox spacing="8" alignment="CENTER">
+                            <children>
+                                <Label text="Opponent" styleClass="field-label" />
+                                <ComboBox fx:id="compareOpponentCombo"
+                                          promptText="Select opponent"
+                                          prefWidth="500" />
+                            </children>
+                        </VBox>
+
+                        <Button text="Compare Players"
+                                styleClass="search-btn"
+                                prefWidth="740"
+                                prefHeight="50" />
+                    </children>
+
+                    <padding>
+                        <Insets top="34" right="36" bottom="34" left="36"/>
+                    </padding>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+
+</BorderPane>
