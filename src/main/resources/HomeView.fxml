@@ -76,9 +76,9 @@
                             <Label text="Season Range" styleClass="field-label" />
 
                             <HBox spacing="6">
-                                <TextField promptText="1949" prefWidth="70"/>
+                                <TextField fx:id="seasonStartField" promptText="1949" prefWidth="70"/>
                                 <Label text="to" />
-                                <TextField promptText="2026" prefWidth="70"/>
+                                <TextField fx:id="seasonEndField" promptText="2026" prefWidth="70"/>
                             </HBox>
                         </VBox>
 
@@ -94,7 +94,7 @@
 
                         <VBox spacing="6">
                             <Label text="Last N Games vs Opponent" styleClass="field-label" />
-                            <TextField promptText="10" />
+                            <TextField fx:id="lastNGamesField" promptText="10" />
                         </VBox>
 
                         <Button text="Apply Filters" styleClass="filters-btn" />
