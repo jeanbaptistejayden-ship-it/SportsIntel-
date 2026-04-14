@@ -713,3 +713,152 @@
 .logout-text:hover {
     -fx-text-fill: #ea580c;
 }
+
+/*Compare Results Screen*/
+.home-root {
+    -fx-background-color: #d7e6f7;
+}
+
+.compare-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.compare-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.center-area {
+    -fx-background-color: transparent;
+}
+
+.compare-results-wrapper {
+    -fx-background-color: transparent;
+}
+
+.compare-results-header {
+    -fx-background-color: #f7f7f8;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.15, 0, 3);
+}
+
+.compare-results-title {
+    -fx-text-fill: #0d1730;
+    -fx-font-size: 34px;
+    -fx-font-weight: 800;
+}
+
+.compare-results-subtitle {
+    -fx-text-fill: #4b5563;
+    -fx-font-size: 16px;
+}
+
+.player-name-card {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.left-player-card {
+    -fx-background-color: #dbeafe;
+    -fx-border-color: #93c5fd;
+    -fx-border-width: 2;
+}
+
+.right-player-card {
+    -fx-background-color: #f3e8ff;
+    -fx-border-color: #c4b5fd;
+    -fx-border-width: 2;
+}
+
+.player-name-title {
+    -fx-text-fill: #0d1730;
+    -fx-font-size: 28px;
+    -fx-font-weight: 800;
+}
+
+.compare-stats-card {
+    -fx-background-color: #f7f7f8;
+    -fx-background-radius: 14;
+    -fx-padding: 24;
+}
+
+.compare-section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0d1730;
+}
+
+.stat-label {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 13px;
+}
+
+.stat-box {
+    -fx-background-radius: 10;
+    -fx-alignment: center;
+}
+
+.stat-win {
+    -fx-background-color: #d9f5df;
+    -fx-border-color: #4ade80;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.stat-lose {
+    -fx-background-color: #e5e7eb;
+}
+
+.stat-number {
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #374151;
+}
+
+.stat-arrow {
+    -fx-text-fill: #16a34a;
+    -fx-font-size: 14px;
+}
+
+.stat-diff {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+}
+.analysis-card {
+    -fx-background-color: #f5f6f8;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0.2, 0, 4);
+}
+.analysis-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1f2d3d;
+}
+
+.analysis-player-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+.analysis-box-left {
+    -fx-background-color: #e9edf5;
+    -fx-background-radius: 12;
+    -fx-padding: 14;
+    -fx-text-fill: #2c3e50;
+}
+
+.analysis-box-right {
+    -fx-background-color: #efeaf7;
+    -fx-background-radius: 12;
+    -fx-padding: 14;
+    -fx-text-fill: #2c3e50;
+}
+.new-compare-btn {
+    -fx-background-color: #4b5563;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 12;
+}
