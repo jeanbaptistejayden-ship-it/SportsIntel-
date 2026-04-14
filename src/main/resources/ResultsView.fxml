@@ -75,22 +75,22 @@
 
                         <VBox spacing="6">
                             <Label text="Season Range" styleClass="field-label" />
-                            <Label text="2018 - 2026" styleClass="filter-value" />
+                            <Label fx:id="seasonFilterLabel" text="2018 - 2026" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Season Type" styleClass="field-label" />
-                            <Label text="Both" styleClass="filter-value" />
+                            <Label fx:id="seasonTypeFilterLabel" text="Both" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Location" styleClass="field-label" />
-                            <Label text="Home" styleClass="filter-value" />
+                            <Label fx:id="locationFilterLabel" text="Home" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Last N Games vs Opponent" styleClass="field-label" />
-                            <Label text="10" styleClass="filter-value" />
+                            <Label fx:id="lastNFilterLabel" text="10" styleClass="filter-value" />
                         </VBox>
                     </children>
 
@@ -113,9 +113,9 @@
 
                         <VBox spacing="8" alignment="CENTER">
                             <children>
-                                <Label text="Player: LeBron James" styleClass="result-summary" />
-                                <Label text="Opponent: New York Knicks" styleClass="result-summary" />
-                                <Label text="Statistic: Points Per Game" styleClass="result-summary" />
+                                <Label fx:id="playerSummaryLabel" text="Player: LeBron James" styleClass="result-summary" />
+                                <Label fx:id="opponentSummaryLabel" text="Opponent: New York Knicks" styleClass="result-summary" />
+                                <Label fx:id="statSummaryLabel" text="Statistic: Points Per Game" styleClass="result-summary" />
                             </children>
                         </VBox>
 
@@ -139,9 +139,9 @@
                                                 <String fx:value="avg-box"/>
                                             </styleClass>
                                             <children>
-                                                <Label text="Average PPG vs Knicks" styleClass="stat-title" />
-                                                <Label text="27.7" styleClass="avg-number" />
-                                                <Label text="points" styleClass="stat-unit" />
+                                                <Label fx:id="averageTitleLabel" text="Average PPG vs Knicks" styleClass="stat-title" />
+                                                <Label fx:id="averageValueLabel" text="27.7" styleClass="avg-number" />
+                                                <Label fx:id="averageUnitLabel" text="points" styleClass="stat-unit" />
                                             </children>
                                             <padding>
                                                 <Insets top="20" right="20" bottom="20" left="20"/>
@@ -159,7 +159,7 @@
                                             </styleClass>
                                             <children>
                                                 <Label text="Games Played" styleClass="stat-title" />
-                                                <Label text="10" styleClass="games-number" />
+                                                <Label fx:id="gamesPlayedLabel" text="10" styleClass="games-number" />
                                                 <Label text="games" styleClass="stat-unit" />
                                             </children>
                                             <padding>
@@ -178,8 +178,8 @@
                                             </styleClass>
                                             <children>
                                                 <Label text="Highest Game" styleClass="stat-title" />
-                                                <Label text="33" styleClass="high-number" />
-                                                <Label text="points" styleClass="stat-unit" />
+                                                <Label fx:id="highValueLabel" text="33" styleClass="high-number" />
+                                                <Label fx:id="highUnitLabel" text="points" styleClass="stat-unit" />
                                             </children>
                                             <padding>
                                                 <Insets top="20" right="20" bottom="20" left="20"/>
@@ -197,8 +197,8 @@
                                             </styleClass>
                                             <children>
                                                 <Label text="Lowest Game" styleClass="stat-title" />
-                                                <Label text="21" styleClass="low-number" />
-                                                <Label text="points" styleClass="stat-unit" />
+                                                <Label fx:id="lowValueLabel" text="21" styleClass="low-number" />
+                                                <Label fx:id="lowUnitLabel" text="points" styleClass="stat-unit" />
                                             </children>
                                             <padding>
                                                 <Insets top="20" right="20" bottom="20" left="20"/>
