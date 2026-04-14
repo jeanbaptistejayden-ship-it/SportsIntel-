@@ -39,6 +39,51 @@ public class ResultsController {
     private Label profileUsernameLabel;
 
     @FXML
+    private Label seasonFilterLabel;
+
+    @FXML
+    private Label seasonTypeFilterLabel;
+
+    @FXML
+    private Label locationFilterLabel;
+
+    @FXML
+    private Label lastNFilterLabel;
+
+    @FXML
+    private Label playerSummaryLabel;
+
+    @FXML
+    private Label opponentSummaryLabel;
+
+    @FXML
+    private Label statSummaryLabel;
+
+    @FXML
+    private Label averageTitleLabel;
+
+    @FXML
+    private Label averageValueLabel;
+
+    @FXML
+    private Label averageUnitLabel;
+
+    @FXML
+    private Label gamesPlayedLabel;
+
+    @FXML
+    private Label highValueLabel;
+
+    @FXML
+    private Label highUnitLabel;
+
+    @FXML
+    private Label lowValueLabel;
+
+    @FXML
+    private Label lowUnitLabel;
+
+    @FXML
     public void initialize() {
         Image image = new Image(
                 Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm()
@@ -51,7 +96,47 @@ public class ResultsController {
         if (centerLogo != null) {
             centerLogo.setImage(image);
         }
+
+        applyLatestSearch();
         updateLoggedInUI();
+    }
+
+    private void applyLatestSearch() {
+        SessionManager.SearchResult search = SessionManager.getLatestSearch();
+        if (search == null) {
+            return;
+        }
+
+        playerSummaryLabel.setText("Player: " + search.player());
+        String opponent = (search.opponent() == null || search.opponent().isBlank()) ? "Any" : search.opponent();
+        opponentSummaryLabel.setText("Opponent: " + opponent);
+        statSummaryLabel.setText("Statistic: " + search.stat());
+
+        seasonFilterLabel.setText(search.season());
+        seasonTypeFilterLabel.setText(search.seasonType());
+        locationFilterLabel.setText(search.location());
+        lastNFilterLabel.setText(search.lastN());
+
+        averageTitleLabel.setText("Average vs " + opponent);
+        averageValueLabel.setText(String.format("%.1f", search.average()));
+        gamesPlayedLabel.setText(String.valueOf(search.gamesPlayed()));
+        highValueLabel.setText(String.format("%.1f", search.high()));
+        lowValueLabel.setText(String.format("%.1f", search.low()));
+
+        String unit = statUnit(search.stat());
+        averageUnitLabel.setText(unit);
+        highUnitLabel.setText(unit);
+        lowUnitLabel.setText(unit);
+    }
+
+    private String statUnit(String statLabel) {
+        if (statLabel != null && statLabel.toLowerCase().contains("assist")) {
+            return "assists";
+        }
+        if (statLabel != null && statLabel.toLowerCase().contains("rebound")) {
+            return "rebounds";
+        }
+        return "points";
     }
 
     @FXML
