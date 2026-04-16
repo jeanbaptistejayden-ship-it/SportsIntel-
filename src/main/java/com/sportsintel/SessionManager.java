@@ -5,6 +5,7 @@ public class SessionManager {
     private static boolean loggedIn = false;
     private static String fullName = "";
     private static String username = "";
+    private static SearchResult latestSearch;
 
     private SessionManager() {
     }
@@ -19,6 +20,7 @@ public class SessionManager {
         loggedIn = false;
         fullName = "";
         username = "";
+        latestSearch = null;
     }
 
     public static boolean isLoggedIn() {
@@ -31,5 +33,28 @@ public class SessionManager {
 
     public static String getUsername() {
         return username;
+    }
+
+    public static void setLatestSearch(SearchResult searchResult) {
+        latestSearch = searchResult;
+    }
+
+    public static SearchResult getLatestSearch() {
+        return latestSearch;
+    }
+
+    public record SearchResult(
+            String player,
+            String opponent,
+            String stat,
+            String season,
+            String seasonType,
+            String location,
+            String lastN,
+            int gamesPlayed,
+            double average,
+            double high,
+            double low
+    ) {
     }
 }

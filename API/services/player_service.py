@@ -111,7 +111,6 @@ def parse_games(gamelog_frame):
         )
     return games
 
-
 def filter_games_by_location(games: list[dict], location: str = "both"):
     normalized = location.strip().lower()
     if normalized == "both":
@@ -122,7 +121,6 @@ def filter_games_by_location(games: list[dict], location: str = "both"):
         return [g for g in games if not g["home"]]
     raise ValueError(f"Invalid location '{location}'. Use home, away, or both.")
 
-
 def filter_games_by_opponent(games: list[dict], opponent: str | None = None):
     if opponent is None:
         return games
@@ -130,7 +128,6 @@ def filter_games_by_opponent(games: list[dict], opponent: str | None = None):
     if not target:
         return games
     return [g for g in games if g.get("opponent", "").upper() == target]
-
 
 def limit_last_n_games(games: list[dict], last_n: int | None = None):
     if last_n is None:
@@ -147,7 +144,6 @@ def limit_last_n_games(games: list[dict], last_n: int | None = None):
     sorted_games = sorted(games, key=game_date_key, reverse=True)
     return sorted_games[:last_n]
 
-
 def normalize_stat(stat: str = "points") -> str:
     normalized = stat.strip().lower()
     mapped = STAT_MAP.get(normalized)
@@ -155,10 +151,14 @@ def normalize_stat(stat: str = "points") -> str:
         raise ValueError("Invalid stat. Use points/ppg, assists/apg, or rebounds/rpg.")
     return mapped
 
-
 def build_summary(player_name: str, games: list[dict], stat: str = "points"):
     selected_stat = normalize_stat(stat)
     values = [float(g[selected_stat]) for g in games]
+
+    # grab the full game context for the best and worst games
+    high_low = get_high_low_games(games, stat)
+
+    # summary the frontend actually uses: averages plus the standout games
     return {
         "player": player_name,
         "stat": selected_stat,
@@ -166,4 +166,35 @@ def build_summary(player_name: str, games: list[dict], stat: str = "points"):
         "average": round(sum(values) / len(values), 1),
         "high": max(values),
         "low": min(values),
+        "high_game": high_low["high_game"],
+        "low_game": high_low["low_game"],
     }
+
+def get_high_low_games(games: list[dict], stat: str = "points") -> dict:
+    # normalize whatever the user passed in (points, ppg, etc.) to the actual key
+    selected_stat = normalize_stat(stat)
+
+    # nothing to work with, bail early
+    if not games:
+        return {"high_game": None, "low_game": None}
+
+    # find the game where that stat was highest/lowest
+    high_game = max(games, key=lambda g: float(g[selected_stat]))
+    low_game = min(games, key=lambda g: float(g[selected_stat]))
+
+    # return just what the results page needs: date, opponent, location, value
+    return {
+        "high_game": {
+            "date": high_game["date"],
+            "opponent": high_game["opponent"],
+            "home": high_game["home"],
+            "value": float(high_game[selected_stat]),
+        },
+        "low_game": {
+            "date": low_game["date"],
+            "opponent": low_game["opponent"],
+            "home": low_game["home"],
+            "value": float(low_game[selected_stat]),
+        },
+    }
+
