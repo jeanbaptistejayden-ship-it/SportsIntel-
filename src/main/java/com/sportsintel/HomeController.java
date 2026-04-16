@@ -282,6 +282,9 @@ public class HomeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
             Parent root = loader.load();
 
+            ResultsController controller = loader.getController();
+            controller.loadPlayerImage(playerName);
+
             Scene currentScene = navLogo.getScene();
             currentScene.setRoot(root);
 

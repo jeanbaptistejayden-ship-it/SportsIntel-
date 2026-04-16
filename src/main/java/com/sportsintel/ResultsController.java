@@ -21,7 +21,7 @@ public class ResultsController {
     private ImageView navLogo;
 
     @FXML
-    private ImageView centerLogo;
+    private ImageView playerImage;
 
     @FXML
     private HBox authButtons;
@@ -75,13 +75,7 @@ public class ResultsController {
     private Label highValueLabel;
 
     @FXML
-    private Label highUnitLabel;
-
-    @FXML
     private Label lowValueLabel;
-
-    @FXML
-    private Label lowUnitLabel;
 
     @FXML
     public void initialize() {
@@ -92,11 +86,6 @@ public class ResultsController {
         if (navLogo != null) {
             navLogo.setImage(image);
         }
-
-        if (centerLogo != null) {
-            centerLogo.setImage(image);
-        }
-
         applyLatestSearch();
         updateLoggedInUI();
     }
@@ -107,36 +96,22 @@ public class ResultsController {
             return;
         }
 
-        playerSummaryLabel.setText("Player: " + search.player());
-        String opponent = (search.opponent() == null || search.opponent().isBlank()) ? "Any" : search.opponent();
-        opponentSummaryLabel.setText("Opponent: " + opponent);
-        statSummaryLabel.setText("Statistic: " + search.stat());
+        updateText(playerSummaryLabel, search.player());
+        String opponent = (search.opponent() == null || search.opponent().isBlank()) ? "Any Opponent" : search.opponent();
+        updateText(opponentSummaryLabel, "vs " + opponent);
+        updateText(statSummaryLabel, search.stat());
 
-        seasonFilterLabel.setText(search.season());
-        seasonTypeFilterLabel.setText(search.seasonType());
-        locationFilterLabel.setText(search.location());
-        lastNFilterLabel.setText(search.lastN());
+        updateText(seasonFilterLabel, search.season());
+        updateText(seasonTypeFilterLabel, search.seasonType());
+        updateText(locationFilterLabel, search.location());
+        updateText(lastNFilterLabel, search.lastN());
 
-        averageTitleLabel.setText("Average vs " + opponent);
-        averageValueLabel.setText(String.format("%.1f", search.average()));
-        gamesPlayedLabel.setText(String.valueOf(search.gamesPlayed()));
-        highValueLabel.setText(String.format("%.1f", search.high()));
-        lowValueLabel.setText(String.format("%.1f", search.low()));
-
-        String unit = statUnit(search.stat());
-        averageUnitLabel.setText(unit);
-        highUnitLabel.setText(unit);
-        lowUnitLabel.setText(unit);
-    }
-
-    private String statUnit(String statLabel) {
-        if (statLabel != null && statLabel.toLowerCase().contains("assist")) {
-            return "assists";
-        }
-        if (statLabel != null && statLabel.toLowerCase().contains("rebound")) {
-            return "rebounds";
-        }
-        return "points";
+        updateText(averageTitleLabel, "vs " + opponent);
+        updateText(averageValueLabel, String.format("%.1f", search.average()));
+        updateText(averageUnitLabel, shortStatLabel(search.stat()) + " average");
+        updateText(gamesPlayedLabel, String.valueOf(search.gamesPlayed()));
+        updateText(highValueLabel, String.format("%.1f", search.high()));
+        updateText(lowValueLabel, String.format("%.1f", search.low()));
     }
 
     @FXML
@@ -276,6 +251,44 @@ public class ResultsController {
 
             profileMenu.setVisible(false);
             profileMenu.setManaged(false);
+        }
+    }
+
+    private void updateText(Label label, String value) {
+        if (label != null && value != null) {
+            label.setText(value);
+        }
+    }
+
+    private String shortStatLabel(String statLabel) {
+        if (statLabel == null) {
+            return "PPG";
+        }
+        if (statLabel.toLowerCase().contains("assist")) {
+            return "APG";
+        }
+        if (statLabel.toLowerCase().contains("rebound")) {
+            return "RPG";
+        }
+        return "PPG";
+    }
+
+    public void loadPlayerImage(String playerName) {
+        if (playerName != null && playerName.equalsIgnoreCase("LeBron James")) {
+            setPlayerImage("/lebron.png");
+        } else {
+            setPlayerImage("/lebron.png");
+        }
+    }
+
+    private void setPlayerImage(String path) {
+        try {
+            Image image = new Image(
+                    Objects.requireNonNull(getClass().getResource(path)).toExternalForm()
+            );
+            playerImage.setImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
