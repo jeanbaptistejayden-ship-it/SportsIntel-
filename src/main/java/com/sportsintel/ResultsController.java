@@ -39,6 +39,45 @@ public class ResultsController {
     private Label profileUsernameLabel;
 
     @FXML
+    private Label seasonFilterLabel;
+
+    @FXML
+    private Label seasonTypeFilterLabel;
+
+    @FXML
+    private Label locationFilterLabel;
+
+    @FXML
+    private Label lastNFilterLabel;
+
+    @FXML
+    private Label playerSummaryLabel;
+
+    @FXML
+    private Label opponentSummaryLabel;
+
+    @FXML
+    private Label statSummaryLabel;
+
+    @FXML
+    private Label averageTitleLabel;
+
+    @FXML
+    private Label averageValueLabel;
+
+    @FXML
+    private Label averageUnitLabel;
+
+    @FXML
+    private Label gamesPlayedLabel;
+
+    @FXML
+    private Label highValueLabel;
+
+    @FXML
+    private Label lowValueLabel;
+
+    @FXML
     public void initialize() {
         Image image = new Image(
                 Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm()
@@ -47,7 +86,32 @@ public class ResultsController {
         if (navLogo != null) {
             navLogo.setImage(image);
         }
+        applyLatestSearch();
         updateLoggedInUI();
+    }
+
+    private void applyLatestSearch() {
+        SessionManager.SearchResult search = SessionManager.getLatestSearch();
+        if (search == null) {
+            return;
+        }
+
+        updateText(playerSummaryLabel, search.player());
+        String opponent = (search.opponent() == null || search.opponent().isBlank()) ? "Any Opponent" : search.opponent();
+        updateText(opponentSummaryLabel, "vs " + opponent);
+        updateText(statSummaryLabel, search.stat());
+
+        updateText(seasonFilterLabel, search.season());
+        updateText(seasonTypeFilterLabel, search.seasonType());
+        updateText(locationFilterLabel, search.location());
+        updateText(lastNFilterLabel, search.lastN());
+
+        updateText(averageTitleLabel, "vs " + opponent);
+        updateText(averageValueLabel, String.format("%.1f", search.average()));
+        updateText(averageUnitLabel, shortStatLabel(search.stat()) + " average");
+        updateText(gamesPlayedLabel, String.valueOf(search.gamesPlayed()));
+        updateText(highValueLabel, String.format("%.1f", search.high()));
+        updateText(lowValueLabel, String.format("%.1f", search.low()));
     }
 
     @FXML
@@ -188,6 +252,25 @@ public class ResultsController {
             profileMenu.setVisible(false);
             profileMenu.setManaged(false);
         }
+    }
+
+    private void updateText(Label label, String value) {
+        if (label != null && value != null) {
+            label.setText(value);
+        }
+    }
+
+    private String shortStatLabel(String statLabel) {
+        if (statLabel == null) {
+            return "PPG";
+        }
+        if (statLabel.toLowerCase().contains("assist")) {
+            return "APG";
+        }
+        if (statLabel.toLowerCase().contains("rebound")) {
+            return "RPG";
+        }
+        return "PPG";
     }
 
     public void loadPlayerImage(String playerName) {

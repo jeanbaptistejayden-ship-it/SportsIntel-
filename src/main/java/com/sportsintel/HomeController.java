@@ -283,7 +283,7 @@ public class HomeController {
             Parent root = loader.load();
 
             ResultsController controller = loader.getController();
-            controller.loadPlayerImage("LeBron James");
+            controller.loadPlayerImage(playerName);
 
             Scene currentScene = navLogo.getScene();
             currentScene.setRoot(root);

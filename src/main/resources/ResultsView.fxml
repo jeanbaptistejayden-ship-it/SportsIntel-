@@ -75,22 +75,22 @@
 
                         <VBox spacing="6">
                             <Label text="Season Range" styleClass="field-label" />
-                            <Label text="2018 - 2026" styleClass="filter-value" />
+                            <Label fx:id="seasonFilterLabel" text="2018 - 2026" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Season Type" styleClass="field-label" />
-                            <Label text="Both" styleClass="filter-value" />
+                            <Label fx:id="seasonTypeFilterLabel" text="Both" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Location" styleClass="field-label" />
-                            <Label text="Home" styleClass="filter-value" />
+                            <Label fx:id="locationFilterLabel" text="Home" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Last N Games vs Opponent" styleClass="field-label" />
-                            <Label text="10" styleClass="filter-value" />
+                            <Label fx:id="lastNFilterLabel" text="10" styleClass="filter-value" />
                         </VBox>
                     </children>
 
@@ -134,16 +134,16 @@
 
                                                 <VBox spacing="10" alignment="CENTER_LEFT">
                                                     <children>
-                                                        <Label text="LeBron James"
+                                                        <Label fx:id="playerSummaryLabel" text="LeBron James"
                                                                styleClass="result-player-title" />
 
                                                         <HBox spacing="18" alignment="CENTER_LEFT">
                                                             <children>
-                                                                <Label text="vs New York Knicks"
+                                                                <Label fx:id="opponentSummaryLabel" text="vs New York Knicks"
                                                                        styleClass="result-subtitle-strong" />
                                                                 <Label text="•"
                                                                        styleClass="result-dot" />
-                                                                <Label text="Points Per Game"
+                                                                <Label fx:id="statSummaryLabel" text="Points Per Game"
                                                                        styleClass="result-subtitle" />
                                                             </children>
                                                         </HBox>
@@ -168,9 +168,9 @@
                                             <children>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label text="vs Knicks" styleClass="metric-label" />
-                                                        <Label text="29.2" styleClass="metric-number-blue" />
-                                                        <Label text="PPG average" styleClass="metric-subtext" />
+                                                        <Label fx:id="averageTitleLabel" text="vs Knicks" styleClass="metric-label" />
+                                                        <Label fx:id="averageValueLabel" text="29.2" styleClass="metric-number-blue" />
+                                                        <Label fx:id="averageUnitLabel" text="PPG average" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
@@ -221,19 +221,19 @@
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="GAMES" styleClass="mini-stat-label"/>
-                                                        <Label text="10" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="gamesPlayedLabel" text="10" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="HIGH" styleClass="mini-stat-label"/>
-                                                        <Label text="33" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="highValueLabel" text="33" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="LOW" styleClass="mini-stat-label"/>
-                                                        <Label text="25" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="lowValueLabel" text="25" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="stat-mini-box">
