@@ -20,6 +20,32 @@ STAT_MAP = {
     "rebounds": "reb",
     "rpg": "reb",
     "reb": "reb",
+    "field_goal_percentage": "fg_pct",
+    "fg_percentage": "fg_pct",
+    "fg%": "fg_pct",
+    "fg_pct": "fg_pct",
+    "three_point_percentage": "fg3_pct",
+    "3pt_percentage": "fg3_pct",
+    "fg3%": "fg3_pct",
+    "fg3_pct": "fg3_pct",
+    "free_throw_percentage": "ft_pct",
+    "ft_percentage": "ft_pct",
+    "ft%": "ft_pct",
+    "ft_pct": "ft_pct",
+    "steals": "stl",
+    "spg": "stl",
+    "stl": "stl",
+    "blocks": "blk",
+    "bpg": "blk",
+    "blk": "blk",
+    "turnovers": "tov",
+    "topg": "tov",
+    "tov": "tov",
+    "minutes": "min",
+    "mpg": "min",
+    "min": "min",
+    "plus_minus": "plus_minus",
+    "+/-": "plus_minus",
 }
 
 def get_player_lookup(name: str):
@@ -104,9 +130,17 @@ def parse_games(gamelog_frame):
                 "date": row.get("GAME_DATE", ""),
                 "opponent": matchup.split()[-1] if matchup else "",
                 "home": "vs." in matchup,
-                "pts": float(row.get("PTS", 0)),
-                "reb": float(row.get("REB", 0)),
-                "ast": float(row.get("AST", 0)),
+                "pts": to_float(row.get("PTS")),
+                "reb": to_float(row.get("REB")),
+                "ast": to_float(row.get("AST")),
+                "fg_pct": to_percentage(row.get("FG_PCT")),
+                "fg3_pct": to_percentage(row.get("FG3_PCT")),
+                "ft_pct": to_percentage(row.get("FT_PCT")),
+                "stl": to_float(row.get("STL")),
+                "blk": to_float(row.get("BLK")),
+                "tov": to_float(row.get("TOV")),
+                "min": to_float(row.get("MIN")),
+                "plus_minus": to_float(row.get("PLUS_MINUS")),
             }
         )
     return games
@@ -148,7 +182,7 @@ def normalize_stat(stat: str = "points") -> str:
     normalized = stat.strip().lower()
     mapped = STAT_MAP.get(normalized)
     if not mapped:
-        raise ValueError("Invalid stat. Use points/ppg, assists/apg, or rebounds/rpg.")
+        raise ValueError("Invalid stat selection.")
     return mapped
 
 def build_summary(player_name: str, games: list[dict], stat: str = "points"):
@@ -198,3 +232,27 @@ def get_high_low_games(games: list[dict], stat: str = "points") -> dict:
         },
     }
 
+
+def to_float(value) -> float:
+    if value is None:
+        return 0.0
+    if isinstance(value, (int, float)):
+        return float(value)
+
+    text = str(value).strip()
+    if not text or text == "--":
+        return 0.0
+    if ":" in text:
+        parts = text.split(":")
+        if len(parts) == 2:
+            minutes = float(parts[0]) if parts[0] else 0.0
+            seconds = float(parts[1]) if parts[1] else 0.0
+            return minutes + (seconds / 60.0)
+    return float(text)
+
+
+def to_percentage(value) -> float:
+    raw = to_float(value)
+    if raw <= 1.0:
+        return raw * 100.0
+    return raw

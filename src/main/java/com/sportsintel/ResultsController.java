@@ -264,11 +264,36 @@ public class ResultsController {
         if (statLabel == null) {
             return "PPG";
         }
-        if (statLabel.toLowerCase().contains("assist")) {
+        String normalized = statLabel.toLowerCase();
+        if (normalized.contains("assist")) {
             return "APG";
         }
-        if (statLabel.toLowerCase().contains("rebound")) {
+        if (normalized.contains("rebound")) {
             return "RPG";
+        }
+        if (normalized.contains("field goal")) {
+            return "FG%";
+        }
+        if (normalized.contains("3pt")) {
+            return "3PT%";
+        }
+        if (normalized.contains("free throw")) {
+            return "FT%";
+        }
+        if (normalized.contains("steal")) {
+            return "SPG";
+        }
+        if (normalized.contains("block")) {
+            return "BPG";
+        }
+        if (normalized.contains("turnover")) {
+            return "TOPG";
+        }
+        if (normalized.contains("minute")) {
+            return "MPG";
+        }
+        if (normalized.contains("plus/minus")) {
+            return "+/-";
         }
         return "PPG";
     }

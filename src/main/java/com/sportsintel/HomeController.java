@@ -420,7 +420,31 @@ public class HomeController {
         if (value.equalsIgnoreCase("Rebounds Per Game")) {
             return "rpg";
         }
-        throw new IllegalArgumentException("Only Points, Assists, and Rebounds are supported right now.");
+        if (value.equalsIgnoreCase("Field Goal Percentage")) {
+            return "field_goal_percentage";
+        }
+        if (value.equalsIgnoreCase("3pt Throw Percentage")) {
+            return "three_point_percentage";
+        }
+        if (value.equalsIgnoreCase("Free Throw Percentage")) {
+            return "free_throw_percentage";
+        }
+        if (value.equalsIgnoreCase("Steals Per Game")) {
+            return "steals";
+        }
+        if (value.equalsIgnoreCase("Blocks Per Game")) {
+            return "blocks";
+        }
+        if (value.equalsIgnoreCase("Turnovers Per Game")) {
+            return "turnovers";
+        }
+        if (value.equalsIgnoreCase("Minutes Per Game")) {
+            return "minutes";
+        }
+        if (value.equalsIgnoreCase("Plus/Minus")) {
+            return "plus_minus";
+        }
+        throw new IllegalArgumentException("Invalid statistic selection.");
     }
 
     private String mapOpponent(String value) {
@@ -465,6 +489,30 @@ public class HomeController {
         }
         if ("reb".equalsIgnoreCase(stat)) {
             return "Rebounds Per Game";
+        }
+        if ("fg_pct".equalsIgnoreCase(stat)) {
+            return "Field Goal Percentage";
+        }
+        if ("fg3_pct".equalsIgnoreCase(stat)) {
+            return "3pt Throw Percentage";
+        }
+        if ("ft_pct".equalsIgnoreCase(stat)) {
+            return "Free Throw Percentage";
+        }
+        if ("stl".equalsIgnoreCase(stat)) {
+            return "Steals Per Game";
+        }
+        if ("blk".equalsIgnoreCase(stat)) {
+            return "Blocks Per Game";
+        }
+        if ("tov".equalsIgnoreCase(stat)) {
+            return "Turnovers Per Game";
+        }
+        if ("min".equalsIgnoreCase(stat)) {
+            return "Minutes Per Game";
+        }
+        if ("plus_minus".equalsIgnoreCase(stat)) {
+            return "Plus/Minus";
         }
         return "Points Per Game";
     }
