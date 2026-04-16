@@ -21,7 +21,7 @@ public class ResultsController {
     private ImageView navLogo;
 
     @FXML
-    private ImageView centerLogo;
+    private ImageView resultLogo;
 
     @FXML
     private HBox authButtons;
@@ -48,8 +48,8 @@ public class ResultsController {
             navLogo.setImage(image);
         }
 
-        if (centerLogo != null) {
-            centerLogo.setImage(image);
+        if (resultLogo != null) {
+            resultLogo.setImage(image);
         }
         updateLoggedInUI();
     }

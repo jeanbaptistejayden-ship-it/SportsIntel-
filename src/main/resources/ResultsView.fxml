@@ -14,6 +14,7 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.sportsintel.ResultsController"
             styleClass="home-root">
@@ -103,165 +104,395 @@
     </left>
 
     <center>
-        <StackPane styleClass="center-area">
-            <children>
-                <VBox spacing="22"
-                      alignment="TOP_CENTER"
-                      maxWidth="760"
-                      styleClass="results-card">
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    vbarPolicy="AS_NEEDED"
+                    pannable="true"
+                    styleClass="compare-scroll">
+
+            <content>
+                <StackPane styleClass="center-area">
                     <children>
 
-                        <VBox spacing="8" alignment="CENTER">
+                        <VBox spacing="24"
+                              alignment="TOP_CENTER"
+                              maxWidth="980"
+                              styleClass="compare-results-wrapper">
+
                             <children>
-                                <Label text="Player: LeBron James" styleClass="result-summary" />
-                                <Label text="Opponent: New York Knicks" styleClass="result-summary" />
-                                <Label text="Statistic: Points Per Game" styleClass="result-summary" />
-                            </children>
-                        </VBox>
-
-                        <StackPane alignment="CENTER">
-                            <children>
-
-                                <GridPane hgap="100" vgap="30" alignment="CENTER">
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="ALWAYS" halignment="RIGHT"/>
-                                        <ColumnConstraints hgrow="ALWAYS" halignment="LEFT"/>
-                                    </columnConstraints>
-
+                                <VBox spacing="0"
+                                      prefWidth="980"
+                                      maxWidth="980"
+                                      styleClass="result-header-card">
                                     <children>
-                                        <VBox GridPane.rowIndex="0" GridPane.columnIndex="0"
-                                              spacing="10"
-                                              alignment="CENTER"
-                                              prefWidth="300"
-                                              prefHeight="180">
-                                            <styleClass>
-                                                <String fx:value="stat-box"/>
-                                                <String fx:value="avg-box"/>
-                                            </styleClass>
+                                        <HBox spacing="26" alignment="CENTER_LEFT">
                                             <children>
-                                                <Label text="Average PPG vs Knicks" styleClass="stat-title" />
-                                                <Label text="27.7" styleClass="avg-number" />
-                                                <Label text="points" styleClass="stat-unit" />
-                                            </children>
-                                            <padding>
-                                                <Insets top="20" right="20" bottom="20" left="20"/>
-                                            </padding>
-                                        </VBox>
 
-                                        <VBox GridPane.rowIndex="0" GridPane.columnIndex="1"
-                                              spacing="10"
-                                              alignment="CENTER"
-                                              prefWidth="300"
-                                              prefHeight="180">
-                                            <styleClass>
-                                                <String fx:value="stat-box"/>
-                                                <String fx:value="games-box"/>
-                                            </styleClass>
-                                            <children>
-                                                <Label text="Games Played" styleClass="stat-title" />
-                                                <Label text="10" styleClass="games-number" />
-                                                <Label text="games" styleClass="stat-unit" />
-                                            </children>
-                                            <padding>
-                                                <Insets top="20" right="20" bottom="20" left="20"/>
-                                            </padding>
-                                        </VBox>
+                                                <ImageView fx:id="resultLogo"
+                                                           fitWidth="250"
+                                                           fitHeight="250"
+                                                           preserveRatio="true" />
 
-                                        <VBox GridPane.rowIndex="1" GridPane.columnIndex="0"
-                                              spacing="10"
-                                              alignment="CENTER"
-                                              prefWidth="300"
-                                              prefHeight="180">
-                                            <styleClass>
-                                                <String fx:value="stat-box"/>
-                                                <String fx:value="high-box"/>
-                                            </styleClass>
-                                            <children>
-                                                <Label text="Highest Game" styleClass="stat-title" />
-                                                <Label text="33" styleClass="high-number" />
-                                                <Label text="points" styleClass="stat-unit" />
-                                            </children>
-                                            <padding>
-                                                <Insets top="20" right="20" bottom="20" left="20"/>
-                                            </padding>
-                                        </VBox>
+                                                <VBox spacing="10" alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label text="LeBron James"
+                                                               styleClass="result-player-title" />
 
-                                        <VBox GridPane.rowIndex="1" GridPane.columnIndex="1"
-                                              spacing="10"
-                                              alignment="CENTER"
-                                              prefWidth="300"
-                                              prefHeight="180">
-                                            <styleClass>
-                                                <String fx:value="stat-box"/>
-                                                <String fx:value="low-box"/>
-                                            </styleClass>
-                                            <children>
-                                                <Label text="Lowest Game" styleClass="stat-title" />
-                                                <Label text="21" styleClass="low-number" />
-                                                <Label text="points" styleClass="stat-unit" />
+                                                        <HBox spacing="18" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="vs New York Knicks"
+                                                                       styleClass="result-subtitle-strong" />
+                                                                <Label text="•"
+                                                                       styleClass="result-dot" />
+                                                                <Label text="Points Per Game"
+                                                                       styleClass="result-subtitle" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
                                             </children>
-                                            <padding>
-                                                <Insets top="20" right="20" bottom="20" left="20"/>
-                                            </padding>
-                                        </VBox>
+                                        </HBox>
                                     </children>
-                                </GridPane>
+                                    <padding>
+                                        <Insets top="26" right="34" bottom="26" left="34"/>
+                                    </padding>
+                                </VBox>
 
-                                <ImageView fx:id="centerLogo"
-                                           fitWidth="350"
-                                           fitHeight="350"
-                                           preserveRatio="true" />
+                                <VBox spacing="22"
+                                      prefWidth="980"
+                                      maxWidth="980"
+                                      styleClass="performance-metrics-card">
+                                    <children>
+                                        <Label text="Performance Metrics"
+                                               styleClass="performance-metrics-title" />
+                                        <HBox spacing="46" alignment="CENTER">
+                                            <children>
+                                                <VBox spacing="6" alignment="CENTER" prefWidth="180">
+                                                    <children>
+                                                        <Label text="vs Knicks" styleClass="metric-label" />
+                                                        <Label text="29.2" styleClass="metric-number-blue" />
+                                                        <Label text="PPG average" styleClass="metric-subtext" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="6" alignment="CENTER" prefWidth="180">
+                                                    <children>
+                                                        <Label text="Career Average" styleClass="metric-label" />
+                                                        <Label text="26.5" styleClass="metric-number-dark" />
+                                                        <Label text="PPG overall" styleClass="metric-subtext" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="6" alignment="CENTER" prefWidth="180">
+                                                    <children>
+                                                        <Label text="Last 5 Games" styleClass="metric-label" />
+                                                        <Label text="30.4" styleClass="metric-number-green" />
+                                                        <Label text="PPG recent" styleClass="metric-subtext" />
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="6" alignment="CENTER" prefWidth="180">
+                                                    <children>
+                                                        <Label text="Last 10 Games" styleClass="metric-label" />
+                                                        <Label text="29.0" styleClass="metric-number-purple" />
+                                                        <Label text="PPG L10" styleClass="metric-subtext" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets top="24" right="28" bottom="24" left="28"/>
+                                    </padding>
+                                </VBox>
+
+                                <VBox spacing="22"
+                                      prefWidth="980"
+                                      maxWidth="980"
+                                      styleClass="detailed-stats-card">
+                                    <children>
+                                        <Label text="Detailed Statistics"
+                                               styleClass="detailed-stats-title"/>
+                                        <GridPane hgap="20" vgap="20" alignment="CENTER">
+                                            <columnConstraints>
+                                                <ColumnConstraints percentWidth="20"/>
+                                                <ColumnConstraints percentWidth="20"/>
+                                                <ColumnConstraints percentWidth="20"/>
+                                                <ColumnConstraints percentWidth="20"/>
+                                                <ColumnConstraints percentWidth="20"/>
+                                            </columnConstraints>
+                                            <children>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="GAMES" styleClass="mini-stat-label"/>
+                                                        <Label text="10" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="HIGH" styleClass="mini-stat-label"/>
+                                                        <Label text="33" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="LOW" styleClass="mini-stat-label"/>
+                                                        <Label text="25" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="FG%" styleClass="mini-stat-label"/>
+                                                        <Label text="48.5" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="MIN" styleClass="mini-stat-label"/>
+                                                        <Label text="35.5" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="AST" styleClass="mini-stat-label"/>
+                                                        <Label text="7.0" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="REB" styleClass="mini-stat-label"/>
+                                                        <Label text="8.1" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="TO" styleClass="mini-stat-label"/>
+                                                        <Label text="3.1" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="3" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="HOME" styleClass="mini-stat-label"/>
+                                                        <Label text="30.5" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="4" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="AWAY" styleClass="mini-stat-label"/>
+                                                        <Label text="26.2" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                    <padding>
+                                        <Insets top="24" right="24" bottom="24" left="24"/>
+                                    </padding>
+                                </VBox>
+
+                                <VBox spacing="22"
+                                      prefWidth="980"
+                                      maxWidth="980"
+                                      styleClass="matchup-comparison-card">
+                                    <children>
+                                        <Label text="Matchup Comparison"
+                                               styleClass="matchup-comparison-title" />
+                                        <HBox spacing="24"
+                                              alignment="CENTER"
+                                              prefWidth="932"
+                                              maxWidth="932">
+                                            <children>
+                                                <VBox prefWidth="454"
+                                                      prefHeight="170"
+                                                      spacing="14"
+                                                      styleClass="matchup-best-box">
+                                                    <children>
+                                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="🏅" styleClass="matchup-icon" />
+                                                                <Label text="Best Matchup" styleClass="matchup-best-label" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Philadelphia 76ers" styleClass="matchup-team-name" />
+                                                        <Label text="32.9 PPG" styleClass="matchup-best-number" />
+                                                    </children>
+                                                    <padding>
+                                                        <Insets top="20" right="24" bottom="20" left="24"/>
+                                                    </padding>
+                                                </VBox>
+                                                <VBox prefWidth="454"
+                                                      prefHeight="170"
+                                                      spacing="14"
+                                                      styleClass="matchup-tough-box">
+                                                    <children>
+                                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="⚠" styleClass="matchup-icon" />
+                                                                <Label text="Toughest Matchup" styleClass="matchup-tough-label" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Boston Celtics" styleClass="matchup-team-name" />
+                                                        <Label text="24.0 PPG" styleClass="matchup-tough-number" />
+                                                    </children>
+                                                    <padding>
+                                                        <Insets top="20" right="24" bottom="20" left="24"/>
+                                                    </padding>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets top="24" right="24" bottom="24" left="24"/>
+                                    </padding>
+                                </VBox>
+
+                                <VBox spacing="24"
+                                      prefWidth="980"
+                                      maxWidth="980"
+                                      styleClass="intelligence-summary-card">
+                                    <children>
+                                        <HBox spacing="12" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="◎" styleClass="intelligence-icon" />
+                                                <Label text="Intelligence Summary" styleClass="intelligence-title" />
+                                            </children>
+                                        </HBox>
+                                        <GridPane hgap="24" vgap="24" alignment="CENTER">
+                                            <columnConstraints>
+                                                <ColumnConstraints percentWidth="50"/>
+                                                <ColumnConstraints percentWidth="50"/>
+                                            </columnConstraints>
+                                            <children>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="0"
+                                                      spacing="10"
+                                                      prefWidth="430"
+                                                      prefHeight="150"
+                                                      styleClass="intelligence-box">
+                                                    <children>
+                                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="↗" styleClass="summary-green-icon" />
+                                                                <Label text="RECENT TREND" styleClass="summary-box-title" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Trending upward with last 5 games averaging 31.4 Points Per Game, which is 4.9 points above the career average of 26.5."
+                                                               wrapText="true"
+                                                               styleClass="summary-box-text" />
+                                                    </children>
+                                                    <padding>
+                                                        <Insets top="18" right="20" bottom="18" left="20"/>
+                                                    </padding>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                                      spacing="10"
+                                                      prefWidth="430"
+                                                      prefHeight="150"
+                                                      styleClass="intelligence-box">
+                                                    <children>
+                                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="🏅" styleClass="summary-green-icon" />
+                                                                <Label text="MATCHUP STRENGTH" styleClass="summary-box-title" />
+                                                            </children>
+                                                        </HBox>
+
+                                                        <Label text="Detroit Pistons is one of the player's strongest matchups, ranking #3 out of 9 opponents."
+                                                               wrapText="true"
+                                                               styleClass="summary-box-text" />
+                                                    </children>
+                                                    <padding>
+                                                        <Insets top="18" right="20" bottom="18" left="20"/>
+                                                    </padding>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="0"
+                                                      spacing="10"
+                                                      prefWidth="430"
+                                                      prefHeight="120"
+                                                      styleClass="intelligence-box">
+                                                    <children>
+                                                        <Label text="HOME/AWAY SPLIT" styleClass="summary-box-title" />
+
+                                                        <Label text="Performs 16% better at home compared to away games."
+                                                               wrapText="true"
+                                                               styleClass="summary-box-text" />
+                                                    </children>
+                                                    <padding>
+                                                        <Insets top="18" right="20" bottom="18" left="20"/>
+                                                    </padding>
+                                                </VBox>
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                                      spacing="10"
+                                                      prefWidth="430"
+                                                      prefHeight="120"
+                                                      styleClass="intelligence-box">
+                                                    <children>
+                                                        <Label text="RECENT FORM" styleClass="summary-box-title" />
+
+                                                        <Label text="Recent performance shows positive momentum."
+                                                               wrapText="true"
+                                                               styleClass="summary-box-text" />
+                                                    </children>
+
+                                                    <padding>
+                                                        <Insets top="18" right="20" bottom="18" left="20"/>
+                                                    </padding>
+                                                </VBox>
+                                            </children>
+                                        </GridPane>
+
+                                    </children>
+                                    <padding>
+                                        <Insets top="24" right="24" bottom="24" left="24"/>
+                                    </padding>
+                                </VBox>
+
                             </children>
-                        </StackPane>
-
-                    </children>
-
-                    <padding>
-                        <Insets top="28" right="35" bottom="30" left="35"/>
-                    </padding>
-                </VBox>
-
-                <VBox fx:id="profileMenu"
-                      visible="false"
-                      managed="false"
-                      maxWidth="300"
-                      prefWidth="300"
-                      spacing="12"
-                      styleClass="profile-menu"
-                      StackPane.alignment="TOP_RIGHT"
-                      translateX="-10"
-                      translateY="20">
-
-                    <children>
-                        <VBox spacing="4">
-                            <children>
-                                <Label fx:id="profileNameLabel"
-                                       text="Dan Gron"
-                                       styleClass="profile-name" />
-                                <Label fx:id="profileUsernameLabel"
-                                       text="@ForeignStage"
-                                       styleClass="profile-username" />
-                            </children>
+                            <padding>
+                                <Insets top="20" right="20" bottom="30" left="20"/>
+                            </padding>
                         </VBox>
 
-                        <Separator />
+                        <VBox fx:id="profileMenu"
+                              visible="false"
+                              managed="false"
+                              maxWidth="300"
+                              prefWidth="300"
+                              spacing="12"
+                              styleClass="profile-menu"
+                              StackPane.alignment="TOP_RIGHT"
+                              translateX="-10"
+                              translateY="20">
 
-                        <Label text="No search history yet. Start searching to see your history here!"
-                               wrapText="true"
-                               styleClass="profile-history" />
+                            <children>
+                                <VBox spacing="4">
+                                    <children>
+                                        <Label fx:id="profileNameLabel"
+                                               text="Dan Gron"
+                                               styleClass="profile-name" />
+                                        <Label fx:id="profileUsernameLabel"
+                                               text="@ForeignStage"
+                                               styleClass="profile-username" />
+                                    </children>
+                                </VBox>
 
-                        <Separator />
+                                <Separator />
 
-                        <Button text="Logout"
-                                styleClass="logout-btn"
-                                onAction="#handleLogout" />
+                                <Label text="No search history yet. Start searching to see your history here!"
+                                       wrapText="true"
+                                       styleClass="profile-history" />
+
+                                <Separator />
+
+                                <Button text="Logout"
+                                        styleClass="logout-btn"
+                                        onAction="#handleLogout" />
+                            </children>
+
+                            <padding>
+                                <Insets top="14" right="14" bottom="14" left="14"/>
+                            </padding>
+                        </VBox>
+
                     </children>
-
-                    <padding>
-                        <Insets top="14" right="14" bottom="14" left="14"/>
-                    </padding>
-                </VBox>
-            </children>
-        </StackPane>
+                </StackPane>
+            </content>
+        </ScrollPane>
     </center>
 </BorderPane>
