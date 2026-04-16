@@ -6,6 +6,7 @@ public class SessionManager {
     private static String fullName = "";
     private static String username = "";
     private static SearchResult latestSearch;
+    private static CompareResult latestCompare;
 
     private SessionManager() {
     }
@@ -21,6 +22,7 @@ public class SessionManager {
         fullName = "";
         username = "";
         latestSearch = null;
+        latestCompare = null;
     }
 
     public static boolean isLoggedIn() {
@@ -43,6 +45,14 @@ public class SessionManager {
         return latestSearch;
     }
 
+    public static void setLatestCompare(CompareResult compareResult) {
+        latestCompare = compareResult;
+    }
+
+    public static CompareResult getLatestCompare() {
+        return latestCompare;
+    }
+
     public record SearchResult(
             String player,
             String opponent,
@@ -55,6 +65,25 @@ public class SessionManager {
             double average,
             double high,
             double low
+    ) {
+    }
+
+    public record CompareResult(
+            String playerOne,
+            String playerTwo,
+            String opponent,
+            double playerOnePoints,
+            double playerTwoPoints,
+            double playerOneAssists,
+            double playerTwoAssists,
+            double playerOneRebounds,
+            double playerTwoRebounds,
+            double playerOneFgPct,
+            double playerTwoFgPct,
+            double playerOneMinutes,
+            double playerTwoMinutes,
+            int playerOneGames,
+            int playerTwoGames
     ) {
     }
 }
