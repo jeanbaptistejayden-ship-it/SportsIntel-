@@ -21,7 +21,7 @@ public class ResultsController {
     private ImageView navLogo;
 
     @FXML
-    private ImageView resultLogo;
+    private ImageView playerImage;
 
     @FXML
     private HBox authButtons;
@@ -46,10 +46,6 @@ public class ResultsController {
 
         if (navLogo != null) {
             navLogo.setImage(image);
-        }
-
-        if (resultLogo != null) {
-            resultLogo.setImage(image);
         }
         updateLoggedInUI();
     }
@@ -191,6 +187,25 @@ public class ResultsController {
 
             profileMenu.setVisible(false);
             profileMenu.setManaged(false);
+        }
+    }
+
+    public void loadPlayerImage(String playerName) {
+        if (playerName != null && playerName.equalsIgnoreCase("LeBron James")) {
+            setPlayerImage("/lebron.png");
+        } else {
+            setPlayerImage("/lebron.png");
+        }
+    }
+
+    private void setPlayerImage(String path) {
+        try {
+            Image image = new Image(
+                    Objects.requireNonNull(getClass().getResource(path)).toExternalForm()
+            );
+            playerImage.setImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
@@ -128,9 +127,9 @@
                                         <HBox spacing="26" alignment="CENTER_LEFT">
                                             <children>
 
-                                                <ImageView fx:id="resultLogo"
-                                                           fitWidth="250"
-                                                           fitHeight="250"
+                                                <ImageView fx:id="playerImage"
+                                                           fitWidth="200"
+                                                           fitHeight="200"
                                                            preserveRatio="true" />
 
                                                 <VBox spacing="10" alignment="CENTER_LEFT">
