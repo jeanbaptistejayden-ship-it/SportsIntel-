@@ -307,7 +307,6 @@
                                         <Label text="Last 5 Games vs Opponent"
                                                styleClass="last-five-title" />
 
-                                        <!-- Table header -->
                                         <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-header-row">
                                             <children>
                                                 <Label text="Date" prefWidth="140" styleClass="last-five-header-cell" />
@@ -321,7 +320,6 @@
                                             </children>
                                         </HBox>
 
-                                        <!-- Row 1 -->
                                         <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
                                             <children>
                                                 <Label text="03/12/2026" prefWidth="140" styleClass="last-five-cell" />
@@ -335,7 +333,6 @@
                                             </children>
                                         </HBox>
 
-                                        <!-- Row 2 -->
                                         <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
                                             <children>
                                                 <Label text="02/05/2026" prefWidth="140" styleClass="last-five-cell" />
@@ -349,7 +346,6 @@
                                             </children>
                                         </HBox>
 
-                                        <!-- Row 3 -->
                                         <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
                                             <children>
                                                 <Label text="01/18/2026" prefWidth="140" styleClass="last-five-cell" />
@@ -363,7 +359,6 @@
                                             </children>
                                         </HBox>
 
-                                        <!-- Row 4 -->
                                         <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
                                             <children>
                                                 <Label text="12/22/2025" prefWidth="140" styleClass="last-five-cell" />
@@ -377,7 +372,6 @@
                                             </children>
                                         </HBox>
 
-                                        <!-- Row 5 -->
                                         <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
                                             <children>
                                                 <Label text="11/30/2025" prefWidth="140" styleClass="last-five-cell" />
