@@ -1,6 +1,5 @@
 package com.sportsintel;
 
-import model.FirestoreC;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,7 +15,7 @@ public class Main extends Application {
 
     public static Firestore fstore;
     public static FirebaseAuth fauth;
-    private final FirestoreC contxtFirebase = new FirestoreC();
+    private final FirestoneContext contxtFirebase = new FirestoneContext();
 
 
     @Override
