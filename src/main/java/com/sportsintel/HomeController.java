@@ -1,5 +1,7 @@
 package com.sportsintel;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.fxml.FXML;
@@ -24,7 +26,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -264,6 +273,27 @@ public class HomeController {
 
             JsonObject summary = body.getAsJsonObject("summary");
             JsonObject meta = body.getAsJsonObject("meta");
+            JsonArray games = body.getAsJsonArray("games");
+            double selectedAverage = summary.get("average").getAsDouble();
+            String selectedStatKey = summary.get("stat").getAsString();
+
+            String baselineUrl = buildPlayerRequestUrl(playerName, season, seasonType, "both", null, null, stat);
+            HttpRequest baselineRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(baselineUrl))
+                    .GET()
+                    .build();
+            HttpResponse<String> baselineResponse = HttpClient.newHttpClient().send(baselineRequest, HttpResponse.BodyHandlers.ofString());
+            if (baselineResponse.statusCode() != 200) {
+                showError("Backend baseline request failed: HTTP " + baselineResponse.statusCode());
+                return;
+            }
+            JsonObject baselineBody = JsonParser.parseString(baselineResponse.body()).getAsJsonObject();
+            if (baselineBody.has("error")) {
+                showError(baselineBody.get("error").getAsString());
+                return;
+            }
+            JsonObject baselineSummary = baselineBody.getAsJsonObject("summary");
+            JsonArray baselineGames = baselineBody.getAsJsonArray("games");
 
             SessionManager.setLatestSearch(new SessionManager.SearchResult(
                     summary.get("player").getAsString(),
@@ -274,9 +304,23 @@ public class HomeController {
                     meta.get("location").getAsString(),
                     meta.get("last_n").isJsonNull() ? "All" : meta.get("last_n").getAsString(),
                     summary.get("games_played").getAsInt(),
-                    summary.get("average").getAsDouble(),
+                    selectedAverage,
                     summary.get("high").getAsDouble(),
-                    summary.get("low").getAsDouble()
+                    summary.get("low").getAsDouble(),
+                    baselineSummary.get("average").getAsDouble(),
+                    averageOfLastN(baselineGames, selectedStatKey, 5),
+                    averageOfLastN(baselineGames, selectedStatKey, 10),
+                    averageOf(games, "fg_pct"),
+                    averageOf(games, "min"),
+                    averageOf(games, "ast"),
+                    averageOf(games, "reb"),
+                    averageOf(games, "tov"),
+                    averageByLocation(baselineGames, true, selectedStatKey),
+                    averageByLocation(baselineGames, false, selectedStatKey),
+                    readGameOpponent(summary, "high_game"),
+                    readGameValue(summary, "high_game"),
+                    readGameOpponent(summary, "low_game"),
+                    readGameValue(summary, "low_game")
             ));
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
@@ -515,6 +559,95 @@ public class HomeController {
             return "Plus/Minus";
         }
         return "Points Per Game";
+    }
+
+    private double averageOf(JsonArray games, String statKey) {
+        if (games == null || games.isEmpty()) {
+            return 0.0;
+        }
+        double sum = 0.0;
+        int count = 0;
+        for (JsonElement gameElement : games) {
+            JsonObject game = gameElement.getAsJsonObject();
+            if (game.has(statKey) && !game.get(statKey).isJsonNull()) {
+                sum += game.get(statKey).getAsDouble();
+                count++;
+            }
+        }
+        return count == 0 ? 0.0 : sum / count;
+    }
+
+    private double averageByLocation(JsonArray games, boolean home, String statKey) {
+        if (games == null || games.isEmpty()) {
+            return 0.0;
+        }
+        double sum = 0.0;
+        int count = 0;
+        for (JsonElement gameElement : games) {
+            JsonObject game = gameElement.getAsJsonObject();
+            boolean isHome = game.has("home") && !game.get("home").isJsonNull() && game.get("home").getAsBoolean();
+            if (isHome == home && game.has(statKey) && !game.get(statKey).isJsonNull()) {
+                sum += game.get(statKey).getAsDouble();
+                count++;
+            }
+        }
+        return count == 0 ? 0.0 : sum / count;
+    }
+
+    private double averageOfLastN(JsonArray games, String statKey, int lastN) {
+        if (games == null || games.isEmpty()) {
+            return 0.0;
+        }
+        List<JsonObject> sortedGames = new ArrayList<>();
+        for (JsonElement gameElement : games) {
+            sortedGames.add(gameElement.getAsJsonObject());
+        }
+        sortedGames.sort(Comparator.comparing(this::parseGameDate).reversed());
+
+        double sum = 0.0;
+        int count = 0;
+        for (int i = 0; i < sortedGames.size() && count < lastN; i++) {
+            JsonObject game = sortedGames.get(i);
+            if (game.has(statKey) && !game.get(statKey).isJsonNull()) {
+                sum += game.get(statKey).getAsDouble();
+                count++;
+            }
+        }
+        return count == 0 ? 0.0 : sum / count;
+    }
+
+    private LocalDate parseGameDate(JsonObject game) {
+        if (game == null || !game.has("date") || game.get("date").isJsonNull()) {
+            return LocalDate.MIN;
+        }
+        String dateText = game.get("date").getAsString();
+        try {
+            return LocalDate.parse(dateText, DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.US));
+        } catch (DateTimeParseException e) {
+            return LocalDate.MIN;
+        }
+    }
+
+    private String readGameOpponent(JsonObject summary, String gameKey) {
+        if (!summary.has(gameKey) || summary.get(gameKey).isJsonNull()) {
+            return "N/A";
+        }
+        JsonObject game = summary.getAsJsonObject(gameKey);
+        if (!game.has("opponent") || game.get("opponent").isJsonNull()) {
+            return "N/A";
+        }
+        return game.get("opponent").getAsString();
+    }
+
+    private double readGameValue(JsonObject summary, String gameKey) {
+        if (!summary.has(gameKey) || summary.get(gameKey).isJsonNull()) {
+            return 0.0;
+        }
+        JsonObject game = summary.getAsJsonObject(gameKey);
+        if (!game.has("value") || game.get("value").isJsonNull()) {
+            return 0.0;
+        }
+        return game.get("value").getAsDouble();
     }
 
     private void showError(String message) {
