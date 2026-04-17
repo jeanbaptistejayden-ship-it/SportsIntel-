@@ -613,9 +613,9 @@
     -fx-font-size: 28px;
     -fx-font-weight: 800;
 }
-/*Matchup Comparison*/
-.matchup-comparison-card {
-    -fx-background-color: #f5f6f8;
+/*Last 5 Games vs Opponent Stats*/
+.last-five-card {
+    -fx-background-color: #f7f7f8;
     -fx-background-radius: 14;
     -fx-border-color: black;
     -fx-border-width: 1.5;
@@ -623,60 +623,58 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.15, 0, 3);
 }
 
-.matchup-comparison-title {
+.last-five-title {
     -fx-text-fill: #0d1730;
     -fx-font-size: 22px;
     -fx-font-weight: 800;
 }
 
-.matchup-box {
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-width: 2;
+.last-five-header-row {
+    -fx-background-color: #e9eef7;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
 }
 
-.matchup-best-box {
-    -fx-background-color: #eef7ef;
-    -fx-background-radius: 12;
-    -fx-border-color: #7bd88a;
-    -fx-border-radius: 12;
-    -fx-border-width: 2;
+.last-five-header-cell {
+    -fx-text-fill: #374151;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-padding: 12 14 12 14;
 }
 
-.matchup-tough-box {
-    -fx-background-color: #fbf3ea;
-    -fx-background-radius: 12;
-    -fx-border-color: #f0a648;
-    -fx-border-radius: 12;
-    -fx-border-width: 2;
+.last-five-data-row {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #dbe3f1;
+    -fx-border-width: 1;
 }
 
-.matchup-icon {
-    -fx-font-size: 20px;
-}
-
-.matchup-best-label, .matchup-tough-label {
+.last-five-cell {
     -fx-text-fill: #0d1730;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 12 14 12 14;
+}
+
+.centered-cell {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.value-blue {
+    -fx-text-fill: #3657f0;
     -fx-font-weight: 700;
 }
 
-.matchup-team-name {
-    -fx-text-fill: #0d1730;
-    -fx-font-size: 24px;
-    -fx-font-weight: 800;
-}
-
-.matchup-best-number {
+.value-green {
     -fx-text-fill: #3e8b43;
-    -fx-font-size: 40px;
-    -fx-font-weight: 800;
+    -fx-font-weight: 700;
 }
 
-.matchup-tough-number {
+.value-orange {
     -fx-text-fill: #c96a00;
-    -fx-font-size: 40px;
-    -fx-font-weight: 800;
+    -fx-font-weight: 700;
 }
 /*Intelligence Summary*/
 .intelligence-summary-card {
