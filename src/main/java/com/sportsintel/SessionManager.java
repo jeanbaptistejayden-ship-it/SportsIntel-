@@ -64,7 +64,21 @@ public class SessionManager {
             int gamesPlayed,
             double average,
             double high,
-            double low
+            double low,
+            double seasonBaseline,
+            double lastFiveAverage,
+            double lastTenAverage,
+            double fieldGoalPct,
+            double minutes,
+            double assists,
+            double rebounds,
+            double turnovers,
+            double homeAverage,
+            double awayAverage,
+            String bestGameOpponent,
+            double bestGameValue,
+            String toughestGameOpponent,
+            double toughestGameValue
     ) {
     }
 

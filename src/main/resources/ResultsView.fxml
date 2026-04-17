@@ -175,23 +175,23 @@
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label text="Career Average" styleClass="metric-label" />
-                                                        <Label text="26.5" styleClass="metric-number-dark" />
-                                                        <Label text="PPG overall" styleClass="metric-subtext" />
+                                                        <Label fx:id="baselineTitleLabel" text="Career Average" styleClass="metric-label" />
+                                                        <Label fx:id="baselineValueLabel" text="26.5" styleClass="metric-number-dark" />
+                                                        <Label fx:id="baselineUnitLabel" text="PPG overall" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label text="Last 5 Games" styleClass="metric-label" />
-                                                        <Label text="30.4" styleClass="metric-number-green" />
-                                                        <Label text="PPG recent" styleClass="metric-subtext" />
+                                                        <Label fx:id="lastFiveTitleLabel" text="Last 5 Games" styleClass="metric-label" />
+                                                        <Label fx:id="lastFiveValueLabel" text="30.4" styleClass="metric-number-green" />
+                                                        <Label fx:id="lastFiveUnitLabel" text="PPG recent" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label text="Last 10 Games" styleClass="metric-label" />
-                                                        <Label text="29.0" styleClass="metric-number-purple" />
-                                                        <Label text="PPG L10" styleClass="metric-subtext" />
+                                                        <Label fx:id="lastTenTitleLabel" text="Last 10 Games" styleClass="metric-label" />
+                                                        <Label fx:id="lastTenValueLabel" text="29.0" styleClass="metric-number-purple" />
+                                                        <Label fx:id="lastTenUnitLabel" text="PPG L10" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -239,43 +239,43 @@
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="FG%" styleClass="mini-stat-label"/>
-                                                        <Label text="48.5" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="fgValueLabel" text="48.5" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="MIN" styleClass="mini-stat-label"/>
-                                                        <Label text="35.5" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="minValueLabel" text="35.5" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="AST" styleClass="mini-stat-label"/>
-                                                        <Label text="7.0" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="astValueLabel" text="7.0" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="REB" styleClass="mini-stat-label"/>
-                                                        <Label text="8.1" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="rebValueLabel" text="8.1" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="TO" styleClass="mini-stat-label"/>
-                                                        <Label text="3.1" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="tovValueLabel" text="3.1" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="3" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="HOME" styleClass="mini-stat-label"/>
-                                                        <Label text="30.5" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="homeValueLabel" text="30.5" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="4" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="AWAY" styleClass="mini-stat-label"/>
-                                                        <Label text="26.2" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="awayValueLabel" text="26.2" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -309,8 +309,8 @@
                                                                 <Label text="Best Matchup" styleClass="matchup-best-label" />
                                                             </children>
                                                         </HBox>
-                                                        <Label text="Philadelphia 76ers" styleClass="matchup-team-name" />
-                                                        <Label text="32.9 PPG" styleClass="matchup-best-number" />
+                                                        <Label fx:id="bestMatchupTeamLabel" text="Philadelphia 76ers" styleClass="matchup-team-name" />
+                                                        <Label fx:id="bestMatchupValueLabel" text="32.9 PPG" styleClass="matchup-best-number" />
                                                     </children>
                                                     <padding>
                                                         <Insets top="20" right="24" bottom="20" left="24"/>
@@ -327,8 +327,8 @@
                                                                 <Label text="Toughest Matchup" styleClass="matchup-tough-label" />
                                                             </children>
                                                         </HBox>
-                                                        <Label text="Boston Celtics" styleClass="matchup-team-name" />
-                                                        <Label text="24.0 PPG" styleClass="matchup-tough-number" />
+                                                        <Label fx:id="toughestMatchupTeamLabel" text="Boston Celtics" styleClass="matchup-team-name" />
+                                                        <Label fx:id="toughestMatchupValueLabel" text="24.0 PPG" styleClass="matchup-tough-number" />
                                                     </children>
                                                     <padding>
                                                         <Insets top="20" right="24" bottom="20" left="24"/>
@@ -371,7 +371,7 @@
                                                                 <Label text="RECENT TREND" styleClass="summary-box-title" />
                                                             </children>
                                                         </HBox>
-                                                        <Label text="Trending upward with last 5 games averaging 31.4 Points Per Game, which is 4.9 points above the career average of 26.5."
+                                                        <Label fx:id="trendSummaryLabel" text="Trending upward with last 5 games averaging 31.4 Points Per Game, which is 4.9 points above the career average of 26.5."
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
@@ -392,7 +392,7 @@
                                                             </children>
                                                         </HBox>
 
-                                                        <Label text="Detroit Pistons is one of the player's strongest matchups, ranking #3 out of 9 opponents."
+                                                        <Label fx:id="matchupStrengthSummaryLabel" text="Detroit Pistons is one of the player's strongest matchups, ranking #3 out of 9 opponents."
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
@@ -408,7 +408,7 @@
                                                     <children>
                                                         <Label text="HOME/AWAY SPLIT" styleClass="summary-box-title" />
 
-                                                        <Label text="Performs 16% better at home compared to away games."
+                                                        <Label fx:id="homeAwaySummaryLabel" text="Performs 16% better at home compared to away games."
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
@@ -424,7 +424,7 @@
                                                     <children>
                                                         <Label text="RECENT FORM" styleClass="summary-box-title" />
 
-                                                        <Label text="Recent performance shows positive momentum."
+                                                        <Label fx:id="recentFormSummaryLabel" text="Recent performance shows positive momentum."
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>

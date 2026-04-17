@@ -67,6 +67,24 @@ public class ResultsController {
 
     @FXML
     private Label averageUnitLabel;
+    @FXML
+    private Label baselineTitleLabel;
+    @FXML
+    private Label baselineValueLabel;
+    @FXML
+    private Label baselineUnitLabel;
+    @FXML
+    private Label lastFiveTitleLabel;
+    @FXML
+    private Label lastFiveValueLabel;
+    @FXML
+    private Label lastFiveUnitLabel;
+    @FXML
+    private Label lastTenTitleLabel;
+    @FXML
+    private Label lastTenValueLabel;
+    @FXML
+    private Label lastTenUnitLabel;
 
     @FXML
     private Label gamesPlayedLabel;
@@ -76,6 +94,36 @@ public class ResultsController {
 
     @FXML
     private Label lowValueLabel;
+    @FXML
+    private Label fgValueLabel;
+    @FXML
+    private Label minValueLabel;
+    @FXML
+    private Label astValueLabel;
+    @FXML
+    private Label rebValueLabel;
+    @FXML
+    private Label tovValueLabel;
+    @FXML
+    private Label homeValueLabel;
+    @FXML
+    private Label awayValueLabel;
+    @FXML
+    private Label bestMatchupTeamLabel;
+    @FXML
+    private Label bestMatchupValueLabel;
+    @FXML
+    private Label toughestMatchupTeamLabel;
+    @FXML
+    private Label toughestMatchupValueLabel;
+    @FXML
+    private Label trendSummaryLabel;
+    @FXML
+    private Label matchupStrengthSummaryLabel;
+    @FXML
+    private Label homeAwaySummaryLabel;
+    @FXML
+    private Label recentFormSummaryLabel;
 
     @FXML
     public void initialize() {
@@ -108,10 +156,91 @@ public class ResultsController {
 
         updateText(averageTitleLabel, "vs " + opponent);
         updateText(averageValueLabel, String.format("%.1f", search.average()));
-        updateText(averageUnitLabel, shortStatLabel(search.stat()) + " average");
+        String shortStat = shortStatLabel(search.stat());
+        updateText(averageUnitLabel, shortStat + " average");
+
+        updateText(baselineTitleLabel, "Season Baseline");
+        updateText(baselineValueLabel, String.format("%.1f", search.seasonBaseline()));
+        updateText(baselineUnitLabel, shortStat + " baseline");
+
+        updateText(lastFiveTitleLabel, "Last 5 Games");
+        updateText(lastFiveValueLabel, String.format("%.1f", search.lastFiveAverage()));
+        updateText(lastFiveUnitLabel, shortStat + " recent");
+
+        updateText(lastTenTitleLabel, "Last 10 Games");
+        updateText(lastTenValueLabel, String.format("%.1f", search.lastTenAverage()));
+        updateText(lastTenUnitLabel, shortStat + " L10");
+
         updateText(gamesPlayedLabel, String.valueOf(search.gamesPlayed()));
         updateText(highValueLabel, String.format("%.1f", search.high()));
         updateText(lowValueLabel, String.format("%.1f", search.low()));
+        updateText(fgValueLabel, String.format("%.1f", search.fieldGoalPct()));
+        updateText(minValueLabel, String.format("%.1f", search.minutes()));
+        updateText(astValueLabel, String.format("%.1f", search.assists()));
+        updateText(rebValueLabel, String.format("%.1f", search.rebounds()));
+        updateText(tovValueLabel, String.format("%.1f", search.turnovers()));
+        updateText(homeValueLabel, String.format("%.1f", search.homeAverage()));
+        updateText(awayValueLabel, String.format("%.1f", search.awayAverage()));
+
+        updateText(bestMatchupTeamLabel, search.bestGameOpponent());
+        updateText(bestMatchupValueLabel, String.format("%.1f %s", search.bestGameValue(), shortStat));
+        updateText(toughestMatchupTeamLabel, search.toughestGameOpponent());
+        updateText(toughestMatchupValueLabel, String.format("%.1f %s", search.toughestGameValue(), shortStat));
+
+        double trendDiff = search.lastFiveAverage() - search.seasonBaseline();
+        String trendDirection = trendDiff >= 0 ? "upward" : "downward";
+        updateText(
+                trendSummaryLabel,
+                String.format(
+                        "Trending %s: last 5 games are %.1f %s versus baseline %.1f %s (Δ %.1f).",
+                        trendDirection,
+                        search.lastFiveAverage(),
+                        shortStat,
+                        search.seasonBaseline(),
+                        shortStat,
+                        trendDiff
+                )
+        );
+
+        updateText(
+                matchupStrengthSummaryLabel,
+                String.format(
+                        "Best single-game output came vs %s (%.1f %s); toughest was vs %s (%.1f %s).",
+                        search.bestGameOpponent(),
+                        search.bestGameValue(),
+                        shortStat,
+                        search.toughestGameOpponent(),
+                        search.toughestGameValue(),
+                        shortStat
+                )
+        );
+
+        double homeAwayDelta = search.homeAverage() - search.awayAverage();
+        String locationEdge = homeAwayDelta >= 0 ? "home" : "away";
+        updateText(
+                homeAwaySummaryLabel,
+                String.format(
+                        "Split favors %s: home %.1f vs away %.1f %s (Δ %.1f).",
+                        locationEdge,
+                        search.homeAverage(),
+                        search.awayAverage(),
+                        shortStat,
+                        homeAwayDelta
+                )
+        );
+
+        double recentFormDelta = search.lastFiveAverage() - search.lastTenAverage();
+        String formDirection = recentFormDelta >= 0 ? "positive momentum" : "cooling off";
+        updateText(
+                recentFormSummaryLabel,
+                String.format(
+                        "Recent form shows %s (last 5: %.1f, last 10: %.1f %s).",
+                        formDirection,
+                        search.lastFiveAverage(),
+                        search.lastTenAverage(),
+                        shortStat
+                )
+        );
     }
 
     @FXML
