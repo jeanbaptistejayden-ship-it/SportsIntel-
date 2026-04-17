@@ -218,66 +218,77 @@
                                                 <ColumnConstraints percentWidth="20"/>
                                             </columnConstraints>
                                             <children>
+
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="GAMES" styleClass="mini-stat-label"/>
                                                         <Label fx:id="gamesPlayedLabel" text="10" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
+
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="HIGH" styleClass="mini-stat-label"/>
                                                         <Label fx:id="highValueLabel" text="33" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
+
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="LOW" styleClass="mini-stat-label"/>
                                                         <Label fx:id="lowValueLabel" text="25" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
+
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="stat-mini-box">
-                                                    <children>
-                                                        <Label text="FG%" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="fgValueLabel" text="48.5" styleClass="mini-stat-number"/>
-                                                    </children>
-                                                </VBox>
-                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="stat-mini-box">
-                                                    <children>
-                                                        <Label text="MIN" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="minValueLabel" text="35.5" styleClass="mini-stat-number"/>
-                                                    </children>
-                                                </VBox>
-                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="stat-mini-box">
-                                                    <children>
-                                                        <Label text="AST" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="astValueLabel" text="7.0" styleClass="mini-stat-number"/>
-                                                    </children>
-                                                </VBox>
-                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="stat-mini-box">
-                                                    <children>
-                                                        <Label text="REB" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="rebValueLabel" text="8.1" styleClass="mini-stat-number"/>
-                                                    </children>
-                                                </VBox>
-                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="stat-mini-box">
-                                                    <children>
-                                                        <Label text="TO" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="tovValueLabel" text="3.1" styleClass="mini-stat-number"/>
-                                                    </children>
-                                                </VBox>
-                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="3" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="HOME" styleClass="mini-stat-label"/>
                                                         <Label fx:id="homeValueLabel" text="30.5" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
-                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="4" styleClass="stat-mini-box">
+
+                                                <VBox GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="AWAY" styleClass="mini-stat-label"/>
                                                         <Label fx:id="awayValueLabel" text="26.2" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
+
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="FG%" styleClass="mini-stat-label"/>
+                                                        <Label fx:id="fgValueLabel" text="48.5" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="AST" styleClass="mini-stat-label"/>
+                                                        <Label fx:id="astValueLabel" text="7.0" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="REB" styleClass="mini-stat-label"/>
+                                                        <Label fx:id="rebValueLabel" text="8.1" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="3" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="TO" styleClass="mini-stat-label"/>
+                                                        <Label fx:id="tovValueLabel" text="3.1" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox GridPane.rowIndex="1" GridPane.columnIndex="4" styleClass="stat-mini-box">
+                                                    <children>
+                                                        <Label text="MIN" styleClass="mini-stat-label"/>
+                                                        <Label fx:id="minValueLabel" text="35.5" styleClass="mini-stat-number"/>
+                                                    </children>
+                                                </VBox>
+
                                             </children>
                                         </GridPane>
                                     </children>

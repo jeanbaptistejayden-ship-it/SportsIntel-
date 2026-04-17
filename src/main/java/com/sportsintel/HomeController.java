@@ -110,7 +110,7 @@ public class HomeController {
                     "Assists Per Game",
                     "Rebounds Per Game",
                     "Field Goal Percentage",
-                    "3pt Throw Percentage",
+                    "3pt Percentage",
                     "Free Throw Percentage",
                     "Steals Per Game",
                     "Blocks Per Game",
@@ -467,7 +467,7 @@ public class HomeController {
         if (value.equalsIgnoreCase("Field Goal Percentage")) {
             return "field_goal_percentage";
         }
-        if (value.equalsIgnoreCase("3pt Throw Percentage")) {
+        if (value.equalsIgnoreCase("3pt Percentage")) {
             return "three_point_percentage";
         }
         if (value.equalsIgnoreCase("Free Throw Percentage")) {

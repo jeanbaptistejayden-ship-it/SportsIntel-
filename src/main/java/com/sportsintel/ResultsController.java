@@ -157,15 +157,15 @@ public class ResultsController {
         updateText(averageTitleLabel, "vs " + opponent);
         updateText(averageValueLabel, String.format("%.1f", search.average()));
         String shortStat = shortStatLabel(search.stat());
-        updateText(averageUnitLabel, shortStat + " average");
+        updateText(averageUnitLabel, shortStat + " Average");
 
-        updateText(baselineTitleLabel, "Season Baseline");
+        updateText(baselineTitleLabel, "Current Season");
         updateText(baselineValueLabel, String.format("%.1f", search.seasonBaseline()));
-        updateText(baselineUnitLabel, shortStat + " baseline");
+        updateText(baselineUnitLabel, shortStat + " Average");
 
         updateText(lastFiveTitleLabel, "Last 5 Games");
         updateText(lastFiveValueLabel, String.format("%.1f", search.lastFiveAverage()));
-        updateText(lastFiveUnitLabel, shortStat + " recent");
+        updateText(lastFiveUnitLabel, shortStat + " Recent");
 
         updateText(lastTenTitleLabel, "Last 10 Games");
         updateText(lastTenValueLabel, String.format("%.1f", search.lastTenAverage()));
@@ -174,13 +174,13 @@ public class ResultsController {
         updateText(gamesPlayedLabel, String.valueOf(search.gamesPlayed()));
         updateText(highValueLabel, String.format("%.1f", search.high()));
         updateText(lowValueLabel, String.format("%.1f", search.low()));
+        updateText(homeValueLabel, String.format("%.1f", search.homeAverage()));
+        updateText(awayValueLabel, String.format("%.1f", search.awayAverage()));
         updateText(fgValueLabel, String.format("%.1f", search.fieldGoalPct()));
-        updateText(minValueLabel, String.format("%.1f", search.minutes()));
         updateText(astValueLabel, String.format("%.1f", search.assists()));
         updateText(rebValueLabel, String.format("%.1f", search.rebounds()));
         updateText(tovValueLabel, String.format("%.1f", search.turnovers()));
-        updateText(homeValueLabel, String.format("%.1f", search.homeAverage()));
-        updateText(awayValueLabel, String.format("%.1f", search.awayAverage()));
+        updateText(minValueLabel, String.format("%.1f", search.minutes()));
 
         updateText(bestMatchupTeamLabel, search.bestGameOpponent());
         updateText(bestMatchupValueLabel, String.format("%.1f %s", search.bestGameValue(), shortStat));
@@ -192,7 +192,7 @@ public class ResultsController {
         updateText(
                 trendSummaryLabel,
                 String.format(
-                        "Trending %s: last 5 games are %.1f %s versus baseline %.1f %s (Δ %.1f).",
+                        "Trending %s: last 5 games are %.1f %s versus average %.1f %s (Δ %.1f).",
                         trendDirection,
                         search.lastFiveAverage(),
                         shortStat,
