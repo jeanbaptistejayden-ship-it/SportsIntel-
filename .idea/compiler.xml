@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SportsIntel-" />
-        <module name="SportsIntel" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="SportsIntel" target="22" />
+    </bytecodeTargetLevel>
   </component>
 </project>

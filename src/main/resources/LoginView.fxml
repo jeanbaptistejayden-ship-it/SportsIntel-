@@ -7,51 +7,43 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="login-root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.sportsintel.LoginController">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsintel.LoginController"
+           styleClass="login-root">
 
     <children>
-        <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="login-card">
+        <VBox spacing="24" maxWidth="420" styleClass="login-card" alignment="CENTER">
             <children>
 
-                <ImageView fx:id="loginLogo" fitHeight="120" fitWidth="120" preserveRatio="true" />
+                <ImageView fx:id="loginLogo" fitWidth="120" fitHeight="120" preserveRatio="true" />
 
-                <Label styleClass="login-title" text="Login" />
+                <Label text="Login" styleClass="login-title" />
 
-                <VBox maxWidth="350" spacing="8">
+                <VBox spacing="8" maxWidth="350">
                     <children>
-                  <HBox prefHeight="22.0" prefWidth="350.0">
-                     <children>
-                              <Label styleClass="login-label" text="Email" />
-                        <Label fx:id="user_error" prefHeight="18.0" prefWidth="118.0"  text="Incorrect Email" textFill="RED" visible="false">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
-                        <TextField fx:id="user_txt" prefHeight="48" promptText="" styleClass="login-field" />
+                        <Label text="Username" styleClass="login-label" />
+                        <TextField promptText="" styleClass="login-field" prefHeight="48" />
                     </children>
                 </VBox>
 
-                <VBox maxWidth="350" spacing="8">
+                <VBox spacing="8" maxWidth="350">
                     <children>
-                        <Label styleClass="login-label" text="Password" />
-                        <PasswordField fx:id="pass_txt" prefHeight="48" promptText="" styleClass="login-field" />
+                        <Label text="Password" styleClass="login-label" />
+                        <PasswordField promptText="" styleClass="login-field" prefHeight="48" />
                     </children>
                 </VBox>
 
-                <Button prefHeight="52" prefWidth="350" styleClass="login-enter-btn" text="Enter" onAction="#verifyUser" />
+                <Button text="Enter" styleClass="login-enter-btn" prefWidth="350" prefHeight="52" />
 
-                <Hyperlink onAction="#handleBackToHome" styleClass="login-link" text="Back to Home" />
+                <Hyperlink text="Back to Home" styleClass="login-link" onAction="#handleBackToHome" />
 
             </children>
 
             <padding>
-                <Insets bottom="35" left="30" right="30" top="35" />
+                <Insets top="35" right="30" bottom="35" left="30"/>
             </padding>
         </VBox>
     </children>

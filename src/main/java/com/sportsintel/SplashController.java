@@ -41,13 +41,17 @@ public class SplashController {
 
             root.setOpacity(0.0);
 
-            Stage stage = (Stage) logoImage.getScene().getWindow();
-            Scene scene = new Scene(root, 1200, 800);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
-            stage.setScene(scene);
-            stage.show();
+            Scene currentScene = logoImage.getScene();
 
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(1.2), root);
+            if (currentScene.getStylesheets().isEmpty()) {
+                currentScene.getStylesheets().add(
+                        Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
+                );
+            }
+
+            currentScene.setRoot(root);
+
+            FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.2), root);
             fadeIn.setFromValue(0.0);
             fadeIn.setToValue(1.0);
             fadeIn.play();

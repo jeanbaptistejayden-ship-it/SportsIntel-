@@ -4,7 +4,10 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -12,10 +15,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class LoginController {
+    private HomeController homeController;
 
+    public void setHomeController(HomeController homeController) {
+        this.homeController = homeController;
+    }
     @FXML
     private ImageView loginLogo;
 
@@ -57,9 +65,17 @@ public class LoginController {
         stage.close();
     }
 
+    @FXML
+    private void handleLoginSubmit(ActionEvent event) {
+        SessionManager.login("Dan Gron", "@ForeignStage");
 
-
-    public String getUser_txt() {
-        return user_txt.getText();
+        if (homeController != null) {
+            homeController.setLoggedInUser(
+                    SessionManager.getFullName(),
+                    SessionManager.getUsername()
+            );
+        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

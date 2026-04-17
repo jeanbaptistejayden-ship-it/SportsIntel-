@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,10 +11,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
 
+<?import javafx.scene.control.Separator?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.sportsintel.HomeController"
+            fx:controller="com.sportsintel.CompareController"
             styleClass="home-root">
 
     <top>
@@ -30,8 +29,8 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button text="Home" styleClass="home-btn" />
-                <Button text="Compare" styleClass="compare-btn" onAction="#handleCompareClick" />
+                <Button text="Home" styleClass="home-btn" onAction="#handleHomeClick"/>
+                <Button text="Compare" styleClass="compare-btn" />
                 <Button text="Help" styleClass="help-btn" onAction="#handleHelpClick" />
 
                 <HBox fx:id="authButtons" spacing="10" alignment="CENTER_RIGHT">
@@ -62,117 +61,73 @@
             </padding>
         </HBox>
     </top>
-    <left>
-        <VBox alignment="TOP_CENTER">
-            <children>
-                <Region prefHeight="100" />
-                <VBox spacing="14" styleClass="sidebar">
-                    <children>
 
-                        <Label text="Filters" styleClass="sidebar-title" />
-
-                        <VBox spacing="6">
-                            <Label text="Season Range" styleClass="field-label" />
-
-                            <HBox spacing="6">
-                                <TextField fx:id="seasonStartField" promptText="1949" prefWidth="70"/>
-                                <Label text="to" />
-                                <TextField fx:id="seasonEndField" promptText="2026" prefWidth="70"/>
-                            </HBox>
-
-                        </VBox>
-
-                        <VBox spacing="6">
-                            <Label text="Season Type" styleClass="field-label" />
-                            <ComboBox fx:id="seasonTypeCombo" promptText="Both" />
-                        </VBox>
-
-                        <VBox spacing="6">
-                            <Label text="Location" styleClass="field-label" />
-                            <ComboBox fx:id="locationCombo" promptText="Both" />
-                        </VBox>
-
-                        <VBox spacing="6">
-                            <Label text="Last N Games vs Opponent" styleClass="field-label" />
-                            <TextField fx:id="lastNGamesField" promptText="10" />
-                        </VBox>
-
-                        <Button text="Apply Filters" styleClass="filters-btn" />
-                        <Button text="Reset" styleClass="reset-btn" />
-
-                    </children>
-
-                    <padding>
-                        <Insets top="20" right="14" bottom="20" left="14"/>
-                    </padding>
-                </VBox>
-
-            </children>
-        </VBox>
-    </left>
     <center>
         <StackPane styleClass="center-area">
             <children>
-                <VBox spacing="22" maxWidth="760" styleClass="search-card" alignment="CENTER">
+                <VBox spacing="24"
+                      maxWidth="900"
+                      alignment="CENTER"
+                      styleClass="search-card">
+
                     <children>
                         <ImageView fx:id="mainLogo"
-                                   fitWidth="300"
-                                   fitHeight="300"
+                                   fitWidth="220"
+                                   fitHeight="220"
                                    preserveRatio="true" />
-                        <Label text="Analyze Player Performance vs&#10;Team"
-                               styleClass="main-title"
-                               wrapText="true" />
-                        <HBox spacing="20" alignment="CENTER">
+
+                        <Label text="Compare Players"
+                               styleClass="compare-title" />
+
+                        <Label text="Side-by-side performance analysis against the same opponent"
+                               styleClass="compare-subtitle" />
+
+                        <HBox spacing="40" alignment="CENTER">
                             <children>
-                                <VBox spacing="6" prefWidth="260">
+
+                                <VBox spacing="8" prefWidth="330">
                                     <children>
-                                        <Label text="Player Name" styleClass="field-label" />
-                                        <TextField fx:id="playerNameField"
-                                                   promptText="Enter player name"
-                                                   prefWidth="260" />
+                                        <Label text="Player 1" styleClass="field-label" />
+                                        <TextField fx:id="playerOneField"
+                                                   promptText="e.g., LeBron James"
+                                                   prefWidth="330" />
                                     </children>
                                 </VBox>
-                                <VBox spacing="6" prefWidth="260">
+
+                                <Label text="→" styleClass="compare-arrow" />
+
+                                <VBox spacing="8" prefWidth="330">
                                     <children>
-                                        <Label text="Sport" styleClass="field-label" />
-                                        <ComboBox fx:id="sportCombo"
-                                                  promptText="Select sport"
-                                                  prefWidth="260" />
+                                        <Label text="Player 2" styleClass="field-label" />
+                                        <TextField fx:id="playerTwoField"
+                                                   promptText="e.g., Kevin Durant"
+                                                   prefWidth="330" />
                                     </children>
                                 </VBox>
+
                             </children>
                         </HBox>
-                        <HBox spacing="20" alignment="CENTER">
+
+                        <VBox spacing="8" alignment="CENTER">
                             <children>
-                                <VBox spacing="6" prefWidth="260">
-                                    <children>
-                                        <Label text="Opponent" styleClass="field-label" />
-                                        <ComboBox fx:id="opponentCombo"
-                                                  promptText="Select opponent"
-                                                  prefWidth="260" />
-                                    </children>
-                                </VBox>
-                                <VBox spacing="6" prefWidth="260">
-                                    <children>
-                                        <Label text="Statistic" styleClass="field-label" />
-                                        <ComboBox fx:id="statisticCombo"
-                                                  promptText="Select statistic"
-                                                  prefWidth="260" />
-                                    </children>
-                                </VBox>
+                                <Label text="Opponent" styleClass="field-label" />
+                                <ComboBox fx:id="compareOpponentCombo"
+                                          promptText="Select opponent"
+                                          prefWidth="500" />
                             </children>
-                        </HBox>
-                        <Button text="Search"
+                        </VBox>
+
+                        <Button text="Compare Players"
                                 styleClass="search-btn"
-                                prefWidth="540"
-                                prefHeight="44"
-                                onAction="#handleSearchClick"/>
+                                prefWidth="740"
+                                prefHeight="50"
+                                onAction="#handleCompareSubmit"/>
                     </children>
+
                     <padding>
-                        <Insets top="30" right="35" bottom="30" left="35"/>
+                        <Insets top="34" right="36" bottom="34" left="36"/>
                     </padding>
                 </VBox>
-
                 <VBox fx:id="profileMenu"
                       visible="false"
                       managed="false"
@@ -213,8 +168,8 @@
                         <Insets top="14" right="14" bottom="14" left="14"/>
                     </padding>
                 </VBox>
-
             </children>
         </StackPane>
     </center>
+
 </BorderPane>

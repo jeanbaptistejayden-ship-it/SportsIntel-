@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsintel.CompareResultsController"
+           styleClass="home-root">
+
+    <children>
+
+        <BorderPane>
+
+            <top>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="top-bar">
+                    <children>
+                        <ImageView fx:id="navLogo"
+                                   fitWidth="100"
+                                   fitHeight="100"
+                                   preserveRatio="true" />
+                        <Label text="SportsIntel Analytics" styleClass="top-title" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Home" styleClass="home-btn" onAction="#handleHomeClick" />
+                        <Button text="Compare" styleClass="compare-btn" onAction="#handleCompareClick" />
+                        <Button text="Help" styleClass="help-btn" onAction="#handleHelpClick" />
+                        <HBox fx:id="authButtons" spacing="10" alignment="CENTER_RIGHT">
+                            <children>
+                                <Button text="Login" styleClass="login-btn" onAction="#handleLoginClick" />
+                                <Button text="Sign Up" styleClass="signup-btn" onAction="#handleSignUpClick" />
+                            </children>
+                        </HBox>
+
+                        <VBox fx:id="profileBox" visible="false" managed="false">
+                            <children>
+                                <StackPane fx:id="profileButton"
+                                           onMouseClicked="#toggleProfileMenu"
+                                           styleClass="profile-circle">
+                                    <Label text="👤" styleClass="profile-icon-text"/>
+                                    <children>
+                                        <ImageView fx:id="profileImage"
+                                                   fitWidth="32"
+                                                   fitHeight="32"
+                                                   preserveRatio="true" />
+                                    </children>
+                                </StackPane>
+                            </children>
+                        </VBox>
+                    </children>
+
+                    <padding>
+                        <Insets top="16" right="20" bottom="16" left="20"/>
+                    </padding>
+                </HBox>
+            </top>
+
+            <center>
+                <ScrollPane fitToWidth="true"
+                            hbarPolicy="NEVER"
+                            vbarPolicy="AS_NEEDED"
+                            pannable="true"
+                            styleClass="compare-scroll">
+                    <content>
+                        <StackPane styleClass="center-area">
+                            <children>
+                                <VBox spacing="24"
+                                      maxWidth="980"
+                                      alignment="TOP_CENTER"
+                                      styleClass="compare-results-wrapper">
+                                    <children>
+
+                                        <VBox spacing="10"
+                                              alignment="CENTER"
+                                              prefWidth="980"
+                                              styleClass="compare-results-header">
+                                            <children>
+                                                <Label text="Player Comparison" styleClass="compare-results-title" />
+                                                <Label fx:id="comparisonSubtitleLabel" text="vs Minnesota Timberwolves" styleClass="compare-results-subtitle" />
+                                            </children>
+                                            <padding>
+                                                <Insets top="24" right="24" bottom="24" left="24"/>
+                                            </padding>
+                                        </VBox>
+
+                                        <HBox spacing="28" alignment="CENTER">
+                                            <children>
+
+                                                <StackPane prefWidth="460"
+                                                           prefHeight="84"
+                                                           styleClass="player-name-card,left-player-card">
+                                                    <children>
+                                                        <Label fx:id="playerOneNameLabel" text="Lebron James" styleClass="player-name-title" />
+                                                    </children>
+                                                </StackPane>
+
+                                                <StackPane prefWidth="460"
+                                                           prefHeight="84"
+                                                           styleClass="player-name-card,right-player-card">
+                                                    <children>
+                                                        <Label fx:id="playerTwoNameLabel" text="Kevin Durant" styleClass="player-name-title" />
+                                                    </children>
+                                                </StackPane>
+
+                                            </children>
+                                        </HBox>
+                                        <VBox spacing="18"
+                                              maxWidth="980"
+                                              alignment="CENTER"
+                                              styleClass="compare-stats-card">
+                                            <children>
+                                                <Label text="Head-to-Head Statistics" styleClass="compare-section-title"/>
+
+                                                <VBox spacing="10" maxWidth="920" alignment="CENTER">
+                                                    <children>
+                                                        <Label text="Points Per Game"
+                                                               styleClass="stat-label"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+
+                                                        <HBox spacing="20" alignment="CENTER">
+                                                            <children>
+                                                                <StackPane fx:id="pointsLeftBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-win">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="pointsLeftLabel" text="29.2" styleClass="stat-number"/>
+                                                                            <Label fx:id="pointsLeftArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+
+                                                                <StackPane fx:id="pointsRightBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="pointsRightLabel" text="25.2" styleClass="stat-number"/>
+                                                                            <Label fx:id="pointsRightArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+
+                                                        <Label fx:id="pointsDiffLabel" text="Difference: 4.0"
+                                                               styleClass="stat-diff"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+                                                        <Separator/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="10" maxWidth="920" alignment="CENTER">
+                                                    <children>
+                                                        <Label text="Assists Per Game"
+                                                               styleClass="stat-label"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+
+                                                        <HBox spacing="20" alignment="CENTER">
+                                                            <children>
+                                                                <StackPane fx:id="assistsLeftBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="assistsLeftLabel" text="7.0" styleClass="stat-number"/>
+                                                                            <Label fx:id="assistsLeftArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+
+                                                                <StackPane fx:id="assistsRightBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-win">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="assistsRightLabel" text="7.1" styleClass="stat-number"/>
+                                                                            <Label fx:id="assistsRightArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+
+                                                        <Label fx:id="assistsDiffLabel" text="Difference: 0.1"
+                                                               styleClass="stat-diff"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+                                                        <Separator/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="10" maxWidth="920" alignment="CENTER">
+                                                    <children>
+                                                        <Label text="Rebounds Per Game" styleClass="stat-label"/>
+                                                        <HBox spacing="20" alignment="CENTER">
+                                                            <children>
+                                                                <StackPane fx:id="reboundsLeftBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-win">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="reboundsLeftLabel" text="8.2" styleClass="stat-number"/>
+                                                                            <Label fx:id="reboundsLeftArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+
+                                                                <StackPane fx:id="reboundsRightBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="reboundsRightLabel" text="7.6" styleClass="stat-number"/>
+                                                                            <Label fx:id="reboundsRightArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+
+                                                        <Label fx:id="reboundsDiffLabel" text="Difference: 0.6"
+                                                               styleClass="stat-diff"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+                                                        <Separator/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="10" maxWidth="920" alignment="CENTER">
+                                                    <children>
+                                                        <Label text="Field Goal %" styleClass="stat-label"/>
+                                                        <HBox spacing="20" alignment="CENTER">
+                                                            <children>
+                                                                <StackPane fx:id="fgPctLeftBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-win">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="fgPctLeftLabel" text="50.3%" styleClass="stat-number"/>
+                                                                            <Label fx:id="fgPctLeftArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+
+                                                                <StackPane fx:id="fgPctRightBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="fgPctRightLabel" text="49.0%" styleClass="stat-number"/>
+                                                                            <Label fx:id="fgPctRightArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+
+                                                        <Label fx:id="fgPctDiffLabel" text="Difference: 1.4pp"
+                                                               styleClass="stat-diff"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+                                                        <Separator/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="10" maxWidth="920" alignment="CENTER">
+                                                    <children>
+                                                        <Label text="Minutes Per Game" styleClass="stat-label"/>
+                                                        <HBox spacing="20" alignment="CENTER">
+                                                            <children>
+                                                                <StackPane fx:id="minutesLeftBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-win">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="minutesLeftLabel" text="35.5" styleClass="stat-number"/>
+                                                                            <Label fx:id="minutesLeftArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <StackPane fx:id="minutesRightBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <Label fx:id="minutesRightLabel" text="34.4" styleClass="stat-number"/>
+                                                                            <Label fx:id="minutesRightArrow" text="↗" styleClass="stat-arrow"/>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+                                                        <Label fx:id="minutesDiffLabel" text="Difference: 1.1"
+                                                               styleClass="stat-diff"
+                                                               alignment="CENTER"
+                                                               maxWidth="Infinity"/>
+                                                        <Separator/>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="10" maxWidth="920" alignment="CENTER">
+                                                    <children>
+                                                        <Label text="Games Played" styleClass="stat-label"/>
+                                                        <HBox spacing="20" alignment="CENTER">
+                                                            <children>
+                                                                <StackPane fx:id="gamesLeftBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <Label fx:id="gamesLeftLabel" text="10.0" styleClass="stat-number"/>
+                                                                    </children>
+                                                                </StackPane>
+
+                                                                <StackPane fx:id="gamesRightBox" prefWidth="440" prefHeight="80"
+                                                                           styleClass="stat-box,stat-lose">
+                                                                    <children>
+                                                                        <Label fx:id="gamesRightLabel" text="10.0" styleClass="stat-number"/>
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </HBox>
+                                                        <Separator/>
+                                                    </children>
+                                                </VBox>
+
+                                            </children>
+                                            <padding>
+                                                <Insets top="20" right="20" bottom="20" left="20"/>
+                                            </padding>
+                                        </VBox>
+
+                                        <VBox spacing="20"
+                                              maxWidth="980"
+                                              styleClass="analysis-card">
+                                            <children>
+                                                <Label text="Performance Analysis"
+                                                       styleClass="analysis-title"/>
+
+                                                <HBox spacing="40" alignment="CENTER">
+                                                    <children>
+                                                        <VBox spacing="10" prefWidth="440">
+                                                            <children>
+                                                                <Label fx:id="analysisPlayerOneLabel" text="Lebron James"
+                                                                       styleClass="analysis-player-name"/>
+
+                                                                <Label fx:id="analysisPlayerOneTextLabel" text="Averages 29.2 PPG vs Bucks, which is 2.7 points above career average of 26.5 PPG."
+                                                                       wrapText="true"
+                                                                       styleClass="analysis-box-left"/>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox spacing="10" prefWidth="440">
+                                                            <children>
+                                                                <Label fx:id="analysisPlayerTwoLabel" text="Kevin Durant"
+                                                                       styleClass="analysis-player-name"/>
+
+                                                                <Label fx:id="analysisPlayerTwoTextLabel" text="Averages 25.2 PPG vs Bucks, which is 2.7 points above career average of 22.5 PPG."
+                                                                       wrapText="true"
+                                                                       styleClass="analysis-box-right"/>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                            <padding>
+                                                <Insets top="22" right="22" bottom="22" left="22"/>
+                                            </padding>
+                                        </VBox>
+                                        <Button text="New Comparison"
+                                                prefWidth="980"
+                                                prefHeight="65"
+                                                styleClass="new-compare-btn"
+                                                onAction="#handleNewComparison"/>
+                                    </children>
+                                    <padding>
+                                        <Insets top="20" right="20" bottom="30" left="20"/>
+                                    </padding>
+                                </VBox>
+
+                            </children>
+                        </StackPane>
+                    </content>
+                </ScrollPane>
+            </center>
+
+        </BorderPane>
+
+        <VBox fx:id="profileMenu"
+              visible="false"
+              managed="false"
+              prefWidth="300"
+              maxWidth="300"
+              prefHeight="170"
+              maxHeight="170"
+              spacing="12"
+              styleClass="profile-menu"
+              StackPane.alignment="TOP_RIGHT"
+              translateX="-20"
+              translateY="85">
+
+            <children>
+                <VBox spacing="2">
+                    <children>
+                        <Label fx:id="profileNameLabel"
+                               text="Dan Gron"
+                               styleClass="profile-name"/>
+
+                        <Label fx:id="profileUsernameLabel"
+                               text="@ForeignStage"
+                               styleClass="profile-username"/>
+                    </children>
+                </VBox>
+
+                <Separator />
+
+                <Label text="No search history yet. Start searching to see your history here!"
+                       wrapText="true"
+                       maxWidth="230"
+                       styleClass="profile-history" />
+
+                <Separator />
+
+                <Label text="Logout"
+                       onMouseClicked="#handleLogout"
+                       styleClass="logout-text"/>
+            </children>
+
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+        </VBox>
+
+    </children>
+</StackPane>
