@@ -92,7 +92,7 @@ public class SignUpController {
     public String getFullName() {
         return "" + getFirst_name_txt() + getLast_name_txt();
     }
- n
+
     public String getDisName_txt() {
         return disName_txt.getText();
     }
