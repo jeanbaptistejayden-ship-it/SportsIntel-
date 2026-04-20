@@ -55,6 +55,7 @@ public class SessionManager {
 
     public record SearchResult(
             String player,
+            String playerImageUrl,
             String opponent,
             String stat,
             String season,

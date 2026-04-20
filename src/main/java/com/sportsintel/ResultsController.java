@@ -1,5 +1,6 @@
 package com.sportsintel;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +13,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Objects;
 
 public class ResultsController {
@@ -145,6 +151,7 @@ public class ResultsController {
         }
 
         updateText(playerSummaryLabel, search.player());
+        loadPlayerImage(search.playerImageUrl());
         String opponent = (search.opponent() == null || search.opponent().isBlank()) ? "Any Opponent" : search.opponent();
         updateText(opponentSummaryLabel, "vs " + opponent);
         updateText(statSummaryLabel, search.stat());
@@ -427,20 +434,32 @@ public class ResultsController {
         return "PPG";
     }
 
-    public void loadPlayerImage(String playerName) {
-        if (playerName != null && playerName.equalsIgnoreCase("LeBron James")) {
-            setPlayerImage("/lebron.png");
-        } else {
-            setPlayerImage("/lebron.png");
-        }
-    }
-
-    private void setPlayerImage(String path) {
+    public void loadPlayerImage(String imageUrl) {
         try {
-            Image image = new Image(
-                    Objects.requireNonNull(getClass().getResource(path)).toExternalForm()
-            );
-            playerImage.setImage(image);
+            System.out.println("Loading image: " + imageUrl);
+
+            if (imageUrl == null || imageUrl.isBlank()) {
+                return;
+            }
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(imageUrl))
+                    .header("User-Agent", "Mozilla/5.0")
+                    .GET()
+                    .build();
+
+            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+            if (response.statusCode() != 200) {
+                System.out.println("Image HTTP status: " + response.statusCode());
+                return;
+            }
+
+            Image image = new Image(new ByteArrayInputStream(response.body()));
+
+            Platform.runLater(() -> playerImage.setImage(image));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

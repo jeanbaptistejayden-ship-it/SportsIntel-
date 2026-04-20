@@ -54,7 +54,7 @@ def get_player_stats(
         }
 
     try:
-        summary = build_summary(player_name, games, stat=stat)
+        summary = build_summary(player_name, player_id, games, stat=stat)
     except ValueError as exc:
         return {"error": str(exc)}
 
