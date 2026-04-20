@@ -48,6 +48,9 @@ STAT_MAP = {
     "+/-": "plus_minus",
 }
 
+def player_image_url(player_id: int) -> str:
+    return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
+
 def get_player_lookup(name: str):
     matches = nba_players.find_players_by_full_name(name)
     if not matches:
@@ -185,7 +188,7 @@ def normalize_stat(stat: str = "points") -> str:
         raise ValueError("Invalid stat selection.")
     return mapped
 
-def build_summary(player_name: str, games: list[dict], stat: str = "points"):
+def build_summary(player_name: str, player_id: int, games: list[dict], stat: str = "points"):
     selected_stat = normalize_stat(stat)
     values = [float(g[selected_stat]) for g in games]
 
@@ -195,6 +198,7 @@ def build_summary(player_name: str, games: list[dict], stat: str = "points"):
     # summary the frontend actually uses: averages plus the standout games
     return {
         "player": player_name,
+        "player_image": player_image_url(player_id),
         "stat": selected_stat,
         "games_played": len(games),
         "average": round(sum(values) / len(values), 1),

@@ -295,8 +295,13 @@ public class HomeController {
             JsonObject baselineSummary = baselineBody.getAsJsonObject("summary");
             JsonArray baselineGames = baselineBody.getAsJsonArray("games");
 
+            String playerImageUrl = summary.has("player_image") && !summary.get("player_image").isJsonNull()
+                    ? summary.get("player_image").getAsString()
+                    : "";
+
             SessionManager.setLatestSearch(new SessionManager.SearchResult(
                     summary.get("player").getAsString(),
+                    playerImageUrl,
                     opponentCombo != null ? opponentCombo.getValue() : "Any Opponent",
                     formatStatLabel(summary.get("stat").getAsString()),
                     meta.get("season").getAsString(),
@@ -325,9 +330,6 @@ public class HomeController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
             Parent root = loader.load();
-
-            ResultsController controller = loader.getController();
-            controller.loadPlayerImage(playerName);
 
             Scene currentScene = navLogo.getScene();
             currentScene.setRoot(root);
