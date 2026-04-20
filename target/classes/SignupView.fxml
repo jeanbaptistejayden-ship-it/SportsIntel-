@@ -10,50 +10,83 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="login-root" xmlns:fx="http://javafx.com/fxml" fx:controller="com.sportsintel.SignupController">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsintel.SignUpController"
+           styleClass="signup-root">
 
     <children>
-        <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="login-card">
+        <VBox spacing="20" maxWidth="450" styleClass="signup-card" alignment="CENTER">
             <children>
 
-                <ImageView fx:id="signupLogo" fitHeight="120" fitWidth="120" preserveRatio="true" />
+                <ImageView fx:id="signUpLogo"
+                           fitWidth="120"
+                           fitHeight="120"
+                           preserveRatio="true" />
 
-                <Label styleClass="login-title" text="Signup" />
+                <Label text="Sign Up" styleClass="signup-title" />
 
-                <VBox maxWidth="350" spacing="8">
+                <VBox spacing="8" maxWidth="360">
                     <children>
-                        <Label styleClass="login-label" text="Email" />
-                        <TextField fx:id="email_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
+                        <Label text="First Name" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" fx:id="first_name_txt" />
                     </children>
                 </VBox>
 
-                <VBox maxWidth="350" spacing="8">
+                <VBox spacing="8" maxWidth="360">
                     <children>
-                        <Label styleClass="login-label" text="Password" />
-                        <PasswordField fx:id="pass_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
+                        <Label text="Last Name" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" fx:id="last_name_txt"/>
                     </children>
                 </VBox>
-            <VBox maxWidth="350" spacing="8">
-               <children>
-                  <Label styleClass="login-label" text="Phone Number" />
-                  <TextField fx:id="phone_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
-               </children>
-            </VBox>
-            <VBox maxWidth="350" spacing="8">
-               <children>
-                  <Label styleClass="login-label" text="Display Name" />
-                  <TextField fx:id="disName_txt" prefHeight="48.0" prefWidth="350.0" promptText="" styleClass="login-field" />
-               </children>
-            </VBox>
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Phone Number" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" fx:id="phone_txt"/>
+                    </children>
+                </VBox>
 
-                <Button prefHeight="52.0" prefWidth="350" styleClass="login-enter-btn" text="Enter" onAction="#userSignup"/>
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Email" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46"  fx:id="email_txt"/>
+                    </children>
+                </VBox>
 
-                <Hyperlink onAction="#handleBackToHome" styleClass="login-link" text="Back to Home" />
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Username" styleClass="signup-label" />
+                        <TextField styleClass="signup-field" prefHeight="46" fx:id="disName_txt" />
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Password" styleClass="signup-label" />
+                        <PasswordField styleClass="signup-field" prefHeight="46" fx:id="pass_txt"/>
+                    </children>
+                </VBox>
+
+                <VBox spacing="8" maxWidth="360">
+                    <children>
+                        <Label text="Confirm Password" styleClass="signup-label" />
+                        <PasswordField styleClass="signup-field" prefHeight="46" fx:id="confirm_pass_txt"/>
+                    </children>
+                </VBox>
+
+                <Button text="Enter"
+                        styleClass="signup-enter-btn"
+                        prefWidth="360"
+                        prefHeight="50"
+                        onAction="#handleSignUpSubmit"/>
+
+                <Hyperlink text="Back to Home"
+                           styleClass="signup-link"
+                           onAction="#handleBackToHome" />
 
             </children>
 
             <padding>
-                <Insets bottom="35" left="30" right="30" top="35" />
+                <Insets top="32" right="30" bottom="32" left="30"/>
             </padding>
         </VBox>
     </children>

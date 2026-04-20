@@ -1,13 +1,13 @@
 package com.sportsintel;
 
 public class User {
-    private String username;
+    private String disName;
     private String first_name;
     private String last_name;
 
 
-    public User(String username, String first_name, String last_name) {
-        this.username = username;
+    public User(String disName, String first_name, String last_name) {
+        this.disName = disName;
         this.first_name = first_name;
         this.last_name = last_name;
     }
@@ -28,7 +28,7 @@ public class User {
         this.last_name = last_name;
     }
 
-    public String getUsername() {
-        return username;
+    public String getdisName() {
+        return disName;
     }
 }
