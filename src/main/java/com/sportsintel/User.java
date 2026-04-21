@@ -4,12 +4,14 @@ public class User {
     private String disName;
     private String first_name;
     private String last_name;
+    private String email;
 
 
-    public User(String disName, String first_name, String last_name) {
+    public User(String disName, String first_name, String last_name, String email ) {
         this.disName = disName;
         this.first_name = first_name;
         this.last_name = last_name;
+        this.email = email;
     }
 
     public String getFirst_name() {
@@ -31,4 +33,10 @@ public class User {
     public String getdisName() {
         return disName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+
 }

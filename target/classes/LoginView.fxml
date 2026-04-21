@@ -25,7 +25,7 @@
                 <VBox spacing="8" maxWidth="350">
                     <children>
                         <Label text="Username" styleClass="login-label" />
-                        <TextField promptText="" styleClass="login-field" prefHeight="48" fx:id="disName_txt"/>
+                        <TextField promptText="" styleClass="login-field" prefHeight="48" fx:id="user_txt"/>
                     </children>
                 </VBox>
 

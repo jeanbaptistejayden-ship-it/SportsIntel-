@@ -28,7 +28,7 @@ public class LoginController {
     private ImageView loginLogo;
 
     @FXML
-    private TextField disName_txt;
+    private TextField user_txt;
 
     @FXML
     private Label user_error;
@@ -46,7 +46,7 @@ public class LoginController {
 
     public void verifyUser() throws FirebaseAuthException {
         try {
-            UserRecord user = Main.fauth.getUserByEmail(getDisName_txt().getText());
+            UserRecord user = Main.fauth.getUserByEmail(getUser_txt().getText());
             //String url = user.getPassword();
 
                 if (!(user == null)) {
@@ -79,7 +79,7 @@ public class LoginController {
         stage.close();
     }
 
-    public TextField getDisName_txt() {
-        return disName_txt;
+    public TextField getUser_txt() {
+        return user_txt;
     }
 }
