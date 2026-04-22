@@ -297,57 +297,96 @@
                                     </padding>
                                 </VBox>
 
-                                <VBox spacing="22"
+                                <VBox spacing="20"
                                       prefWidth="980"
                                       maxWidth="980"
-                                      styleClass="matchup-comparison-card">
+                                      styleClass="last-five-card">
+
                                     <children>
-                                        <Label text="Matchup Comparison"
-                                               styleClass="matchup-comparison-title" />
-                                        <HBox spacing="24"
-                                              alignment="CENTER"
-                                              prefWidth="932"
-                                              maxWidth="932">
+
+                                        <Label text="Last 5 Games vs Opponent"
+                                               styleClass="last-five-title" />
+
+                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-header-row">
                                             <children>
-                                                <VBox prefWidth="454"
-                                                      prefHeight="170"
-                                                      spacing="14"
-                                                      styleClass="matchup-best-box">
-                                                    <children>
-                                                        <HBox spacing="10" alignment="CENTER_LEFT">
-                                                            <children>
-                                                                <Label text="🏅" styleClass="matchup-icon" />
-                                                                <Label text="Best Matchup" styleClass="matchup-best-label" />
-                                                            </children>
-                                                        </HBox>
-                                                        <Label fx:id="bestMatchupTeamLabel" text="Philadelphia 76ers" styleClass="matchup-team-name" />
-                                                        <Label fx:id="bestMatchupValueLabel" text="32.9 PPG" styleClass="matchup-best-number" />
-                                                    </children>
-                                                    <padding>
-                                                        <Insets top="20" right="24" bottom="20" left="24"/>
-                                                    </padding>
-                                                </VBox>
-                                                <VBox prefWidth="454"
-                                                      prefHeight="170"
-                                                      spacing="14"
-                                                      styleClass="matchup-tough-box">
-                                                    <children>
-                                                        <HBox spacing="10" alignment="CENTER_LEFT">
-                                                            <children>
-                                                                <Label text="⚠" styleClass="matchup-icon" />
-                                                                <Label text="Toughest Matchup" styleClass="matchup-tough-label" />
-                                                            </children>
-                                                        </HBox>
-                                                        <Label fx:id="toughestMatchupTeamLabel" text="Boston Celtics" styleClass="matchup-team-name" />
-                                                        <Label fx:id="toughestMatchupValueLabel" text="24.0 PPG" styleClass="matchup-tough-number" />
-                                                    </children>
-                                                    <padding>
-                                                        <Insets top="20" right="24" bottom="20" left="24"/>
-                                                    </padding>
-                                                </VBox>
+                                                <Label text="Date" prefWidth="140" styleClass="last-five-header-cell" />
+                                                <Label text="Opponent" prefWidth="140" styleClass="last-five-header-cell" />
+                                                <Label text="PTS" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="REB" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="AST" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="MIN" prefWidth="110" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="FG%" prefWidth="110" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="Result" prefWidth="140" styleClass="last-five-header-cell centered-cell" />
                                             </children>
                                         </HBox>
+
+                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
+                                            <children>
+                                                <Label text="03/12/2026" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="28" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
+                                                <Label text="8" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="7" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="36" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="51.2%" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="W 112-104" prefWidth="140" styleClass="last-five-cell centered-cell value-green" />
+                                            </children>
+                                        </HBox>
+
+                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
+                                            <children>
+                                                <Label text="02/05/2026" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="21" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
+                                                <Label text="7" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="5" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="34" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="44.8%" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="L 101-108" prefWidth="140" styleClass="last-five-cell centered-cell value-orange" />
+                                            </children>
+                                        </HBox>
+
+                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
+                                            <children>
+                                                <Label text="01/18/2026" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="24" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
+                                                <Label text="10" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="6" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="37" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="47.9%" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="W 115-110" prefWidth="140" styleClass="last-five-cell centered-cell value-green" />
+                                            </children>
+                                        </HBox>
+
+                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
+                                            <children>
+                                                <Label text="12/22/2025" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="19" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
+                                                <Label text="6" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="8" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="33" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="42.1%" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="L 98-103" prefWidth="140" styleClass="last-five-cell centered-cell value-orange" />
+                                            </children>
+                                        </HBox>
+
+                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
+                                            <children>
+                                                <Label text="11/30/2025" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
+                                                <Label text="20" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
+                                                <Label text="9" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="4" prefWidth="90" styleClass="last-five-cell centered-cell" />
+                                                <Label text="35" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="45.0%" prefWidth="110" styleClass="last-five-cell centered-cell" />
+                                                <Label text="W 109-107" prefWidth="140" styleClass="last-five-cell centered-cell value-green" />
+                                            </children>
+                                        </HBox>
+
                                     </children>
+
                                     <padding>
                                         <Insets top="24" right="24" bottom="24" left="24"/>
                                     </padding>
@@ -378,7 +417,6 @@
                                                     <children>
                                                         <HBox spacing="10" alignment="CENTER_LEFT">
                                                             <children>
-                                                                <Label text="↗" styleClass="summary-green-icon" />
                                                                 <Label text="RECENT TREND" styleClass="summary-box-title" />
                                                             </children>
                                                         </HBox>
@@ -390,6 +428,8 @@
                                                         <Insets top="18" right="20" bottom="18" left="20"/>
                                                     </padding>
                                                 </VBox>
+
+
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="1"
                                                       spacing="10"
                                                       prefWidth="430"
@@ -398,8 +438,7 @@
                                                     <children>
                                                         <HBox spacing="10" alignment="CENTER_LEFT">
                                                             <children>
-                                                                <Label text="🏅" styleClass="summary-green-icon" />
-                                                                <Label text="MATCHUP STRENGTH" styleClass="summary-box-title" />
+                                                                <Label text="CAREER VS OPPONENT" styleClass="summary-box-title" />
                                                             </children>
                                                         </HBox>
 
@@ -411,6 +450,8 @@
                                                         <Insets top="18" right="20" bottom="18" left="20"/>
                                                     </padding>
                                                 </VBox>
+
+
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="0"
                                                       spacing="10"
                                                       prefWidth="430"
@@ -427,15 +468,16 @@
                                                         <Insets top="18" right="20" bottom="18" left="20"/>
                                                     </padding>
                                                 </VBox>
+
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="1"
                                                       spacing="10"
                                                       prefWidth="430"
                                                       prefHeight="120"
                                                       styleClass="intelligence-box">
                                                     <children>
-                                                        <Label text="RECENT FORM" styleClass="summary-box-title" />
+                                                        <Label text="CAREER OVERVIEW" styleClass="summary-box-title" />
 
-                                                        <Label fx:id="recentFormSummaryLabel" text="Recent performance shows positive momentum."
+                                                        <Label fx:id="recentFormSummaryLabel" text="Career averages: 27.1 PPG, 7.5 REB, 7.3 AST across 20 seasons."
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>

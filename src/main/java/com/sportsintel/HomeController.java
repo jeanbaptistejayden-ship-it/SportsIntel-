@@ -719,4 +719,44 @@ public class HomeController {
             profileMenu.setManaged(false);
         }
     }
+
+    @FXML
+    private void handleResetClick() {
+        if (seasonStartField != null) {
+            seasonStartField.clear();
+        }
+
+        if (seasonEndField != null) {
+            seasonEndField.clear();
+        }
+
+        if (lastNGamesField != null) {
+            lastNGamesField.clear();
+        }
+
+        if (playerNameField != null) {
+            playerNameField.clear();
+        }
+
+        if (seasonTypeCombo != null) {
+            seasonTypeCombo.setValue("Both");
+        }
+
+        if (locationCombo != null) {
+            locationCombo.setValue("Both");
+        }
+
+        if (sportCombo != null) {
+            sportCombo.setValue("Basketball");
+        }
+
+        if (opponentCombo != null) {
+            opponentCombo.getSelectionModel().clearSelection();
+            opponentCombo.setValue(null);
+        }
+
+        if (statisticCombo != null) {
+            statisticCombo.setValue("Points Per Game");
+        }
+    }
 }
