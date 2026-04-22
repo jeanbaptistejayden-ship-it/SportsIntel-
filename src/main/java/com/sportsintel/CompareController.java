@@ -26,9 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -253,60 +251,35 @@ public class CompareController {
     }
 
     private JsonObject fetchPlayerData(String playerName, String opponentAbbr) throws Exception {
-        int currentYear = LocalDate.now().getYear();
-        String[] seasonsToTry = {
-                formatSeason(currentYear - 1),
-                formatSeason(currentYear - 2),
-                formatSeason(currentYear - 3)
-        };
+        String requestUrl = buildPlayerRequestUrl(playerName, opponentAbbr);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(requestUrl))
+                .GET()
+                .build();
 
-        IllegalArgumentException lastError = null;
-        for (String season : seasonsToTry) {
-            String requestUrl = buildPlayerRequestUrl(playerName, season, opponentAbbr);
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(requestUrl))
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
-                throw new IllegalArgumentException("Backend request failed: HTTP " + response.statusCode());
-            }
-
-            JsonObject body = JsonParser.parseString(response.body()).getAsJsonObject();
-            if (body.has("error")) {
-                String error = body.get("error").getAsString();
-                if (error.toLowerCase(Locale.ROOT).contains("no games found")) {
-                    lastError = new IllegalArgumentException(error);
-                    continue;
-                }
-                throw new IllegalArgumentException(error);
-            }
-            return body;
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new IllegalArgumentException("Backend request failed: HTTP " + response.statusCode());
         }
 
-        if (lastError != null) {
-            throw lastError;
+        JsonObject body = JsonParser.parseString(response.body()).getAsJsonObject();
+        if (body.has("error")) {
+            throw new IllegalArgumentException(body.get("error").getAsString());
         }
-        throw new IllegalArgumentException("No games found for that comparison.");
+        return body;
     }
 
-    private String buildPlayerRequestUrl(String playerName, String season, String opponentAbbr) {
+    private String buildPlayerRequestUrl(String playerName, String opponentAbbr) {
         StringBuilder url = new StringBuilder(API_BASE_URL)
                 .append("/player/")
                 .append(URLEncoder.encode(playerName, StandardCharsets.UTF_8).replace("+", "%20"));
 
-        url.append("?season_type=both");
+        url.append("?career=true");
+        url.append("&season_type=both");
         url.append("&location=both");
         url.append("&stat=ppg");
-        url.append("&season=").append(URLEncoder.encode(season, StandardCharsets.UTF_8));
         url.append("&opponent=").append(URLEncoder.encode(opponentAbbr, StandardCharsets.UTF_8));
         return url.toString();
-    }
-
-    private static String formatSeason(int startYear) {
-        int endYear = startYear + 1;
-        return startYear + "-" + String.valueOf(endYear).substring(2);
     }
 
     private String mapOpponent(String value) {
