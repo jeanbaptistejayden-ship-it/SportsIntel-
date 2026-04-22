@@ -265,20 +265,21 @@ public class HomeController {
             String selectedStatKey = summary.get("stat").getAsString();
 
             String baselineUrl = buildPlayerRequestUrl(playerName, season, seasonStart, seasonEnd, false, seasonType, "both", null, null, stat);
-            JsonObject baselineBody = requestJson(baselineUrl, "Backend baseline request");
+            JsonObject baselineBody = requestJsonOptional(baselineUrl, "Backend baseline request", body);
             JsonObject baselineSummary = baselineBody.getAsJsonObject("summary");
             JsonArray baselineGames = baselineBody.getAsJsonArray("games");
 
             String careerAllUrl = buildPlayerRequestUrl(playerName, null, null, null, true, "both", "both", null, null, stat);
-            JsonObject careerAllBody = requestJson(careerAllUrl, "Backend career request");
+            JsonObject careerAllBody = requestJsonOptional(careerAllUrl, "Backend career request", baselineBody);
             JsonObject careerAllSummary = careerAllBody.getAsJsonObject("summary");
             JsonArray careerAllGames = careerAllBody.getAsJsonArray("games");
 
             JsonObject careerOpponentBody = opponent == null
                     ? baselineBody
-                    : requestJson(
+                    : requestJsonOptional(
                     buildPlayerRequestUrl(playerName, null, null, null, true, "both", "both", opponent, null, stat),
-                    "Backend career-vs-opponent request"
+                    "Backend career-vs-opponent request",
+                    baselineBody
             );
             JsonObject careerOpponentSummary = careerOpponentBody.getAsJsonObject("summary");
             JsonArray careerOpponentGames = careerOpponentBody.getAsJsonArray("games");
@@ -694,6 +695,15 @@ public class HomeController {
             throw new IllegalArgumentException(body.get("error").getAsString());
         }
         return body;
+    }
+
+    private JsonObject requestJsonOptional(String url, String requestName, JsonObject fallback) {
+        try {
+            return requestJson(url, requestName);
+        } catch (Exception e) {
+            System.out.println(requestName + " skipped: " + e.getMessage());
+            return fallback;
+        }
     }
 
     private List<SessionManager.LastGameRow> toLastFiveRows(JsonArray games) {
