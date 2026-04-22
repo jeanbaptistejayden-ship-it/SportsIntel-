@@ -307,20 +307,58 @@
                                         <Label text="Last 5 Games vs Opponent"
                                                styleClass="last-five-title" />
 
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-header-row">
+                                        <HBox alignment="CENTER_LEFT"
+                                              spacing="0"
+                                              prefWidth="850"
+                                              maxWidth="850"
+                                              minWidth="850"
+                                              styleClass="last-five-header-row">
                                             <children>
-                                                <Label text="Date" prefWidth="160" styleClass="last-five-header-cell" />
-                                                <Label text="Opponent" prefWidth="120" styleClass="last-five-header-cell" />
-                                                <Label text="PTS" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="REB" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="AST" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="MIN" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="FG%" prefWidth="110" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="3PT%" prefWidth="110" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="Date"
+                                                       minWidth="160" prefWidth="160" maxWidth="160"
+                                                       styleClass="last-five-header-cell" />
+
+                                                <Label text="Opponent"
+                                                       minWidth="120" prefWidth="120" maxWidth="120"
+                                                       styleClass="last-five-header-cell" />
+
+                                                <Label text="PTS"
+                                                       minWidth="90" prefWidth="90" maxWidth="90"
+                                                       alignment="CENTER"
+                                                       styleClass="last-five-header-cell centered-cell" />
+
+                                                <Label text="REB"
+                                                       minWidth="90" prefWidth="90" maxWidth="90"
+                                                       alignment="CENTER"
+                                                       styleClass="last-five-header-cell centered-cell" />
+
+                                                <Label text="AST"
+                                                       minWidth="90" prefWidth="90" maxWidth="90"
+                                                       alignment="CENTER"
+                                                       styleClass="last-five-header-cell centered-cell" />
+
+                                                <Label text="MIN"
+                                                       minWidth="90" prefWidth="90" maxWidth="90"
+                                                       alignment="CENTER"
+                                                       styleClass="last-five-header-cell centered-cell" />
+
+                                                <Label text="FG%"
+                                                       minWidth="110" prefWidth="110" maxWidth="110"
+                                                       alignment="CENTER"
+                                                       styleClass="last-five-header-cell centered-cell" />
+
+                                                <Label text="3PT%"
+                                                       minWidth="110" prefWidth="110" maxWidth="110"
+                                                       alignment="CENTER"
+                                                       styleClass="last-five-header-cell centered-cell" />
                                             </children>
                                         </HBox>
 
-                                        <VBox fx:id="lastFiveRowsBox" spacing="12" />
+                                        <VBox fx:id="lastFiveRowsBox"
+                                              spacing="12"
+                                              prefWidth="850"
+                                              maxWidth="850"
+                                              minWidth="850" />
 
                                     </children>
 

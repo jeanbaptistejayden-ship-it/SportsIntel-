@@ -514,7 +514,17 @@ public class ResultsController {
 
     private Label makeTableCell(String text, double width, String... styleClasses) {
         Label label = new Label(text);
+
+        label.setMinWidth(width);
         label.setPrefWidth(width);
+        label.setMaxWidth(width);
+
+        if (width == 160 || width == 120) {
+            label.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        } else {
+            label.setAlignment(javafx.geometry.Pos.CENTER);
+        }
+
         label.getStyleClass().addAll(styleClasses);
         return label;
     }

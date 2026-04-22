@@ -207,10 +207,8 @@ def build_summary(player_name: str, player_id: int, games: list[dict], stat: str
     selected_stat = normalize_stat(stat)
     values = [float(g[selected_stat]) for g in games]
 
-    # grab the full game context for the best and worst games
     high_low = get_high_low_games(games, stat)
 
-    # summary the frontend actually uses: averages plus the standout games
     return {
         "player": player_name,
         "player_image": player_image_url(player_id),

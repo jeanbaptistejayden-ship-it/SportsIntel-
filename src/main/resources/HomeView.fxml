@@ -76,9 +76,9 @@
                             <Label text="Season Range" styleClass="field-label" />
 
                             <HBox spacing="6">
-                                <TextField fx:id="seasonStartField" promptText="1949" prefWidth="70"/>
+                                <TextField fx:id="seasonStartField" promptText="2003" prefWidth="70"/>
                                 <Label text="to" />
-                                <TextField fx:id="seasonEndField" promptText="2026" prefWidth="70"/>
+                                <TextField fx:id="seasonEndField" promptText="2025" prefWidth="70"/>
                             </HBox>
                         </VBox>
 
