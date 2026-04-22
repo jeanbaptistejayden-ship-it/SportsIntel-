@@ -102,24 +102,39 @@ def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regul
         raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
     return fetch_gamelog(player_id, season, mapped)
 
-def fetch_gamelog_range(player_id, start_season, end_season, season_type="Regular Season"):
-    import pandas as pd
-
-    # pull the starting year; for example "2021-22" -> 2021
+def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, season_type: str = "regular"):
     start = int(start_season.split("-")[0])
     end = int(end_season.split("-")[0])
 
-    frames = []
-    for y in range(start, end + 1):
-        # rebuild the season string for each year in the range
-        season = f"{y}-{str(y + 1)[-2:]}"
-        df = fetch_gamelog(player_id, season, season_type)
-        # skip empty seasons so we don't break the concat
-        if df is not None and not df.empty:
-            frames.append(df)
+    if end < start:
+        raise ValueError("season_end must be the same as or after season_start.")
 
-    # stack all seasons into one dataframe, or return None if nothing came back
-    return pd.concat(frames, ignore_index=True) if frames else None
+    current_year = datetime.utcnow().year
+    current_month = datetime.utcnow().month
+    max_start_year = current_year if current_month >= 10 else current_year - 1
+
+    if start > max_start_year or end > max_start_year:
+        raise ValueError("Season range cannot include future seasons.")
+
+    frames = []
+    errors = []
+
+    for y in range(start, end + 1):
+        season = f"{y}-{str(y + 1)[-2:]}"
+        try:
+            df = fetch_gamelog_by_type(player_id, season=season, season_type=season_type)
+            if df is not None and not df.empty:
+                frames.append(df)
+        except Exception as exc:
+            errors.append(f"{season}: {exc}")
+
+    if frames:
+        return pd.concat(frames, ignore_index=True)
+
+    if errors:
+        raise ValueError("No valid seasons returned data. " + " | ".join(errors))
+
+    return None
 
 def parse_games(gamelog_frame):
     if gamelog_frame is None or gamelog_frame.empty:

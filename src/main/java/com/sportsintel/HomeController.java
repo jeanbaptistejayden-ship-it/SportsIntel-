@@ -5,15 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -29,9 +29,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.Comparator;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -39,6 +39,8 @@ import java.util.Objects;
 
 public class HomeController {
     private static final String API_BASE_URL = "http://127.0.0.1:8000";
+    private static final int MAX_SEASON_START_YEAR = 2025;
+    private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
     private static final Map<String, String> OPPONENT_TO_ABBR = createOpponentMap();
 
     @FXML
@@ -95,18 +97,24 @@ public class HomeController {
         navLogo.setImage(image);
         mainLogo.setImage(image);
 
+        initializeCombos();
+        updateLoggedInUI();
+    }
+
+    private void initializeCombos() {
         if (seasonTypeCombo != null) {
-            seasonTypeCombo.getItems().addAll("Regular Season", "Playoffs", "Both");
+            seasonTypeCombo.getItems().setAll("Regular Season", "Playoffs", "Both");
             seasonTypeCombo.setValue("Both");
         }
 
         if (locationCombo != null) {
-            locationCombo.getItems().addAll("Home", "Away", "Both");
+            locationCombo.getItems().setAll("Home", "Away", "Both");
             locationCombo.setValue("Both");
         }
 
         if (statisticCombo != null) {
-            statisticCombo.getItems().addAll("Points Per Game",
+            statisticCombo.getItems().setAll(
+                    "Points Per Game",
                     "Assists Per Game",
                     "Rebounds Per Game",
                     "Field Goal Percentage",
@@ -116,15 +124,22 @@ public class HomeController {
                     "Blocks Per Game",
                     "Turnovers Per Game",
                     "Minutes Per Game",
-                    "Plus/Minus");
+                    "Plus/Minus"
+            );
         }
 
         if (sportCombo != null) {
-            sportCombo.getItems().addAll("Basketball", "Baseball (Coming Soon)", "Football (Coming Soon)", "Soccer (Coming Soon)");
+            sportCombo.getItems().setAll(
+                    "Basketball",
+                    "Baseball (Coming Soon)",
+                    "Football (Coming Soon)",
+                    "Soccer (Coming Soon)"
+            );
         }
 
         if (opponentCombo != null) {
-            opponentCombo.getItems().addAll("Atlanta Hawks",
+            opponentCombo.getItems().setAll(
+                    "Atlanta Hawks",
                     "Boston Celtics",
                     "Brooklyn Nets",
                     "Charlotte Hornets",
@@ -153,35 +168,14 @@ public class HomeController {
                     "San Antonio Spurs",
                     "Toronto Raptors",
                     "Utah Jazz",
-                    "Washington Wizards");
-        }
-
-        if (SessionManager.isLoggedIn()) {
-            setLoggedInUser(
-                    SessionManager.getFullName(),
-                    SessionManager.getUsername()
+                    "Washington Wizards"
             );
         }
     }
 
     @FXML
     private void handleHelpClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HelpView.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root, 900, 700);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
-
-            Stage helpStage = new Stage();
-            helpStage.setTitle("Help & Support");
-            helpStage.setScene(scene);
-            helpStage.initModality(Modality.APPLICATION_MODAL);
-            helpStage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        openModal("/HelpView.fxml", "Help & Support", 900, 700, true);
     }
 
     @FXML
@@ -203,37 +197,23 @@ public class HomeController {
             loginStage.setResizable(false);
             loginStage.showAndWait();
 
+            updateLoggedInUI();
         } catch (IOException e) {
             e.printStackTrace();
+            showError("Could not open login page.");
         }
     }
 
     @FXML
     private void handleSignUpClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUpView.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root, 520, 920);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
-
-            Stage signUpStage = new Stage();
-            signUpStage.setTitle("Sign Up");
-            signUpStage.setScene(scene);
-            signUpStage.initModality(Modality.APPLICATION_MODAL);
-            signUpStage.setResizable(false);
-            signUpStage.showAndWait();
-
-            updateLoggedInUI();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        openModal("/SignUpView.fxml", "Sign Up", 520, 920, false);
+        updateLoggedInUI();
     }
+
     @FXML
     private void handleSearchClick() {
         try {
-            String playerName = playerNameField != null ? playerNameField.getText().trim() : "";
+            String playerName = getTrimmedText(playerNameField);
             if (playerName.isEmpty()) {
                 showError("Please enter a player name.");
                 return;
@@ -248,98 +228,182 @@ public class HomeController {
             String seasonType = mapSeasonType(seasonTypeCombo != null ? seasonTypeCombo.getValue() : null);
             String location = mapLocation(locationCombo != null ? locationCombo.getValue() : null);
             String stat = mapStat(statisticCombo != null ? statisticCombo.getValue() : null);
-            String season = buildSeasonParam();
+            String seasonStart = buildSeasonStartParam();
+            String seasonEnd = buildSeasonEndParam(seasonStart);
             String opponent = mapOpponent(opponentCombo != null ? opponentCombo.getValue() : null);
             Integer lastN = parseLastN();
 
-            String requestUrl = buildPlayerRequestUrl(playerName, season, seasonType, location, opponent, lastN, stat);
+            String requestUrl = buildPlayerRequestUrl(
+                    playerName,
+                    seasonStart,
+                    seasonEnd,
+                    seasonType,
+                    location,
+                    opponent,
+                    lastN,
+                    stat
+            );
+            System.out.println("Request URL: " + requestUrl);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(requestUrl))
-                    .GET()
-                    .build();
+            JsonObject body = sendJsonRequest(requestUrl);
+            JsonObject summary = requireObject(body, "summary");
+            JsonObject meta = requireObject(body, "meta");
+            JsonArray games = requireArray(body, "games");
+            JsonObject careerVsOpponentSummary = requireObject(body, "career_vs_opponent_summary");
+            JsonObject careerOverviewSummary = requireObject(body, "career_overview_summary");
+            JsonArray recentVsOpponentGames = requireArray(body, "recent_vs_opponent_games");
 
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
-                showError("Backend request failed: HTTP " + response.statusCode());
-                return;
-            }
+            String selectedStatKey = getJsonString(summary, "stat", "pts");
 
-            JsonObject body = JsonParser.parseString(response.body()).getAsJsonObject();
-            if (body.has("error")) {
-                showError(body.get("error").getAsString());
-                return;
-            }
+            String playerImageUrl = getJsonString(summary, "player_image", "");
+            String displayedSeason = (seasonStart == null && seasonEnd == null)
+                    ? "No Season Range"
+                    : getJsonString(meta, "season_range", getJsonString(meta, "season", "Unknown"));
+            String displayedSeasonType = getJsonString(meta, "season_type", "both");
+            String displayedLocation = getJsonString(meta, "location", "both");
+            String displayedLastN = getNullableJsonString(meta, "last_n", "All");
+            String displayedPlayer = getJsonString(summary, "player", playerName);
+            String displayedStatLabel = formatStatLabel(selectedStatKey);
+            String displayedOpponent = (opponentCombo != null
+                    && opponentCombo.getValue() != null
+                    && !opponentCombo.getValue().isBlank())
+                    ? opponentCombo.getValue()
+                    : "Any Opponent";
 
-            JsonObject summary = body.getAsJsonObject("summary");
-            JsonObject meta = body.getAsJsonObject("meta");
-            JsonArray games = body.getAsJsonArray("games");
-            double selectedAverage = summary.get("average").getAsDouble();
-            String selectedStatKey = summary.get("stat").getAsString();
+            double filteredAverageForSelectedStat = getAverageForSelectedStat(games, selectedStatKey);
+            double careerAverageForSelectedStat = getCareerAverageForSelectedStat(careerOverviewSummary, selectedStatKey);
+            double recentFiveAverageForSelectedStat = getRecentAverageForSelectedStat(games, selectedStatKey, 5);
+            double recentTenAverageForSelectedStat = getRecentAverageForSelectedStat(games, selectedStatKey, 10);
 
-            String baselineUrl = buildPlayerRequestUrl(playerName, season, seasonType, "both", null, null, stat);
-            HttpRequest baselineRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(baselineUrl))
-                    .GET()
-                    .build();
-            HttpResponse<String> baselineResponse = HttpClient.newHttpClient().send(baselineRequest, HttpResponse.BodyHandlers.ofString());
-            if (baselineResponse.statusCode() != 200) {
-                showError("Backend baseline request failed: HTTP " + baselineResponse.statusCode());
-                return;
-            }
-            JsonObject baselineBody = JsonParser.parseString(baselineResponse.body()).getAsJsonObject();
-            if (baselineBody.has("error")) {
-                showError(baselineBody.get("error").getAsString());
-                return;
-            }
-            JsonObject baselineSummary = baselineBody.getAsJsonObject("summary");
-            JsonArray baselineGames = baselineBody.getAsJsonArray("games");
+            double pointsAverage = averageOf(games, "pts");
+            double fieldGoalPctAverage = averageOf(games, "fg_pct");
+            double minutesAverage = averageOf(games, "min");
+            double assistsAverage = averageOf(games, "ast");
+            double reboundsAverage = averageOf(games, "reb");
+            double turnoversAverage = averageOf(games, "tov");
 
-            String playerImageUrl = summary.has("player_image") && !summary.get("player_image").isJsonNull()
-                    ? summary.get("player_image").getAsString()
-                    : "";
+            double homeAverageForSelectedStat = averageByLocation(games, true, selectedStatKey);
+            double awayAverageForSelectedStat = averageByLocation(games, false, selectedStatKey);
 
             SessionManager.setLatestSearch(new SessionManager.SearchResult(
-                    summary.get("player").getAsString(),
+                    displayedPlayer,
                     playerImageUrl,
-                    opponentCombo != null ? opponentCombo.getValue() : "Any Opponent",
-                    formatStatLabel(summary.get("stat").getAsString()),
-                    meta.get("season").getAsString(),
-                    meta.get("season_type").getAsString(),
-                    meta.get("location").getAsString(),
-                    meta.get("last_n").isJsonNull() ? "All" : meta.get("last_n").getAsString(),
-                    summary.get("games_played").getAsInt(),
-                    selectedAverage,
-                    summary.get("high").getAsDouble(),
-                    summary.get("low").getAsDouble(),
-                    baselineSummary.get("average").getAsDouble(),
-                    averageOfLastN(baselineGames, selectedStatKey, 5),
-                    averageOfLastN(baselineGames, selectedStatKey, 10),
-                    averageOf(games, "fg_pct"),
-                    averageOf(games, "min"),
-                    averageOf(games, "ast"),
-                    averageOf(games, "reb"),
-                    averageOf(games, "tov"),
-                    averageByLocation(baselineGames, true, selectedStatKey),
-                    averageByLocation(baselineGames, false, selectedStatKey),
+                    displayedOpponent,
+                    displayedStatLabel,
+                    displayedSeason,
+                    displayedSeasonType,
+                    displayedLocation,
+                    displayedLastN,
+
+                    getJsonInt(summary, "games_played", 0),
+                    filteredAverageForSelectedStat,
+                    getJsonDouble(summary, "high", 0.0),
+                    getJsonDouble(summary, "low", 0.0),
+
+                    careerAverageForSelectedStat,
+                    recentFiveAverageForSelectedStat,
+                    recentTenAverageForSelectedStat,
+
+                    pointsAverage,
+                    fieldGoalPctAverage,
+                    minutesAverage,
+                    assistsAverage,
+                    reboundsAverage,
+                    turnoversAverage,
+                    homeAverageForSelectedStat,
+                    awayAverageForSelectedStat,
+
                     readGameOpponent(summary, "high_game"),
                     readGameValue(summary, "high_game"),
                     readGameOpponent(summary, "low_game"),
-                    readGameValue(summary, "low_game")
+                    readGameValue(summary, "low_game"),
+
+                    getJsonInt(careerVsOpponentSummary, "games_played", 0),
+                    getJsonDouble(careerVsOpponentSummary, "ppg", 0.0),
+                    getJsonDouble(careerVsOpponentSummary, "apg", 0.0),
+                    getJsonDouble(careerVsOpponentSummary, "rpg", 0.0),
+                    getJsonDouble(careerVsOpponentSummary, "mpg", 0.0),
+
+                    getJsonDouble(careerOverviewSummary, "ppg", 0.0),
+                    getJsonDouble(careerOverviewSummary, "apg", 0.0),
+                    getJsonDouble(careerOverviewSummary, "rpg", 0.0),
+                    getJsonDouble(careerOverviewSummary, "mpg", 0.0),
+                    getJsonDouble(careerOverviewSummary, "fg_pct", 0.0),
+                    getJsonDouble(careerOverviewSummary, "fg3_pct", 0.0),
+                    getJsonDouble(careerOverviewSummary, "tov", 0.0),
+                    getJsonDouble(careerOverviewSummary, "blk", 0.0),
+                    getJsonDouble(careerOverviewSummary, "stl", 0.0),
+
+                    parseRecentGames(recentVsOpponentGames)
             ));
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
-            Parent root = loader.load();
-
-            Scene currentScene = navLogo.getScene();
-            currentScene.setRoot(root);
-
+            navigateTo("/ResultsView.fxml");
+        } catch (IllegalArgumentException e) {
+            showError(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
             showError("Could not open results page.");
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Could not retrieve player data from backend.");
+            showError("Could not retrieve player data from backend: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleCompareClick() {
+        try {
+            navigateTo("/CompareView.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Could not open compare page.");
+        }
+    }
+
+    @FXML
+    private void toggleProfileMenu() {
+        boolean show = !profileMenu.isVisible();
+        profileMenu.setVisible(show);
+        profileMenu.setManaged(show);
+    }
+
+    @FXML
+    private void handleLogout() {
+        SessionManager.logout();
+        profileMenu.setVisible(false);
+        profileMenu.setManaged(false);
+        profileBox.setVisible(false);
+        profileBox.setManaged(false);
+        authButtons.setVisible(true);
+        authButtons.setManaged(true);
+    }
+
+    @FXML
+    private void handleResetClick() {
+        if (seasonStartField != null) {
+            seasonStartField.clear();
+        }
+        if (seasonEndField != null) {
+            seasonEndField.clear();
+        }
+        if (lastNGamesField != null) {
+            lastNGamesField.clear();
+        }
+        if (playerNameField != null) {
+            playerNameField.clear();
+        }
+        if (seasonTypeCombo != null) {
+            seasonTypeCombo.setValue("Both");
+        }
+        if (locationCombo != null) {
+            locationCombo.setValue("Both");
+        }
+        if (sportCombo != null) {
+        }
+        if (opponentCombo != null) {
+            opponentCombo.getSelectionModel().clearSelection();
+            opponentCombo.setValue(null);
+        }
+        if (statisticCombo != null) {
         }
     }
 
@@ -357,45 +421,76 @@ public class HomeController {
         profileMenu.setManaged(false);
     }
 
-    @FXML
-    private void toggleProfileMenu() {
-        boolean show = !profileMenu.isVisible();
-        profileMenu.setVisible(show);
-        profileMenu.setManaged(show);
-    }
+    private JsonObject sendJsonRequest(String url) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
 
-    @FXML
-    private void handleLogout() {
-        SessionManager.logout();
-        profileMenu.setVisible(false);
-        profileMenu.setManaged(false);
+        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Response body: " + response.body());
 
-        profileBox.setVisible(false);
-        profileBox.setManaged(false);
-
-        authButtons.setVisible(true);
-        authButtons.setManaged(true);
-    }
-
-    @FXML
-    private void handleCompareClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CompareView.fxml"));
-            Parent root = loader.load();
-
-            Scene currentScene = navLogo.getScene();
-            currentScene.setRoot(root);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException("Backend request failed: HTTP " + response.statusCode());
         }
+
+        JsonObject body = JsonParser.parseString(response.body()).getAsJsonObject();
+        if (body.has("error") && !body.get("error").isJsonNull()) {
+            throw new IllegalStateException(body.get("error").getAsString());
+        }
+
+        return body;
     }
 
-    private String buildSeasonParam() {
-        if (seasonStartField == null) {
-            return null;
+    private JsonObject requireObject(JsonObject parent, String key) {
+        if (parent == null || !parent.has(key) || parent.get(key) == null || parent.get(key).isJsonNull()) {
+            throw new IllegalStateException("Missing object in backend response: " + key);
         }
-        String rawStart = seasonStartField.getText() == null ? "" : seasonStartField.getText().trim();
+        return parent.getAsJsonObject(key);
+    }
+
+    private JsonArray requireArray(JsonObject parent, String key) {
+        if (parent == null || !parent.has(key) || parent.get(key) == null || parent.get(key).isJsonNull()) {
+            return new JsonArray();
+        }
+        return parent.getAsJsonArray(key);
+    }
+
+    private String getJsonString(JsonObject object, String key, String fallback) {
+        if (object == null || !object.has(key) || object.get(key) == null || object.get(key).isJsonNull()) {
+            return fallback;
+        }
+        return object.get(key).getAsString();
+    }
+
+    private String getNullableJsonString(JsonObject object, String key, String fallback) {
+        if (object == null || !object.has(key) || object.get(key) == null || object.get(key).isJsonNull()) {
+            return fallback;
+        }
+        String value = object.get(key).getAsString();
+        return (value == null || value.isBlank()) ? fallback : value;
+    }
+
+    private double getJsonDouble(JsonObject object, String key, double fallback) {
+        if (object == null || !object.has(key) || object.get(key) == null || object.get(key).isJsonNull()) {
+            return fallback;
+        }
+        return object.get(key).getAsDouble();
+    }
+
+    private int getJsonInt(JsonObject object, String key, int fallback) {
+        if (object == null || !object.has(key) || object.get(key) == null || object.get(key).isJsonNull()) {
+            return fallback;
+        }
+        return object.get(key).getAsInt();
+    }
+
+    private String getTrimmedText(TextField field) {
+        return field == null || field.getText() == null ? "" : field.getText().trim();
+    }
+
+    private String buildSeasonStartParam() {
+        String rawStart = getTrimmedText(seasonStartField);
         if (rawStart.isEmpty()) {
             return null;
         }
@@ -407,18 +502,50 @@ public class HomeController {
             throw new IllegalArgumentException("Season start year must be a number.");
         }
 
-        int endYear = startYear + 1;
-        return startYear + "-" + String.valueOf(endYear).substring(2);
+        if (startYear > MAX_SEASON_START_YEAR) {
+            throw new IllegalArgumentException("Season start year cannot be later than 2025.");
+        }
+
+        return toSeasonString(startYear);
+    }
+
+    private String buildSeasonEndParam(String seasonStart) {
+        String rawEnd = getTrimmedText(seasonEndField);
+        if (rawEnd.isEmpty()) {
+            return seasonStart;
+        }
+
+        int endYear;
+        try {
+            endYear = Integer.parseInt(rawEnd);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Season end year must be a number.");
+        }
+
+        if (endYear > MAX_SEASON_START_YEAR) {
+            throw new IllegalArgumentException("Season end year cannot be later than 2025.");
+        }
+
+        if (seasonStart != null) {
+            int startYear = Integer.parseInt(seasonStart.substring(0, 4));
+            if (endYear < startYear) {
+                throw new IllegalArgumentException("Season end year must be greater than or equal to season start year.");
+            }
+        }
+
+        return toSeasonString(endYear);
+    }
+
+    private String toSeasonString(int startYear) {
+        return startYear + "-" + String.valueOf(startYear + 1).substring(2);
     }
 
     private Integer parseLastN() {
-        if (lastNGamesField == null) {
-            return null;
-        }
-        String value = lastNGamesField.getText() == null ? "" : lastNGamesField.getText().trim();
+        String value = getTrimmedText(lastNGamesField);
         if (value.isEmpty()) {
             return null;
         }
+
         try {
             int parsed = Integer.parseInt(value);
             if (parsed <= 0) {
@@ -502,7 +629,8 @@ public class HomeController {
 
     private String buildPlayerRequestUrl(
             String playerName,
-            String season,
+            String seasonStart,
+            String seasonEnd,
             String seasonType,
             String location,
             String opponent,
@@ -517,8 +645,11 @@ public class HomeController {
         url.append("&location=").append(URLEncoder.encode(location, StandardCharsets.UTF_8));
         url.append("&stat=").append(URLEncoder.encode(stat, StandardCharsets.UTF_8));
 
-        if (season != null) {
-            url.append("&season=").append(URLEncoder.encode(season, StandardCharsets.UTF_8));
+        if (seasonStart != null) {
+            url.append("&season_start=").append(URLEncoder.encode(seasonStart, StandardCharsets.UTF_8));
+        }
+        if (seasonEnd != null) {
+            url.append("&season_end=").append(URLEncoder.encode(seasonEnd, StandardCharsets.UTF_8));
         }
         if (opponent != null) {
             url.append("&opponent=").append(URLEncoder.encode(opponent, StandardCharsets.UTF_8));
@@ -526,6 +657,7 @@ public class HomeController {
         if (lastN != null) {
             url.append("&last_n=").append(lastN);
         }
+
         return url.toString();
     }
 
@@ -540,7 +672,7 @@ public class HomeController {
             return "Field Goal Percentage";
         }
         if ("fg3_pct".equalsIgnoreCase(stat)) {
-            return "3pt Throw Percentage";
+            return "3pt Percentage";
         }
         if ("ft_pct".equalsIgnoreCase(stat)) {
             return "Free Throw Percentage";
@@ -563,10 +695,34 @@ public class HomeController {
         return "Points Per Game";
     }
 
+    private double getCareerAverageForSelectedStat(JsonObject careerOverviewSummary, String selectedStatKey) {
+        return switch (selectedStatKey.toLowerCase()) {
+            case "pts" -> getJsonDouble(careerOverviewSummary, "ppg", 0.0);
+            case "ast" -> getJsonDouble(careerOverviewSummary, "apg", 0.0);
+            case "reb" -> getJsonDouble(careerOverviewSummary, "rpg", 0.0);
+            case "min" -> getJsonDouble(careerOverviewSummary, "mpg", 0.0);
+            case "fg_pct" -> getJsonDouble(careerOverviewSummary, "fg_pct", 0.0);
+            case "fg3_pct" -> getJsonDouble(careerOverviewSummary, "fg3_pct", 0.0);
+            case "tov" -> getJsonDouble(careerOverviewSummary, "tov", 0.0);
+            case "blk" -> getJsonDouble(careerOverviewSummary, "blk", 0.0);
+            case "stl" -> getJsonDouble(careerOverviewSummary, "stl", 0.0);
+            default -> 0.0;
+        };
+    }
+
+    private double getAverageForSelectedStat(JsonArray games, String selectedStatKey) {
+        return averageOf(games, selectedStatKey);
+    }
+
+    private double getRecentAverageForSelectedStat(JsonArray games, String selectedStatKey, int n) {
+        return averageOfLastN(games, selectedStatKey, n);
+    }
+
     private double averageOf(JsonArray games, String statKey) {
         if (games == null || games.isEmpty()) {
             return 0.0;
         }
+
         double sum = 0.0;
         int count = 0;
         for (JsonElement gameElement : games) {
@@ -583,6 +739,7 @@ public class HomeController {
         if (games == null || games.isEmpty()) {
             return 0.0;
         }
+
         double sum = 0.0;
         int count = 0;
         for (JsonElement gameElement : games) {
@@ -600,6 +757,7 @@ public class HomeController {
         if (games == null || games.isEmpty()) {
             return 0.0;
         }
+
         List<JsonObject> sortedGames = new ArrayList<>();
         for (JsonElement gameElement : games) {
             sortedGames.add(gameElement.getAsJsonObject());
@@ -622,6 +780,7 @@ public class HomeController {
         if (game == null || !game.has("date") || game.get("date").isJsonNull()) {
             return LocalDate.MIN;
         }
+
         String dateText = game.get("date").getAsString();
         try {
             return LocalDate.parse(dateText, DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.US));
@@ -634,10 +793,12 @@ public class HomeController {
         if (!summary.has(gameKey) || summary.get(gameKey).isJsonNull()) {
             return "N/A";
         }
+
         JsonObject game = summary.getAsJsonObject(gameKey);
         if (!game.has("opponent") || game.get("opponent").isJsonNull()) {
             return "N/A";
         }
+
         return game.get("opponent").getAsString();
     }
 
@@ -645,11 +806,62 @@ public class HomeController {
         if (!summary.has(gameKey) || summary.get(gameKey).isJsonNull()) {
             return 0.0;
         }
+
         JsonObject game = summary.getAsJsonObject(gameKey);
         if (!game.has("value") || game.get("value").isJsonNull()) {
             return 0.0;
         }
+
         return game.get("value").getAsDouble();
+    }
+
+    private void updateLoggedInUI() {
+        if (SessionManager.isLoggedIn()) {
+            authButtons.setVisible(false);
+            authButtons.setManaged(false);
+
+            profileBox.setVisible(true);
+            profileBox.setManaged(true);
+
+            profileNameLabel.setText(SessionManager.getFullName());
+            profileUsernameLabel.setText(SessionManager.getUsername());
+        } else {
+            authButtons.setVisible(true);
+            authButtons.setManaged(true);
+
+            profileBox.setVisible(false);
+            profileBox.setManaged(false);
+
+            profileMenu.setVisible(false);
+            profileMenu.setManaged(false);
+        }
+    }
+
+    private void navigateTo(String fxmlPath) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        Parent root = loader.load();
+        Scene currentScene = navLogo.getScene();
+        currentScene.setRoot(root);
+    }
+
+    private void openModal(String fxmlPath, String title, int width, int height, boolean resizable) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, width, height);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(resizable);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Could not open " + title + ".");
+        }
     }
 
     private void showError(String message) {
@@ -695,68 +907,24 @@ public class HomeController {
         return map;
     }
 
-    private void updateLoggedInUI() {
-        if (SessionManager.isLoggedIn()) {
+    private List<SessionManager.RecentGame> parseRecentGames(JsonArray games) {
+        List<SessionManager.RecentGame> rows = new ArrayList<>();
 
-            authButtons.setVisible(false);
-            authButtons.setManaged(false);
+        for (JsonElement element : games) {
+            JsonObject game = element.getAsJsonObject();
 
-            profileBox.setVisible(true);
-            profileBox.setManaged(true);
-
-            profileNameLabel.setText(SessionManager.getFullName());
-            profileUsernameLabel.setText(SessionManager.getUsername());
-
-        } else {
-
-            authButtons.setVisible(true);
-            authButtons.setManaged(true);
-
-            profileBox.setVisible(false);
-            profileBox.setManaged(false);
-
-            profileMenu.setVisible(false);
-            profileMenu.setManaged(false);
-        }
-    }
-
-    @FXML
-    private void handleResetClick() {
-        if (seasonStartField != null) {
-            seasonStartField.clear();
+            rows.add(new SessionManager.RecentGame(
+                    getJsonString(game, "date", ""),
+                    getJsonString(game, "opponent", ""),
+                    getJsonDouble(game, "pts", 0.0),
+                    getJsonDouble(game, "reb", 0.0),
+                    getJsonDouble(game, "ast", 0.0),
+                    getJsonDouble(game, "min", 0.0),
+                    getJsonDouble(game, "fg_pct", 0.0),
+                    getJsonDouble(game, "fg3_pct", 0.0)
+            ));
         }
 
-        if (seasonEndField != null) {
-            seasonEndField.clear();
-        }
-
-        if (lastNGamesField != null) {
-            lastNGamesField.clear();
-        }
-
-        if (playerNameField != null) {
-            playerNameField.clear();
-        }
-
-        if (seasonTypeCombo != null) {
-            seasonTypeCombo.setValue("Both");
-        }
-
-        if (locationCombo != null) {
-            locationCombo.setValue("Both");
-        }
-
-        if (sportCombo != null) {
-            sportCombo.setValue("Basketball");
-        }
-
-        if (opponentCombo != null) {
-            opponentCombo.getSelectionModel().clearSelection();
-            opponentCombo.setValue(null);
-        }
-
-        if (statisticCombo != null) {
-            statisticCombo.setValue("Points Per Game");
-        }
+        return rows;
     }
 }
