@@ -2,10 +2,13 @@ from fastapi import APIRouter
 
 from API.services.player_service import (
     build_summary,
+    build_stat_averages,
     fetch_gamelog_by_type,
+    fetch_gamelog_range_by_type,
     filter_games_by_location,
     filter_games_by_opponent,
     get_default_season,
+    get_player_career_years,
     get_player_lookup,
     limit_last_n_games,
     parse_games,
@@ -18,6 +21,9 @@ router = APIRouter()
 def get_player_stats(
     name: str,
     season: str | None = None,
+    season_start: int | None = None,
+    season_end: int | None = None,
+    career: bool = False,
     season_type: str = "regular",
     location: str = "both",
     opponent: str | None = None,
@@ -31,12 +37,36 @@ def get_player_stats(
     player_id = player["id"]
     player_name = player["name"]
 
+    use_range = season_start is not None or season_end is not None
+    if use_range and (season_start is None or season_end is None):
+        return {"error": "Both season_start and season_end are required for season range search."}
+
     chosen_season = season or get_default_season()
     try:
-        gamelog_data = fetch_gamelog_by_type(player_id, season=chosen_season, season_type=season_type)
+        if career:
+            start_year, end_year = get_player_career_years(player_id)
+            gamelog_data = fetch_gamelog_range_by_type(
+                player_id,
+                start_year=start_year,
+                end_year=end_year,
+                season_type=season_type,
+            )
+            chosen_season = f"career ({start_year}-{end_year})"
+        elif use_range:
+            gamelog_data = fetch_gamelog_range_by_type(
+                player_id,
+                start_year=season_start,
+                end_year=season_end,
+                season_type=season_type,
+            )
+            chosen_season = f"{season_start}-{season_end}"
+        else:
+            gamelog_data = fetch_gamelog_by_type(player_id, season=chosen_season, season_type=season_type)
     except ValueError as exc:
         return {"error": str(exc)}
-
+    except Exception:
+        return {"error": "Unexpected backend error while fetching player data."}
+ 
     games = parse_games(gamelog_data)
     try:
         games = filter_games_by_location(games, location=location)
@@ -57,6 +87,8 @@ def get_player_stats(
         summary = build_summary(player_name, player_id, games, stat=stat)
     except ValueError as exc:
         return {"error": str(exc)}
+
+    summary.update(build_stat_averages(games))
 
     return {
         "summary": summary,

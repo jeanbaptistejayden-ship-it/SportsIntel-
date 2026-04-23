@@ -19,10 +19,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ResultsController {
-
     @FXML
     private ImageView navLogo;
 
@@ -115,14 +117,6 @@ public class ResultsController {
     @FXML
     private Label awayValueLabel;
     @FXML
-    private Label bestMatchupTeamLabel;
-    @FXML
-    private Label bestMatchupValueLabel;
-    @FXML
-    private Label toughestMatchupTeamLabel;
-    @FXML
-    private Label toughestMatchupValueLabel;
-    @FXML
     private Label trendSummaryLabel;
     @FXML
     private Label matchupStrengthSummaryLabel;
@@ -130,6 +124,86 @@ public class ResultsController {
     private Label homeAwaySummaryLabel;
     @FXML
     private Label recentFormSummaryLabel;
+    @FXML
+    private Label lastFiveRow1DateLabel;
+    @FXML
+    private Label lastFiveRow1OpponentLabel;
+    @FXML
+    private Label lastFiveRow1PtsLabel;
+    @FXML
+    private Label lastFiveRow1RebLabel;
+    @FXML
+    private Label lastFiveRow1AstLabel;
+    @FXML
+    private Label lastFiveRow1MinLabel;
+    @FXML
+    private Label lastFiveRow1FgLabel;
+    @FXML
+    private Label lastFiveRow1ResultLabel;
+    @FXML
+    private Label lastFiveRow2DateLabel;
+    @FXML
+    private Label lastFiveRow2OpponentLabel;
+    @FXML
+    private Label lastFiveRow2PtsLabel;
+    @FXML
+    private Label lastFiveRow2RebLabel;
+    @FXML
+    private Label lastFiveRow2AstLabel;
+    @FXML
+    private Label lastFiveRow2MinLabel;
+    @FXML
+    private Label lastFiveRow2FgLabel;
+    @FXML
+    private Label lastFiveRow2ResultLabel;
+    @FXML
+    private Label lastFiveRow3DateLabel;
+    @FXML
+    private Label lastFiveRow3OpponentLabel;
+    @FXML
+    private Label lastFiveRow3PtsLabel;
+    @FXML
+    private Label lastFiveRow3RebLabel;
+    @FXML
+    private Label lastFiveRow3AstLabel;
+    @FXML
+    private Label lastFiveRow3MinLabel;
+    @FXML
+    private Label lastFiveRow3FgLabel;
+    @FXML
+    private Label lastFiveRow3ResultLabel;
+    @FXML
+    private Label lastFiveRow4DateLabel;
+    @FXML
+    private Label lastFiveRow4OpponentLabel;
+    @FXML
+    private Label lastFiveRow4PtsLabel;
+    @FXML
+    private Label lastFiveRow4RebLabel;
+    @FXML
+    private Label lastFiveRow4AstLabel;
+    @FXML
+    private Label lastFiveRow4MinLabel;
+    @FXML
+    private Label lastFiveRow4FgLabel;
+    @FXML
+    private Label lastFiveRow4ResultLabel;
+    @FXML
+    private Label lastFiveRow5DateLabel;
+    @FXML
+    private Label lastFiveRow5OpponentLabel;
+    @FXML
+    private Label lastFiveRow5PtsLabel;
+    @FXML
+    private Label lastFiveRow5RebLabel;
+    @FXML
+    private Label lastFiveRow5AstLabel;
+    @FXML
+    private Label lastFiveRow5MinLabel;
+    @FXML
+    private Label lastFiveRow5FgLabel;
+    @FXML
+    private Label lastFiveRow5ResultLabel;
 
     @FXML
     public void initialize() {
@@ -189,17 +263,14 @@ public class ResultsController {
         updateText(tovValueLabel, String.format("%.1f", search.turnovers()));
         updateText(minValueLabel, String.format("%.1f", search.minutes()));
 
-        updateText(bestMatchupTeamLabel, search.bestGameOpponent());
-        updateText(bestMatchupValueLabel, String.format("%.1f %s", search.bestGameValue(), shortStat));
-        updateText(toughestMatchupTeamLabel, search.toughestGameOpponent());
-        updateText(toughestMatchupValueLabel, String.format("%.1f %s", search.toughestGameValue(), shortStat));
+        fillLastFiveTable(search.lastFiveVsOpponent());
 
         double trendDiff = search.lastFiveAverage() - search.seasonBaseline();
         String trendDirection = trendDiff >= 0 ? "upward" : "downward";
         updateText(
                 trendSummaryLabel,
                 String.format(
-                        "Trending %s: last 5 games are %.1f %s versus average %.1f %s (Δ %.1f).",
+                        "Trending %s: last 5 games are %.1f %s versus selected baseline %.1f %s (Δ %.1f).",
                         trendDirection,
                         search.lastFiveAverage(),
                         shortStat,
@@ -212,13 +283,13 @@ public class ResultsController {
         updateText(
                 matchupStrengthSummaryLabel,
                 String.format(
-                        "Best single-game output came vs %s (%.1f %s); toughest was vs %s (%.1f %s).",
-                        search.bestGameOpponent(),
-                        search.bestGameValue(),
+                        "Against %s, this sample shows %.1f %s with %.1f APG and %.1f RPG across %d games.",
+                        opponent,
+                        search.average(),
                         shortStat,
-                        search.toughestGameOpponent(),
-                        search.toughestGameValue(),
-                        shortStat
+                        search.assists(),
+                        search.rebounds(),
+                        search.gamesPlayed()
                 )
         );
 
@@ -236,18 +307,54 @@ public class ResultsController {
                 )
         );
 
-        double recentFormDelta = search.lastFiveAverage() - search.lastTenAverage();
-        String formDirection = recentFormDelta >= 0 ? "positive momentum" : "cooling off";
         updateText(
                 recentFormSummaryLabel,
                 String.format(
-                        "Recent form shows %s (last 5: %.1f, last 10: %.1f %s).",
-                        formDirection,
+                        "Recent form: last 5 games are %.1f %s versus last 10 at %.1f %s.",
                         search.lastFiveAverage(),
+                        shortStat,
                         search.lastTenAverage(),
                         shortStat
                 )
         );
+    }
+
+    private void fillLastFiveTable(List<SessionManager.LastGameRow> rows) {
+        SessionManager.LastGameRow[] normalized = new SessionManager.LastGameRow[5];
+        for (int i = 0; i < normalized.length; i++) {
+            if (rows != null && i < rows.size()) {
+                normalized[i] = rows.get(i);
+            } else {
+                normalized[i] = new SessionManager.LastGameRow("-", "-", 0.0, 0.0, 0.0, 0.0, 0.0, "-");
+            }
+        }
+
+        setRow(normalized[0], lastFiveRow1DateLabel, lastFiveRow1OpponentLabel, lastFiveRow1PtsLabel, lastFiveRow1RebLabel, lastFiveRow1AstLabel, lastFiveRow1MinLabel, lastFiveRow1FgLabel, lastFiveRow1ResultLabel);
+        setRow(normalized[1], lastFiveRow2DateLabel, lastFiveRow2OpponentLabel, lastFiveRow2PtsLabel, lastFiveRow2RebLabel, lastFiveRow2AstLabel, lastFiveRow2MinLabel, lastFiveRow2FgLabel, lastFiveRow2ResultLabel);
+        setRow(normalized[2], lastFiveRow3DateLabel, lastFiveRow3OpponentLabel, lastFiveRow3PtsLabel, lastFiveRow3RebLabel, lastFiveRow3AstLabel, lastFiveRow3MinLabel, lastFiveRow3FgLabel, lastFiveRow3ResultLabel);
+        setRow(normalized[3], lastFiveRow4DateLabel, lastFiveRow4OpponentLabel, lastFiveRow4PtsLabel, lastFiveRow4RebLabel, lastFiveRow4AstLabel, lastFiveRow4MinLabel, lastFiveRow4FgLabel, lastFiveRow4ResultLabel);
+        setRow(normalized[4], lastFiveRow5DateLabel, lastFiveRow5OpponentLabel, lastFiveRow5PtsLabel, lastFiveRow5RebLabel, lastFiveRow5AstLabel, lastFiveRow5MinLabel, lastFiveRow5FgLabel, lastFiveRow5ResultLabel);
+    }
+
+    private void setRow(
+            SessionManager.LastGameRow row,
+            Label dateLabel,
+            Label opponentLabel,
+            Label ptsLabel,
+            Label rebLabel,
+            Label astLabel,
+            Label minLabel,
+            Label fgLabel,
+            Label resultLabel
+    ) {
+        updateText(dateLabel, row.date());
+        updateText(opponentLabel, row.opponent());
+        updateText(ptsLabel, String.format("%.0f", row.points()));
+        updateText(rebLabel, String.format("%.0f", row.rebounds()));
+        updateText(astLabel, String.format("%.0f", row.assists()));
+        updateText(minLabel, String.format("%.1f", row.minutes()));
+        updateText(fgLabel, String.format("%.1f%%", row.fieldGoalPct()));
+        updateText(resultLabel, row.result());
     }
 
     @FXML
