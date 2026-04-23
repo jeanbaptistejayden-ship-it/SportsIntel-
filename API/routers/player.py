@@ -1,16 +1,18 @@
 from fastapi import APIRouter
+from concurrent.futures import ThreadPoolExecutor
 
 from API.services.player_service import (
+    average_stat,
     build_summary,
     fetch_gamelog_by_type,
     fetch_gamelog_range,
+    fetch_player_vs_opponent,
     filter_games_by_location,
     filter_games_by_opponent,
     get_default_season,
     get_player_lookup,
     limit_last_n_games,
     parse_games,
-    average_stat,
 )
 
 router = APIRouter()
@@ -87,23 +89,23 @@ def get_player_stats(
                 gamelog_data = fetch_gamelog_by_type(
                     player_id,
                     season=chosen_start,
-                    season_type=season_type
+                    season_type=season_type,
                 )
             else:
                 gamelog_data = fetch_gamelog_range(
                     player_id,
                     start_season=chosen_start,
                     end_season=chosen_end,
-                    season_type=season_type
+                    season_type=season_type,
                 )
         else:
-            chosen_start = "2015-16"
+            chosen_start = "2003-04"
             chosen_end = get_default_season()
             gamelog_data = fetch_gamelog_range(
                 player_id,
                 start_season=chosen_start,
                 end_season=chosen_end,
-                season_type=season_type
+                season_type=season_type,
             )
     except ValueError as exc:
         return {"error": str(exc)}
@@ -119,7 +121,6 @@ def get_player_stats(
 
     career_overview_games = scoped_games
     career_vs_opponent_games = filter_games_by_opponent(scoped_games, opponent=opponent)
-
     filtered_games = career_vs_opponent_games if opponent else scoped_games
 
     try:
@@ -188,3 +189,25 @@ def get_teams():
             "OKC", "ORL", "PHI", "PHX", "POR", "SAC", "SAS", "TOR", "UTA", "WAS"
         ]
     }
+
+
+@router.get("/compare")
+def compare_players(player_one: str, player_two: str, opponent: str):
+    try:
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            p1_future = executor.submit(fetch_player_vs_opponent, player_one, opponent)
+            p2_future = executor.submit(fetch_player_vs_opponent, player_two, opponent)
+
+            p1 = p1_future.result()
+            p2 = p2_future.result()
+
+        return {
+            "player_one": p1,
+            "player_two": p2,
+            "opponent": opponent,
+        }
+
+    except ValueError as exc:
+        return {"error": str(exc)}
+    except Exception as exc:
+        return {"error": f"Compare request failed: {str(exc)}"}

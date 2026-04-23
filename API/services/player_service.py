@@ -3,7 +3,7 @@ from functools import lru_cache
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
-from nba_api.stats.endpoints import playergamelog
+from nba_api.stats.endpoints import playergamelog, commonplayerinfo
 from nba_api.stats.static import players as nba_players
 
 SEASON_TYPE_MAP = {
@@ -49,8 +49,10 @@ STAT_MAP = {
     "+/-": "plus_minus",
 }
 
+
 def player_image_url(player_id: int) -> str:
     return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
+
 
 @lru_cache(maxsize=256)
 def get_player_lookup(name: str):
@@ -58,8 +60,27 @@ def get_player_lookup(name: str):
     if not matches:
         return None, {"error": f"Could not find player '{name}' in nba_api player index."}
 
-    active_match = next((p for p in matches if p.get("is_active")), matches[0])
-    return {"id": int(active_match["id"]), "name": active_match["full_name"]}, None
+    best_match = next((p for p in matches if p.get("is_active")), matches[0])
+
+    return {
+        "id": int(best_match["id"]),
+        "name": best_match["full_name"],
+    }, None
+
+
+@lru_cache(maxsize=256)
+def get_player_career_years(player_id: int) -> tuple[int, int]:
+    endpoint = commonplayerinfo.CommonPlayerInfo(player_id=player_id, timeout=30)
+    data_frames = endpoint.get_data_frames()
+
+    if not data_frames or data_frames[0].empty:
+        raise ValueError(f"Could not retrieve career info for player id {player_id}.")
+
+    row = data_frames[0].iloc[0]
+    from_year = int(row["FROM_YEAR"])
+    to_year = int(row["TO_YEAR"])
+
+    return from_year, to_year
 
 
 def get_default_season() -> str:
@@ -82,6 +103,7 @@ def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Seaso
     data_frames = endpoint.get_data_frames()
     return data_frames[0] if data_frames else None
 
+
 def normalize_season_type(season_type: str) -> str:
     normalized = season_type.strip().lower()
     if normalized in {"regular", "regular season"}:
@@ -98,11 +120,13 @@ def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regul
         raise ValueError(f"Invalid season_type '{season_type}'. Use regular or playoffs.")
     return fetch_gamelog(player_id, season, mapped)
 
+
 @lru_cache(maxsize=512)
 def fetch_and_parse_gamelog(player_id: int, season: str, season_type: str = "regular"):
     df = fetch_gamelog_by_type(player_id, season=season, season_type=season_type)
     games = parse_games(df)
     return tuple(tuple(sorted(game.items())) for game in games)
+
 
 def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, season_type: str = "regular"):
     start = int(start_season.split("-")[0])
@@ -122,7 +146,7 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
     frames = []
     errors = []
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=2) as executor:
         future_to_season = {
             executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
             for season in seasons
@@ -137,13 +161,14 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
             except Exception as exc:
                 errors.append(f"{season}: {exc}")
 
+    if errors:
+        raise ValueError("Some seasons failed to load. " + " | ".join(errors))
+
     if frames:
         return pd.concat(frames, ignore_index=True)
 
-    if errors:
-        raise ValueError("No valid seasons returned data. " + " | ".join(errors))
-
     return None
+
 
 def parse_games(gamelog_frame):
     if gamelog_frame is None or gamelog_frame.empty:
@@ -172,6 +197,7 @@ def parse_games(gamelog_frame):
         )
     return games
 
+
 def filter_games_by_location(games: list[dict], location: str = "both"):
     normalized = location.strip().lower()
     if normalized == "both":
@@ -182,6 +208,7 @@ def filter_games_by_location(games: list[dict], location: str = "both"):
         return [g for g in games if not g["home"]]
     raise ValueError(f"Invalid location '{location}'. Use home, away, or both.")
 
+
 def filter_games_by_opponent(games: list[dict], opponent: str | None = None):
     if opponent is None:
         return games
@@ -189,6 +216,59 @@ def filter_games_by_opponent(games: list[dict], opponent: str | None = None):
     if not target:
         return games
     return [g for g in games if g.get("opponent", "").upper() == target]
+
+
+def to_season_string(start_year: int) -> str:
+    return f"{start_year}-{str(start_year + 1)[-2:]}"
+
+
+def build_compare_summary(player_name: str, games: list[dict]) -> dict:
+    return {
+        "player": player_name,
+        "games_played": len(games),
+        "ppg": average_stat(games, "pts"),
+        "apg": average_stat(games, "ast"),
+        "rpg": average_stat(games, "reb"),
+        "fg_pct": average_stat(games, "fg_pct"),
+        "mpg": average_stat(games, "min"),
+    }
+
+def fetch_player_vs_opponent(player_name: str, opponent: str):
+    player, error = get_player_lookup(player_name)
+    if error:
+        raise ValueError(error["error"])
+
+    player_id = player["id"]
+    canonical_name = player["name"]
+
+    from_year, to_year = get_player_career_years(player_id)
+    current_start_year = int(get_default_season().split("-")[0])
+
+    compare_floor_year = 2014
+    start_year = max(from_year, compare_floor_year)
+    end_year = min(to_year, current_start_year)
+
+    if end_year < start_year:
+        raise ValueError(f"No valid compare range for {canonical_name}")
+
+    start_season = to_season_string(start_year)
+    end_season = to_season_string(end_year)
+
+    gamelog_data = fetch_gamelog_range(
+        player_id,
+        start_season=start_season,
+        end_season=end_season,
+        season_type="regular"
+    )
+
+    all_games = parse_games(gamelog_data)
+    vs_games = filter_games_by_opponent(all_games, opponent)
+
+    if not vs_games:
+        raise ValueError(f"No games found for {canonical_name} vs {opponent}")
+
+    return build_compare_summary(canonical_name, vs_games)
+
 
 def limit_last_n_games(games: list[dict], last_n: int | None = None):
     if last_n is None:
@@ -208,12 +288,14 @@ def limit_last_n_games(games: list[dict], last_n: int | None = None):
     sorted_games = sorted(games, key=game_date_key, reverse=True)
     return sorted_games[:last_n]
 
+
 def normalize_stat(stat: str = "points") -> str:
     normalized = stat.strip().lower()
     mapped = STAT_MAP.get(normalized)
     if not mapped:
         raise ValueError("Invalid stat selection.")
     return mapped
+
 
 def build_summary(player_name: str, player_id: int, games: list[dict], stat: str = "points"):
     selected_stat = normalize_stat(stat)
@@ -235,19 +317,16 @@ def build_summary(player_name: str, player_id: int, games: list[dict], stat: str
         "low_game": high_low["low_game"],
     }
 
+
 def get_high_low_games(games: list[dict], stat: str = "points") -> dict:
-    # normalize whatever the user passed in (points, ppg, etc.) to the actual key
     selected_stat = normalize_stat(stat)
 
-    # nothing to work with, bail early
     if not games:
         return {"high_game": None, "low_game": None}
 
-    # find the game where that stat was highest/lowest
     high_game = max(games, key=lambda g: float(g[selected_stat]))
     low_game = min(games, key=lambda g: float(g[selected_stat]))
 
-    # return just what the results page needs: date, opponent, location, value
     return {
         "high_game": {
             "date": high_game["date"],
@@ -288,8 +367,10 @@ def to_percentage(value) -> float:
         return raw * 100.0
     return raw
 
+
 def restore_games(serialized_games):
     return [dict(items) for items in serialized_games]
+
 
 def average_stat(games: list[dict], stat_key: str) -> float:
     if not games:
