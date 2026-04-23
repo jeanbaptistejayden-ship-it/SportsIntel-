@@ -242,13 +242,16 @@ public class ResultsController {
         updateText(
                 matchupStrengthSummaryLabel,
                 String.format(
-                        "In %d games vs %s, %s averages %.1f PPG, %.1f APG, %.1f RPG in %.1f MPG.",
+                        "In %d games vs %s, %s averages %.1f PPG, %.1f APG, %.1f RPG, %.1f BPG, %.1f SPG, %.1f TOPG in %.1f MPG.",
                         search.careerVsOpponentGamesPlayed(),
                         opponent,
                         defaultString(search.player(), "The player"),
                         search.careerVsOpponentPpg(),
                         search.careerVsOpponentApg(),
                         search.careerVsOpponentRpg(),
+                        search.careerVsOpponentBpg(),
+                        search.careerVsOpponentSpg(),
+                        search.careerVsOpponentTopg(),
                         search.careerVsOpponentMpg()
                 )
         );
@@ -397,16 +400,13 @@ public class ResultsController {
     }
 
     private String prettifySeasonType(String value) {
-        if (value == null) {
-            return "Both";
-        }
-        if (value.equalsIgnoreCase("regular")) {
+        if (value == null || value.equalsIgnoreCase("regular")) {
             return "Regular Season";
         }
         if (value.equalsIgnoreCase("playoffs")) {
             return "Playoffs";
         }
-        return "Both";
+        return "Regular Season";
     }
 
     private String prettifyLocation(String value) {

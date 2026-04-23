@@ -10,16 +10,10 @@ from API.services.player_service import (
     get_player_lookup,
     limit_last_n_games,
     parse_games,
+    average_stat,
 )
 
 router = APIRouter()
-
-
-def average_stat(games: list[dict], stat_key: str) -> float:
-    if not games:
-        return 0.0
-    values = [float(game.get(stat_key, 0.0)) for game in games]
-    return round(sum(values) / len(values), 1)
 
 
 def sort_games_desc(games: list[dict]) -> list[dict]:
@@ -43,6 +37,9 @@ def build_career_vs_opponent_summary(player_name: str, opponent: str | None, gam
         "apg": average_stat(games, "ast"),
         "rpg": average_stat(games, "reb"),
         "mpg": average_stat(games, "min"),
+        "bpg": average_stat(games, "blk"),
+        "spg": average_stat(games, "stl"),
+        "tov": average_stat(games, "tov"),
     }
 
 

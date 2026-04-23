@@ -105,6 +105,9 @@ public class SessionManager {
             double careerVsOpponentApg,
             double careerVsOpponentRpg,
             double careerVsOpponentMpg,
+            double careerVsOpponentBpg,
+            double careerVsOpponentSpg,
+            double careerVsOpponentTopg,
 
             double careerPpg,
             double careerApg,

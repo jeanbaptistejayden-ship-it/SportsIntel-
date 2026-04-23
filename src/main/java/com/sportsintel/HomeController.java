@@ -103,13 +103,11 @@ public class HomeController {
 
     private void initializeCombos() {
         if (seasonTypeCombo != null) {
-            seasonTypeCombo.getItems().setAll("Regular Season", "Playoffs", "Both");
-            seasonTypeCombo.setValue("Both");
+            seasonTypeCombo.getItems().setAll("Regular Season", "Playoffs");
         }
 
         if (locationCombo != null) {
             locationCombo.getItems().setAll("Home", "Away", "Both");
-            locationCombo.setValue("Both");
         }
 
         if (statisticCombo != null) {
@@ -323,6 +321,9 @@ public class HomeController {
                     getJsonDouble(careerVsOpponentSummary, "apg", 0.0),
                     getJsonDouble(careerVsOpponentSummary, "rpg", 0.0),
                     getJsonDouble(careerVsOpponentSummary, "mpg", 0.0),
+                    getJsonDouble(careerVsOpponentSummary, "bpg", 0.0),
+                    getJsonDouble(careerVsOpponentSummary, "spg", 0.0),
+                    getJsonDouble(careerVsOpponentSummary, "tov", 0.0),
 
                     getJsonDouble(careerOverviewSummary, "ppg", 0.0),
                     getJsonDouble(careerOverviewSummary, "apg", 0.0),
@@ -392,7 +393,6 @@ public class HomeController {
             playerNameField.clear();
         }
         if (seasonTypeCombo != null) {
-            seasonTypeCombo.setValue("Both");
         }
         if (locationCombo != null) {
             locationCombo.setValue("Both");
@@ -558,16 +558,13 @@ public class HomeController {
     }
 
     private String mapSeasonType(String value) {
-        if (value == null || value.equalsIgnoreCase("Both")) {
-            return "both";
-        }
-        if (value.equalsIgnoreCase("Regular Season")) {
+        if (value == null || value.equalsIgnoreCase("Regular Season")) {
             return "regular";
         }
         if (value.equalsIgnoreCase("Playoffs")) {
             return "playoffs";
         }
-        return "both";
+        return "regular";
     }
 
     private String mapLocation(String value) {

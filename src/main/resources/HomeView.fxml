@@ -84,12 +84,12 @@
 
                         <VBox spacing="6">
                             <Label text="Season Type" styleClass="field-label" />
-                            <ComboBox fx:id="seasonTypeCombo" promptText="Both" />
+                            <ComboBox fx:id="seasonTypeCombo" promptText="Season Type" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Location" styleClass="field-label" />
-                            <ComboBox fx:id="locationCombo" promptText="Both" />
+                            <ComboBox fx:id="locationCombo" promptText="Location" />
                         </VBox>
 
                         <VBox spacing="6">

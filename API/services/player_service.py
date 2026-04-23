@@ -1,4 +1,6 @@
 from datetime import datetime
+from functools import lru_cache
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 from nba_api.stats.endpoints import playergamelog
@@ -7,7 +9,6 @@ from nba_api.stats.static import players as nba_players
 SEASON_TYPE_MAP = {
     "regular": "Regular Season",
     "playoffs": "Playoffs",
-    "both": None
 }
 
 STAT_MAP = {
@@ -51,6 +52,7 @@ STAT_MAP = {
 def player_image_url(player_id: int) -> str:
     return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
 
+@lru_cache(maxsize=256)
 def get_player_lookup(name: str):
     matches = nba_players.find_players_by_full_name(name)
     if not matches:
@@ -69,6 +71,7 @@ def get_default_season() -> str:
     return f"{start_year}-{str(start_year + 1)[-2:]}"
 
 
+@lru_cache(maxsize=512)
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
     endpoint = playergamelog.PlayerGameLog(
         player_id=player_id,
@@ -85,22 +88,21 @@ def normalize_season_type(season_type: str) -> str:
         return "regular"
     if normalized == "playoffs":
         return "playoffs"
-    if normalized == "both":
-        return "both"
-    raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
+    raise ValueError(f"Invalid season_type '{season_type}'. Use regular or playoffs.")
 
 
 def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regular"):
     normalized = normalize_season_type(season_type)
-    if normalized == "both":
-        reg = fetch_gamelog(player_id, season, "Regular Season")
-        post = fetch_gamelog(player_id, season, "Playoffs")
-        frames = [f for f in [reg, post] if f is not None and not f.empty]
-        return pd.concat(frames, ignore_index=True) if frames else None
     mapped = SEASON_TYPE_MAP.get(normalized)
     if not mapped:
-        raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
+        raise ValueError(f"Invalid season_type '{season_type}'. Use regular or playoffs.")
     return fetch_gamelog(player_id, season, mapped)
+
+@lru_cache(maxsize=512)
+def fetch_and_parse_gamelog(player_id: int, season: str, season_type: str = "regular"):
+    df = fetch_gamelog_by_type(player_id, season=season, season_type=season_type)
+    games = parse_games(df)
+    return tuple(tuple(sorted(game.items())) for game in games)
 
 def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, season_type: str = "regular"):
     start = int(start_season.split("-")[0])
@@ -116,17 +118,24 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
     if start > max_start_year or end > max_start_year:
         raise ValueError("Season range cannot include future seasons.")
 
+    seasons = [f"{y}-{str(y + 1)[-2:]}" for y in range(start, end + 1)]
     frames = []
     errors = []
 
-    for y in range(start, end + 1):
-        season = f"{y}-{str(y + 1)[-2:]}"
-        try:
-            df = fetch_gamelog_by_type(player_id, season=season, season_type=season_type)
-            if df is not None and not df.empty:
-                frames.append(df)
-        except Exception as exc:
-            errors.append(f"{season}: {exc}")
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        future_to_season = {
+            executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
+            for season in seasons
+        }
+
+        for future in as_completed(future_to_season):
+            season = future_to_season[future]
+            try:
+                df = future.result()
+                if df is not None and not df.empty:
+                    frames.append(df)
+            except Exception as exc:
+                errors.append(f"{season}: {exc}")
 
     if frames:
         return pd.concat(frames, ignore_index=True)
@@ -187,6 +196,9 @@ def limit_last_n_games(games: list[dict], last_n: int | None = None):
     if last_n <= 0:
         raise ValueError("Invalid last_n value. Use a positive integer.")
 
+    if len(games) <= last_n:
+        return games
+
     def game_date_key(game: dict):
         try:
             return datetime.strptime(game["date"], "%b %d, %Y")
@@ -205,7 +217,9 @@ def normalize_stat(stat: str = "points") -> str:
 
 def build_summary(player_name: str, player_id: int, games: list[dict], stat: str = "points"):
     selected_stat = normalize_stat(stat)
+
     values = [float(g[selected_stat]) for g in games]
+    avg = average_stat(games, selected_stat)
 
     high_low = get_high_low_games(games, stat)
 
@@ -214,7 +228,7 @@ def build_summary(player_name: str, player_id: int, games: list[dict], stat: str
         "player_image": player_image_url(player_id),
         "stat": selected_stat,
         "games_played": len(games),
-        "average": round(sum(values) / len(values), 1),
+        "average": avg,
         "high": max(values),
         "low": min(values),
         "high_game": high_low["high_game"],
@@ -273,3 +287,14 @@ def to_percentage(value) -> float:
     if raw <= 1.0:
         return raw * 100.0
     return raw
+
+def restore_games(serialized_games):
+    return [dict(items) for items in serialized_games]
+
+def average_stat(games: list[dict], stat_key: str) -> float:
+    if not games:
+        return 0.0
+    return round(
+        sum(float(g.get(stat_key, 0.0)) for g in games) / len(games),
+        1
+    )
