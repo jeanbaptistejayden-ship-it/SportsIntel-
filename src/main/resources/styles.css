@@ -811,6 +811,11 @@
     -fx-font-size: 38px;
     -fx-font-weight: 600;
 }
+.compare-note {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+    -fx-opacity: 0.85;
+}
 /*Results page profile picture*/
 .profile-circle {
     -fx-background-color: #2f6df6;
