@@ -26,6 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -40,6 +41,9 @@ import java.util.Objects;
 public class HomeController {
     private static final String API_BASE_URL = "http://127.0.0.1:8000";
     private static final Map<String, String> OPPONENT_TO_ABBR = createOpponentMap();
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(6))
+            .build();
 
     @FXML
     private ImageView navLogo;
@@ -269,20 +273,8 @@ public class HomeController {
             JsonObject baselineSummary = baselineBody.getAsJsonObject("summary");
             JsonArray baselineGames = baselineBody.getAsJsonArray("games");
 
-            String careerAllUrl = buildPlayerRequestUrl(playerName, null, null, null, true, "both", "both", null, null, stat);
-            JsonObject careerAllBody = requestJsonOptional(careerAllUrl, "Backend career request", baselineBody);
-            JsonObject careerAllSummary = careerAllBody.getAsJsonObject("summary");
-            JsonArray careerAllGames = careerAllBody.getAsJsonArray("games");
-
-            JsonObject careerOpponentBody = opponent == null
-                    ? baselineBody
-                    : requestJsonOptional(
-                    buildPlayerRequestUrl(playerName, null, null, null, true, "both", "both", opponent, null, stat),
-                    "Backend career-vs-opponent request",
-                    baselineBody
-            );
-            JsonObject careerOpponentSummary = careerOpponentBody.getAsJsonObject("summary");
-            JsonArray careerOpponentGames = careerOpponentBody.getAsJsonArray("games");
+            JsonObject careerOpponentSummary = summary;
+            JsonArray careerOpponentGames = games;
 
             String playerImageUrl = summary.has("player_image") && !summary.get("player_image").isJsonNull()
                     ? summary.get("player_image").getAsString()
@@ -297,10 +289,10 @@ public class HomeController {
                     meta.get("season_type").getAsString(),
                     meta.get("location").getAsString(),
                     meta.get("last_n").isJsonNull() ? "All" : meta.get("last_n").getAsString(),
-                    careerOpponentSummary.get("games_played").getAsInt(),
+                    summary.get("games_played").getAsInt(),
                     selectedAverage,
-                    careerOpponentSummary.get("high").getAsDouble(),
-                    careerOpponentSummary.get("low").getAsDouble(),
+                    summary.get("high").getAsDouble(),
+                    summary.get("low").getAsDouble(),
                     baselineSummary.get("average").getAsDouble(),
                     averageOfLastN(baselineGames, selectedStatKey, 5),
                     averageOfLastN(baselineGames, selectedStatKey, 10),
@@ -315,12 +307,12 @@ public class HomeController {
                     readGameValue(careerOpponentSummary, "high_game"),
                     readGameOpponent(careerOpponentSummary, "low_game"),
                     readGameValue(careerOpponentSummary, "low_game"),
-                    careerOpponentSummary.get("average").getAsDouble(),
-                    careerAllSummary.get("average").getAsDouble(),
-                    averageOf(careerAllGames, "ast"),
-                    averageOf(careerAllGames, "reb"),
-                    careerAllSummary.get("games_played").getAsInt(),
-                    toLastFiveRows(careerOpponentGames)
+                    summary.get("average").getAsDouble(),
+                    baselineSummary.get("average").getAsDouble(),
+                    averageOf(baselineGames, "ast"),
+                    averageOf(baselineGames, "reb"),
+                    baselineSummary.get("games_played").getAsInt(),
+                    toLastFiveRows(games)
             ));
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
@@ -682,11 +674,16 @@ public class HomeController {
     }
 
     private JsonObject requestJson(String url, String requestName) throws Exception {
+        return requestJson(url, requestName, 45);
+    }
+
+    private JsonObject requestJson(String url, String requestName, int timeoutSeconds) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
+                .timeout(Duration.ofSeconds(timeoutSeconds))
                 .GET()
                 .build();
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200) {
             throw new IllegalArgumentException(requestName + " failed: HTTP " + response.statusCode());
         }
@@ -699,7 +696,7 @@ public class HomeController {
 
     private JsonObject requestJsonOptional(String url, String requestName, JsonObject fallback) {
         try {
-            return requestJson(url, requestName);
+            return requestJson(url, requestName, 6);
         } catch (Exception e) {
             System.out.println(requestName + " skipped: " + e.getMessage());
             return fallback;

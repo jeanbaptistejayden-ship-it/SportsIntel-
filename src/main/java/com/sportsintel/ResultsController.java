@@ -19,11 +19,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ResultsController {
-
     @FXML
     private ImageView navLogo;
 
@@ -282,8 +283,9 @@ public class ResultsController {
         updateText(
                 matchupStrengthSummaryLabel,
                 String.format(
-                        "Career vs opponent: %.1f %s, %.1f APG, %.1f RPG across %d games.",
-                        search.opponentCareerAverage(),
+                        "Against %s, this sample shows %.1f %s with %.1f APG and %.1f RPG across %d games.",
+                        opponent,
+                        search.average(),
                         shortStat,
                         search.assists(),
                         search.rebounds(),
@@ -308,12 +310,11 @@ public class ResultsController {
         updateText(
                 recentFormSummaryLabel,
                 String.format(
-                        "Career overview: %.1f %s, %.1f APG, %.1f RPG across %d games.",
-                        search.careerAverage(),
+                        "Recent form: last 5 games are %.1f %s versus last 10 at %.1f %s.",
+                        search.lastFiveAverage(),
                         shortStat,
-                        search.careerAssists(),
-                        search.careerRebounds(),
-                        search.careerGames()
+                        search.lastTenAverage(),
+                        shortStat
                 )
         );
     }

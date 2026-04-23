@@ -1,4 +1,6 @@
 from datetime import datetime
+from functools import lru_cache
+import time
 
 import pandas as pd
 import requests
@@ -71,17 +73,37 @@ def get_default_season() -> str:
 
 
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
-    try:
-        endpoint = playergamelog.PlayerGameLog(
-            player_id=player_id,
-            season=season,
-            season_type_all_star=season_type,
-            timeout=30,
-        )
-        data_frames = endpoint.get_data_frames()
-        return data_frames[0] if data_frames else None
-    except requests.exceptions.RequestException as exc:
-        raise ValueError("Could not reach stats.nba.com. Please check your internet connection and try again.") from exc
+    last_exc = None
+    for attempt in range(3):
+        try:
+            endpoint = playergamelog.PlayerGameLog(
+                player_id=player_id,
+                season=season,
+                season_type_all_star=season_type,
+                timeout=30,
+            )
+            data_frames = endpoint.get_data_frames()
+            return data_frames[0] if data_frames else None
+        except requests.exceptions.RequestException as exc:
+            last_exc = exc
+            if attempt < 2:
+                time.sleep(1.5 * (attempt + 1))
+            continue
+    raise ValueError("Could not reach stats.nba.com. Please check your internet connection and try again.") from last_exc
+
+
+@lru_cache(maxsize=4096)
+def _fetch_gamelog_by_type_cached(player_id: int, season: str, normalized_season_type: str):
+    if normalized_season_type == "both":
+        reg = fetch_gamelog(player_id, season, "Regular Season")
+        post = fetch_gamelog(player_id, season, "Playoffs")
+        frames = [f for f in [reg, post] if f is not None and not f.empty]
+        return pd.concat(frames, ignore_index=True) if frames else None
+
+    mapped = SEASON_TYPE_MAP.get(normalized_season_type)
+    if not mapped:
+        raise ValueError(f"Invalid season_type '{normalized_season_type}'. Use regular, playoffs, or both.")
+    return fetch_gamelog(player_id, season, mapped)
 
 def normalize_season_type(season_type: str) -> str:
     normalized = season_type.strip().lower()
@@ -96,15 +118,8 @@ def normalize_season_type(season_type: str) -> str:
 
 def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regular"):
     normalized = normalize_season_type(season_type)
-    if normalized == "both":
-        reg = fetch_gamelog(player_id, season, "Regular Season")
-        post = fetch_gamelog(player_id, season, "Playoffs")
-        frames = [f for f in [reg, post] if f is not None and not f.empty]
-        return pd.concat(frames, ignore_index=True) if frames else None
-    mapped = SEASON_TYPE_MAP.get(normalized)
-    if not mapped:
-        raise ValueError(f"Invalid season_type '{season_type}'. Use regular, playoffs, or both.")
-    return fetch_gamelog(player_id, season, mapped)
+    cached = _fetch_gamelog_by_type_cached(player_id, season, normalized)
+    return None if cached is None else cached.copy(deep=True)
 
 def fetch_gamelog_range(player_id, start_season, end_season, season_type="Regular Season"):
     import pandas as pd
@@ -247,6 +262,27 @@ def build_summary(player_name: str, player_id: int, games: list[dict], stat: str
         "low": min(values),
         "high_game": high_low["high_game"],
         "low_game": high_low["low_game"],
+    }
+
+
+def build_stat_averages(games: list[dict]) -> dict:
+    if not games:
+        return {
+            "ast_average": 0.0,
+            "reb_average": 0.0,
+            "fg_pct_average": 0.0,
+            "min_average": 0.0,
+        }
+
+    def avg(stat_key: str) -> float:
+        values = [float(g.get(stat_key, 0.0)) for g in games]
+        return round(sum(values) / len(values), 1) if values else 0.0
+
+    return {
+        "ast_average": avg("ast"),
+        "reb_average": avg("reb"),
+        "fg_pct_average": avg("fg_pct"),
+        "min_average": avg("min"),
     }
 
 def get_high_low_games(games: list[dict], stat: str = "points") -> dict:

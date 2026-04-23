@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from API.services.player_service import (
     build_summary,
+    build_stat_averages,
     fetch_gamelog_by_type,
     fetch_gamelog_range_by_type,
     filter_games_by_location,
@@ -86,6 +87,8 @@ def get_player_stats(
         summary = build_summary(player_name, player_id, games, stat=stat)
     except ValueError as exc:
         return {"error": str(exc)}
+
+    summary.update(build_stat_averages(games))
 
     return {
         "summary": summary,
