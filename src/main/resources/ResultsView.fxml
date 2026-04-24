@@ -314,43 +314,14 @@
                                               minWidth="850"
                                               styleClass="last-five-header-row">
                                             <children>
-                                                <Label text="Date"
-                                                       minWidth="160" prefWidth="160" maxWidth="160"
-                                                       styleClass="last-five-header-cell" />
-
-                                                <Label text="Opponent"
-                                                       minWidth="120" prefWidth="120" maxWidth="120"
-                                                       styleClass="last-five-header-cell" />
-
-                                                <Label text="PTS"
-                                                       minWidth="90" prefWidth="90" maxWidth="90"
-                                                       alignment="CENTER"
-                                                       styleClass="last-five-header-cell centered-cell" />
-
-                                                <Label text="REB"
-                                                       minWidth="90" prefWidth="90" maxWidth="90"
-                                                       alignment="CENTER"
-                                                       styleClass="last-five-header-cell centered-cell" />
-
-                                                <Label text="AST"
-                                                       minWidth="90" prefWidth="90" maxWidth="90"
-                                                       alignment="CENTER"
-                                                       styleClass="last-five-header-cell centered-cell" />
-
-                                                <Label text="MIN"
-                                                       minWidth="90" prefWidth="90" maxWidth="90"
-                                                       alignment="CENTER"
-                                                       styleClass="last-five-header-cell centered-cell" />
-
-                                                <Label text="FG%"
-                                                       minWidth="110" prefWidth="110" maxWidth="110"
-                                                       alignment="CENTER"
-                                                       styleClass="last-five-header-cell centered-cell" />
-
-                                                <Label text="3PT%"
-                                                       minWidth="110" prefWidth="110" maxWidth="110"
-                                                       alignment="CENTER"
-                                                       styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="Date" minWidth="160" prefWidth="160" maxWidth="160" styleClass="last-five-header-cell" />
+                                                <Label text="Opponent" minWidth="120" prefWidth="120" maxWidth="120" styleClass="last-five-header-cell" />
+                                                <Label text="PTS" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="REB" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="AST" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="MIN" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="FG%" minWidth="110" prefWidth="110" maxWidth="110" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="3PT%" minWidth="110" prefWidth="110" maxWidth="110" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
                                             </children>
                                         </HBox>
 

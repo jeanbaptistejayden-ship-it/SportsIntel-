@@ -127,17 +127,11 @@ public class HomeController {
         }
 
         if (sportCombo != null) {
-            sportCombo.getItems().setAll(
-                    "Basketball",
-                    "Baseball (Coming Soon)",
-                    "Football (Coming Soon)",
-                    "Soccer (Coming Soon)"
-            );
+            sportCombo.getItems().setAll("Basketball", "Baseball (Coming Soon)", "Football (Coming Soon)", "Soccer (Coming Soon)");
         }
 
         if (opponentCombo != null) {
-            opponentCombo.getItems().setAll(
-                    "Atlanta Hawks",
+            opponentCombo.getItems().setAll("Atlanta Hawks",
                     "Boston Celtics",
                     "Brooklyn Nets",
                     "Charlotte Hornets",
@@ -173,7 +167,22 @@ public class HomeController {
 
     @FXML
     private void handleHelpClick() {
-        openModal("/HelpView.fxml", "Help & Support", 900, 700, true);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HelpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 900, 700);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Help & Support");
+            helpStage.setScene(scene);
+            helpStage.initModality(Modality.APPLICATION_MODAL);
+            helpStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -204,7 +213,25 @@ public class HomeController {
 
     @FXML
     private void handleSignUpClick() {
-        openModal("/SignUpView.fxml", "Sign Up", 520, 920, false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 520, 920);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage signUpStage = new Stage();
+            signUpStage.setTitle("Sign Up");
+            signUpStage.setScene(scene);
+            signUpStage.initModality(Modality.APPLICATION_MODAL);
+            signUpStage.setResizable(false);
+            signUpStage.showAndWait();
+
+            updateLoggedInUI();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         updateLoggedInUI();
     }
 
@@ -231,16 +258,7 @@ public class HomeController {
             String opponent = mapOpponent(opponentCombo != null ? opponentCombo.getValue() : null);
             Integer lastN = parseLastN();
 
-            String requestUrl = buildPlayerRequestUrl(
-                    playerName,
-                    seasonStart,
-                    seasonEnd,
-                    seasonType,
-                    location,
-                    opponent,
-                    lastN,
-                    stat
-            );
+            String requestUrl = buildPlayerRequestUrl(playerName, seasonStart, seasonEnd, seasonType, location, opponent, lastN, stat);
             System.out.println("Request URL: " + requestUrl);
 
             JsonObject body = sendJsonRequest(requestUrl);
@@ -399,6 +417,8 @@ public class HomeController {
             playerNameField.clear();
         }
         if (seasonTypeCombo != null) {
+            seasonTypeCombo.getSelectionModel().clearSelection();
+            seasonTypeCombo.setValue(null);
         }
         if (locationCombo != null) {
             locationCombo.setValue("Both");

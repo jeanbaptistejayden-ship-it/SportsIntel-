@@ -278,25 +278,81 @@ public class ResultsController {
 
     @FXML
     private void handleHelpClick() {
-        openModal("/HelpView.fxml", "Help & Support", 900, 700, true);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HelpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 900, 700);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Help & Support");
+            helpStage.setScene(scene);
+            helpStage.initModality(Modality.APPLICATION_MODAL);
+            helpStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleLoginClick() {
-        openModal("/LoginView.fxml", "Login", 480, 700, false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 520, 920);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage signUpStage = new Stage();
+            signUpStage.setTitle("Sign Up");
+            signUpStage.setScene(scene);
+            signUpStage.initModality(Modality.APPLICATION_MODAL);
+            signUpStage.setResizable(false);
+            signUpStage.showAndWait();
+
+            updateLoggedInUI();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         updateLoggedInUI();
     }
 
     @FXML
     private void handleSignUpClick() {
-        openModal("/SignUpView.fxml", "Sign Up", 520, 920, false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUpView.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root, 520, 920);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+            Stage signUpStage = new Stage();
+            signUpStage.setTitle("Sign Up");
+            signUpStage.setScene(scene);
+            signUpStage.initModality(Modality.APPLICATION_MODAL);
+            signUpStage.setResizable(false);
+            signUpStage.showAndWait();
+
+            updateLoggedInUI();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         updateLoggedInUI();
     }
 
     @FXML
     private void handleHomeClick() {
         try {
-            navigateTo("/HomeView.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HomeView.fxml"));
+            Parent root = loader.load();
+
+            Scene currentScene = navLogo.getScene();
+            currentScene.setRoot(root);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -305,7 +361,12 @@ public class ResultsController {
     @FXML
     private void handleCompareClick() {
         try {
-            navigateTo("/CompareView.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CompareView.fxml"));
+            Parent root = loader.load();
+
+            Scene currentScene = navLogo.getScene();
+            currentScene.setRoot(root);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
