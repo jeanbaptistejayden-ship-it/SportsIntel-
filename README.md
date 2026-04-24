@@ -22,6 +22,7 @@ SportsIntel uses a client-server architecture. The JavaFX desktop frontend commu
 
 ## Project Structure 
 
+```
 SportsIntel/
 ├── .run/
 │   └── SportsIntel [javafx_run].run.xml
