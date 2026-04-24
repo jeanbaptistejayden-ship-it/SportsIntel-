@@ -20,7 +20,51 @@ A desktop NBA player statistics application that allows users to search for any 
 
 SportsIntel uses a client-server architecture. The JavaFX desktop frontend communicates with a local FastAPI backend via HTTP. The backend fetches and filters real NBA game log data using the nba_api library and returns structured JSON responses. Player headshots are loaded dynamically from the official NBA CDN. Firebase handles user authentication and session management.
 
-## Project Structure (WIP)
+## Project Structure 
+
+SportsIntel/
+├── .run/
+│   └── SportsIntel [javafx_run].run.xml
+├── API/
+│   ├── data/
+│   │   ├── __init__.py
+│   │   └── players.py
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   └── player.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   └── player_service.py
+│   ├── app.py
+│   └── main.py
+├── src/main/
+│   ├── java/com/sportsintel/
+│   │   ├── CompareController.java
+│   │   ├── CompareResultsController.java
+│   │   ├── HelpController.java
+│   │   ├── HomeController.java
+│   │   ├── LoginController.java
+│   │   ├── Main.java
+│   │   ├── ResultsController.java
+│   │   ├── SessionManager.java
+│   │   ├── SignUpController.java
+│   │   └── SplashController.java
+│   └── resources/
+│       ├── CompareResultsView.fxml
+│       ├── CompareView.fxml
+│       ├── HelpView.fxml
+│       ├── HomeView.fxml
+│       ├── LoginView.fxml
+│       ├── ResultsView.fxml
+│       ├── SignUpView.fxml
+│       ├── SplashView.fxml
+│       ├── lebron.png
+│       ├── newlogo.png
+│       └── styles.css
+├── .gitignore
+├── README.md
+├── pom.xml
+└── requirements.txt
 
 ## Setup
 
@@ -33,14 +77,20 @@ SportsIntel uses a client-server architecture. The JavaFX desktop frontend commu
 ```bash
 cd API
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn API.main:app --reload
 ```
 
 ### Frontend
 Open the project in IntelliJ IDEA and run 'Main.java'.
 Make sure the backend is running on port 8000 before launching the app.
 
-## API Endpoints (WIP)
+## API Endpoints 
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/player/{name}` | Fetch filtered player game log and summary |
+| GET | `/player/filters/reset` | Returns default filter values |
+| GET | `/teams` | Returns all 30 NBA team abbreviations |
 
 ### Query Parameters for '/player/{name}'
 
@@ -83,8 +133,25 @@ GET/player/Lebron James?season=2024-2025&season_type=regular&opponent=NYK&stat=p
 Points, Assists, Rebounds, Field Goal %, 3-Point %, Free Throw %,
 Steals, Blocks, Turnovers, Minutes, Plus/Minus
 
-## Project Management (WIP)
+## Project Management
 
-## Team (WIP)
+This project was developed using Scrum methodology. Sprints were planned and
+tracked using GitHub Issues with a structured backlog. The team held regular
+scrum standups covering completed work, next steps, and blockers.
 
-## Notes (WIP)
+## Team 
+
+| Name | Role |
+|------|------|
+| Jayden | GM |
+| Daniel | Frontend / JavaFX |
+| Brenda | Backend / API Integration |
+| Matt | Backend / API |
+| Valerie | Firebase |
+
+## Notes
+
+- Only NBA Basketball is currently supported. Additional sports are planned
+  for future development.
+- The application requires an active internet connection to fetch live NBA data.
+- Login and sign-up are required to access profile features
