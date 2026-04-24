@@ -1036,3 +1036,8 @@
 .new-compare-btn:hover {
     -fx-background-color: grey;
 }
+/*Player Image Compare*/
+.player-image {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.3, 0, 4);
+    -fx-background-radius: 10;
+}

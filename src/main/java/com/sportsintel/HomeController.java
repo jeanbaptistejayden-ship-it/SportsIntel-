@@ -257,7 +257,13 @@ public class HomeController {
             String displayedSeason = (seasonStart == null && seasonEnd == null)
                     ? "No Season Range"
                     : getJsonString(meta, "season_range", getJsonString(meta, "season", "Unknown"));
-            String displayedSeasonType = getJsonString(meta, "season_type", "both");
+            String displayedSeasonType;
+
+            if (seasonType == null) {
+                displayedSeasonType = "career";
+            } else {
+                displayedSeasonType = getJsonString(meta, "season_type", "both");
+            }
             String displayedLocation = getJsonString(meta, "location", "both");
             String displayedLastN = getNullableJsonString(meta, "last_n", "All");
             String displayedPlayer = getJsonString(summary, "player", playerName);
@@ -558,6 +564,11 @@ public class HomeController {
     }
 
     private String mapSeasonType(String value) {
+
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
         if (value == null || value.equalsIgnoreCase("Regular Season")) {
             return "regular";
         }
@@ -638,7 +649,11 @@ public class HomeController {
                 .append("/player/")
                 .append(URLEncoder.encode(playerName, StandardCharsets.UTF_8).replace("+", "%20"));
 
-        url.append("?season_type=").append(URLEncoder.encode(seasonType, StandardCharsets.UTF_8));
+        if (seasonType != null) {
+            url.append("?season_type=").append(URLEncoder.encode(seasonType, StandardCharsets.UTF_8));
+        } else {
+            url.append("?");
+        }
         url.append("&location=").append(URLEncoder.encode(location, StandardCharsets.UTF_8));
         url.append("&stat=").append(URLEncoder.encode(stat, StandardCharsets.UTF_8));
 

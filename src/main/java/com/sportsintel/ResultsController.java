@@ -400,13 +400,16 @@ public class ResultsController {
     }
 
     private String prettifySeasonType(String value) {
-        if (value == null || value.equalsIgnoreCase("regular")) {
+        if (value == null || value.equalsIgnoreCase("career")) {
+            return "Career";
+        }
+        if (value.equalsIgnoreCase("regular")) {
             return "Regular Season";
         }
         if (value.equalsIgnoreCase("playoffs")) {
             return "Playoffs";
         }
-        return "Regular Season";
+        return "Career";
     }
 
     private String prettifyLocation(String value) {
