@@ -66,6 +66,7 @@ SportsIntel/
 ├── README.md
 ├── pom.xml
 └── requirements.txt
+```
 
 ## Setup
 
