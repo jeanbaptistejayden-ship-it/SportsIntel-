@@ -82,6 +82,8 @@ public class SignUpController {
         if (first_name_txt.getText().isEmpty()){
             setTextRed(first_name_lbl);
             count = 1;
+            input_error_lbl.setVisible(true);
+
         }
         else{
             setTextBlack(first_name_lbl);
@@ -89,6 +91,8 @@ public class SignUpController {
         if (last_name_txt.getText().isEmpty()){
             setTextRed(last_name_lbl);
             count = 1;
+            input_error_lbl.setVisible(true);
+
         }
         else{
             setTextBlack(last_name_lbl);
@@ -114,12 +118,13 @@ public class SignUpController {
         else{
             setTextBlack(user_lbl);
         }
-        if (pass_txt.getText().isEmpty()){
-            setTextRed(pass_lbl);
-            count = 1;
+        if (verifyPassword()){
+
+            setTextBlack(pass_lbl);
         }
         else{
-            setTextBlack(pass_lbl);
+            setTextRed(pass_lbl);
+            count = 1;
         }
         if (confirm_pass_txt.getText().isEmpty()){
             setTextRed(confirm_pass_lbl);
@@ -141,7 +146,45 @@ public class SignUpController {
         }
     }
 
-    public void verifyPassword(){
+    public boolean verifyUniqueness() throws FirebaseAuthException {
+        boolean unique = true;
+        String email = email_txt.getText();
+        String phone = phone_txt.getText();
+        String user = user_txt.getText();
+        try {
+            if (Main.fauth.getUserByEmail(email).getEmail() == null) {
+                System.out.println("Email already in use");
+
+            }
+        }
+        catch (FirebaseAuthException e){
+            unique = false;
+        }
+        try{
+                if (Main.fauth.getUserByPhoneNumber(phone).getPhoneNumber() == null) {
+                    System.out.println("Phone number already in use");
+                }
+            }
+        catch (FirebaseAuthException e){
+            unique = false;
+        }
+
+        return unique;
+    }
+
+    public boolean verifyPassword(){
+        boolean verified = true;
+        if(getPass_txt().isEmpty()){
+            verified = false;
+        }
+        if(getPass_txt().length()<8){
+            verified = false;
+        }
+        if(!getPass_txt().equals(getConfirm_pass_txt())){
+            verified = false;
+        }
+
+        return verified;
 
     }
 
@@ -156,12 +199,13 @@ public class SignUpController {
             UserRecord userRecord;
             try {
                 userRecord = Main.fauth.createUser(request);
-                AcessFBData.addData(getUser_txt(), getFullName(), getEmail_txt());
+
                 System.out.println("Successfully created new user: " + userRecord.getUid());
 
 
             } catch (FirebaseAuthException ex) {
                 System.out.println("FAIL");
+                System.out.println(getPass_txt());
 
             }
             // Logger.getLogger(FirestoreContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -174,6 +218,10 @@ public class SignUpController {
 
     public String getPass_txt() {
         return pass_txt.getText();
+    }
+
+    public String getConfirm_pass_txt() {
+        return confirm_pass_txt.getText();
     }
 
     public String getPhone_txt() {
@@ -203,9 +251,13 @@ public class SignUpController {
     }
 
     @FXML
-    private void handleSignUpSubmit(ActionEvent event) {
+    private void handleSignUpSubmit(ActionEvent event) throws FirebaseAuthException {
         if(verifyUserInput()==0) {
             userSignup();
+
+            input_error_lbl.setVisible(false);
+            AcessFBData.addData(getUser_txt(), getFullName(), getEmail_txt(), getPass_txt());
+            AcessFBData.readFirebase();
             SessionManager.login(getFullName(), "@ForeignStage");
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();

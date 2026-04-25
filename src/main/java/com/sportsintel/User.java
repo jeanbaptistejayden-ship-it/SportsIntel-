@@ -1,42 +1,33 @@
 package com.sportsintel;
 
 public class User {
-    private String disName;
-    private String first_name;
-    private String last_name;
+    private String username;
+    private String fullName;
+private String password;
     private String email;
 
 
-    public User(String disName, String first_name, String last_name, String email ) {
-        this.disName = disName;
-        this.first_name = first_name;
-        this.last_name = last_name;
+
+    public User(String username, String fullName, String email, String password) {
+        this.username = username;
+       this.fullName = fullName;
         this.email = email;
+        this.password = password;
     }
 
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getdisName() {
-        return disName;
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 }

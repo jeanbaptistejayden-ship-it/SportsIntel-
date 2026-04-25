@@ -22,7 +22,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         fstore = contxtFirebase.firebase();
         fauth = FirebaseAuth.getInstance();
-
+        AcessFBData.readFirebase();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SplashView.fxml"));
         Parent root = loader.load();
 

@@ -28,13 +28,16 @@ public class LoginController {
     private ImageView loginLogo;
 
     @FXML
-    private TextField email_txt;
+    private TextField username_txt;
 
     @FXML
     private Label user_error;
 
     @FXML
     private PasswordField pass_txt;
+
+    private String fullName;
+
 
     @FXML
     public void initialize() {
@@ -44,18 +47,22 @@ public class LoginController {
         loginLogo.setImage(image);
     }
 
-    public void verifyUser() throws FirebaseAuthException {
-        try {
-            UserRecord user = Main.fauth.getUserByEmail(getEmail_txt());
-            //String url = user.getPassword();
+    public boolean verifyUser() throws FirebaseAuthException {
+        boolean verified = false;
+        System.out.println(AcessFBData.getUserList().size());
 
-                if (!(user == null)) {
-                    System.out.println("User verified");
+            for (int i = 0; i < AcessFBData.getUserList().size(); i++) {
+                if (AcessFBData.getUserList().get(i).getUsername().equals(username_txt.getText())) {
+                    fullName = AcessFBData.getUserList().get(i).getFullName();
+                    verified = true;
+                } else {
+                    System.out.println("Not veridied");
+                   // user_error.setVisible(true);
                 }
-            }  catch (Exception e){
-                user_error.setVisible(true);
             }
-     }
+            return verified;
+            //String url = user.getPassword()
+    }
 
     @FXML
     private void handleBackToHome(ActionEvent event) {
@@ -64,20 +71,21 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLoginSubmit(ActionEvent event) {
-        SessionManager.login("Dan Gron", "@ForeignStage");
-
-        if (homeController != null) {
-            homeController.setLoggedInUser(
-                    SessionManager.getFullName(),
-                    SessionManager.getUsername()
-            );
+    private void handleLoginSubmit(ActionEvent event) throws FirebaseAuthException {
+        if(verifyUser()) {
+            SessionManager.login(fullName, "@ForeignStage");
+            if (homeController != null) {
+                homeController.setLoggedInUser(
+                        SessionManager.getFullName(),
+                        SessionManager.getUsername()
+                );
+            }
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
         }
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
     }
 
-    public String getEmail_txt() {
-        return email_txt.getText();
+    public String getUsername_txt() {
+        return username_txt.getText();
     }
 }
