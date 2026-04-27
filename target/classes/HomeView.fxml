@@ -75,21 +75,21 @@
                             <Label text="Season Range" styleClass="field-label" />
 
                             <HBox spacing="6">
-                                <TextField fx:id="seasonStartField" promptText="2003" prefWidth="70"/>
+                                <TextField fx:id="seasonStartField" promptText="1949" prefWidth="70"/>
                                 <Label text="to" />
-                                <TextField fx:id="seasonEndField" promptText="2025" prefWidth="70"/>
+                                <TextField fx:id="seasonEndField" promptText="2026" prefWidth="70"/>
                             </HBox>
 
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Season Type" styleClass="field-label" />
-                            <ComboBox fx:id="seasonTypeCombo" promptText="Season Type" />
+                            <ComboBox fx:id="seasonTypeCombo" promptText="Both" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Location" styleClass="field-label" />
-                            <ComboBox fx:id="locationCombo" promptText="Location" />
+                            <ComboBox fx:id="locationCombo" promptText="Both" />
                         </VBox>
 
                         <VBox spacing="6">
@@ -98,7 +98,7 @@
                         </VBox>
 
                         <Button text="Apply Filters" styleClass="filters-btn" />
-                        <Button text="Reset" styleClass="reset-btn" onAction="#handleResetClick" />
+                        <Button text="Reset" styleClass="reset-btn" />
 
                     </children>
 
