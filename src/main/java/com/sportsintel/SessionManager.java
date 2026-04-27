@@ -1,7 +1,5 @@
 package com.sportsintel;
 
-import java.util.List;
-
 public class SessionManager {
 
     private static boolean loggedIn = false;
@@ -81,25 +79,7 @@ public class SessionManager {
             String bestGameOpponent,
             double bestGameValue,
             String toughestGameOpponent,
-            double toughestGameValue,
-            double opponentCareerAverage,
-            double careerAverage,
-            double careerAssists,
-            double careerRebounds,
-            int careerGames,
-            List<LastGameRow> lastFiveVsOpponent
-    ) {
-    }
-
-    public record LastGameRow(
-            String date,
-            String opponent,
-            double points,
-            double rebounds,
-            double assists,
-            double minutes,
-            double fieldGoalPct,
-            String result
+            double toughestGameValue
     ) {
     }
 

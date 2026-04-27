@@ -117,12 +117,11 @@
                             </children>
                         </VBox>
 
-                        <Button fx:id="compareSubmitButton"
-                                 text="Compare Players"
-                                 styleClass="search-btn"
-                                 prefWidth="740"
-                                 prefHeight="50"
-                                 onAction="#handleCompareSubmit"/>
+                        <Button text="Compare Players"
+                                styleClass="search-btn"
+                                prefWidth="740"
+                                prefHeight="50"
+                                onAction="#handleCompareSubmit"/>
                     </children>
 
                     <padding>

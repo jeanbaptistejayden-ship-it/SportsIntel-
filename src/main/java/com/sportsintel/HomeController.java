@@ -26,7 +26,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -41,9 +40,6 @@ import java.util.Objects;
 public class HomeController {
     private static final String API_BASE_URL = "http://127.0.0.1:8000";
     private static final Map<String, String> OPPONENT_TO_ABBR = createOpponentMap();
-    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(6))
-            .build();
 
     @FXML
     private ImageView navLogo;
@@ -252,15 +248,28 @@ public class HomeController {
             String seasonType = mapSeasonType(seasonTypeCombo != null ? seasonTypeCombo.getValue() : null);
             String location = mapLocation(locationCombo != null ? locationCombo.getValue() : null);
             String stat = mapStat(statisticCombo != null ? statisticCombo.getValue() : null);
-            SeasonRequest seasonRequest = buildSeasonRequest();
-            String season = seasonRequest.season();
-            Integer seasonStart = seasonRequest.seasonStart();
-            Integer seasonEnd = seasonRequest.seasonEnd();
+            String season = buildSeasonParam();
             String opponent = mapOpponent(opponentCombo != null ? opponentCombo.getValue() : null);
             Integer lastN = parseLastN();
 
-            String requestUrl = buildPlayerRequestUrl(playerName, season, seasonStart, seasonEnd, false, seasonType, location, opponent, lastN, stat);
-            JsonObject body = requestJson(requestUrl, "Backend request");
+            String requestUrl = buildPlayerRequestUrl(playerName, season, seasonType, location, opponent, lastN, stat);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(requestUrl))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                showError("Backend request failed: HTTP " + response.statusCode());
+                return;
+            }
+
+            JsonObject body = JsonParser.parseString(response.body()).getAsJsonObject();
+            if (body.has("error")) {
+                showError(body.get("error").getAsString());
+                return;
+            }
 
             JsonObject summary = body.getAsJsonObject("summary");
             JsonObject meta = body.getAsJsonObject("meta");
@@ -268,13 +277,23 @@ public class HomeController {
             double selectedAverage = summary.get("average").getAsDouble();
             String selectedStatKey = summary.get("stat").getAsString();
 
-            String baselineUrl = buildPlayerRequestUrl(playerName, season, seasonStart, seasonEnd, false, seasonType, "both", null, null, stat);
-            JsonObject baselineBody = requestJsonOptional(baselineUrl, "Backend baseline request", body);
+            String baselineUrl = buildPlayerRequestUrl(playerName, season, seasonType, "both", null, null, stat);
+            HttpRequest baselineRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(baselineUrl))
+                    .GET()
+                    .build();
+            HttpResponse<String> baselineResponse = HttpClient.newHttpClient().send(baselineRequest, HttpResponse.BodyHandlers.ofString());
+            if (baselineResponse.statusCode() != 200) {
+                showError("Backend baseline request failed: HTTP " + baselineResponse.statusCode());
+                return;
+            }
+            JsonObject baselineBody = JsonParser.parseString(baselineResponse.body()).getAsJsonObject();
+            if (baselineBody.has("error")) {
+                showError(baselineBody.get("error").getAsString());
+                return;
+            }
             JsonObject baselineSummary = baselineBody.getAsJsonObject("summary");
             JsonArray baselineGames = baselineBody.getAsJsonArray("games");
-
-            JsonObject careerOpponentSummary = summary;
-            JsonArray careerOpponentGames = games;
 
             String playerImageUrl = summary.has("player_image") && !summary.get("player_image").isJsonNull()
                     ? summary.get("player_image").getAsString()
@@ -296,23 +315,17 @@ public class HomeController {
                     baselineSummary.get("average").getAsDouble(),
                     averageOfLastN(baselineGames, selectedStatKey, 5),
                     averageOfLastN(baselineGames, selectedStatKey, 10),
-                    averageOf(careerOpponentGames, "fg_pct"),
-                    averageOf(careerOpponentGames, "min"),
-                    averageOf(careerOpponentGames, "ast"),
-                    averageOf(careerOpponentGames, "reb"),
-                    averageOf(careerOpponentGames, "tov"),
-                    averageByLocation(careerOpponentGames, true, selectedStatKey),
-                    averageByLocation(careerOpponentGames, false, selectedStatKey),
-                    readGameOpponent(careerOpponentSummary, "high_game"),
-                    readGameValue(careerOpponentSummary, "high_game"),
-                    readGameOpponent(careerOpponentSummary, "low_game"),
-                    readGameValue(careerOpponentSummary, "low_game"),
-                    summary.get("average").getAsDouble(),
-                    baselineSummary.get("average").getAsDouble(),
-                    averageOf(baselineGames, "ast"),
-                    averageOf(baselineGames, "reb"),
-                    baselineSummary.get("games_played").getAsInt(),
-                    toLastFiveRows(games)
+                    averageOf(games, "fg_pct"),
+                    averageOf(games, "min"),
+                    averageOf(games, "ast"),
+                    averageOf(games, "reb"),
+                    averageOf(games, "tov"),
+                    averageByLocation(baselineGames, true, selectedStatKey),
+                    averageByLocation(baselineGames, false, selectedStatKey),
+                    readGameOpponent(summary, "high_game"),
+                    readGameValue(summary, "high_game"),
+                    readGameOpponent(summary, "low_game"),
+                    readGameValue(summary, "low_game")
             ));
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
@@ -321,8 +334,6 @@ public class HomeController {
             Scene currentScene = navLogo.getScene();
             currentScene.setRoot(root);
 
-        } catch (IllegalArgumentException e) {
-            showError(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
             showError("Could not open results page.");
@@ -380,19 +391,13 @@ public class HomeController {
         }
     }
 
-    private SeasonRequest buildSeasonRequest() {
-        String rawStart = seasonStartField == null || seasonStartField.getText() == null
-                ? ""
-                : seasonStartField.getText().trim();
-        String rawEnd = seasonEndField == null || seasonEndField.getText() == null
-                ? ""
-                : seasonEndField.getText().trim();
-
-        if (rawStart.isEmpty() && rawEnd.isEmpty()) {
-            return new SeasonRequest(null, null, null);
+    private String buildSeasonParam() {
+        if (seasonStartField == null) {
+            return null;
         }
+        String rawStart = seasonStartField.getText() == null ? "" : seasonStartField.getText().trim();
         if (rawStart.isEmpty()) {
-            throw new IllegalArgumentException("Please enter a season start year.");
+            return null;
         }
 
         int startYear;
@@ -402,22 +407,8 @@ public class HomeController {
             throw new IllegalArgumentException("Season start year must be a number.");
         }
 
-        if (rawEnd.isEmpty()) {
-            int endYear = startYear + 1;
-            return new SeasonRequest(startYear + "-" + String.valueOf(endYear).substring(2), null, null);
-        }
-
-        int endYear;
-        try {
-            endYear = Integer.parseInt(rawEnd);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Season end year must be a number.");
-        }
-
-        if (endYear < startYear) {
-            throw new IllegalArgumentException("Season end year must be greater than or equal to start year.");
-        }
-        return new SeasonRequest(null, startYear, endYear);
+        int endYear = startYear + 1;
+        return startYear + "-" + String.valueOf(endYear).substring(2);
     }
 
     private Integer parseLastN() {
@@ -512,9 +503,6 @@ public class HomeController {
     private String buildPlayerRequestUrl(
             String playerName,
             String season,
-            Integer seasonStart,
-            Integer seasonEnd,
-            boolean career,
             String seasonType,
             String location,
             String opponent,
@@ -528,18 +516,9 @@ public class HomeController {
         url.append("?season_type=").append(URLEncoder.encode(seasonType, StandardCharsets.UTF_8));
         url.append("&location=").append(URLEncoder.encode(location, StandardCharsets.UTF_8));
         url.append("&stat=").append(URLEncoder.encode(stat, StandardCharsets.UTF_8));
-        if (career) {
-            url.append("&career=true");
-        }
 
         if (season != null) {
             url.append("&season=").append(URLEncoder.encode(season, StandardCharsets.UTF_8));
-        }
-        if (seasonStart != null) {
-            url.append("&season_start=").append(seasonStart);
-        }
-        if (seasonEnd != null) {
-            url.append("&season_end=").append(seasonEnd);
         }
         if (opponent != null) {
             url.append("&opponent=").append(URLEncoder.encode(opponent, StandardCharsets.UTF_8));
@@ -671,65 +650,6 @@ public class HomeController {
             return 0.0;
         }
         return game.get("value").getAsDouble();
-    }
-
-    private JsonObject requestJson(String url, String requestName) throws Exception {
-        return requestJson(url, requestName, 45);
-    }
-
-    private JsonObject requestJson(String url, String requestName, int timeoutSeconds) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .timeout(Duration.ofSeconds(timeoutSeconds))
-                .GET()
-                .build();
-        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            throw new IllegalArgumentException(requestName + " failed: HTTP " + response.statusCode());
-        }
-        JsonObject body = JsonParser.parseString(response.body()).getAsJsonObject();
-        if (body.has("error")) {
-            throw new IllegalArgumentException(body.get("error").getAsString());
-        }
-        return body;
-    }
-
-    private JsonObject requestJsonOptional(String url, String requestName, JsonObject fallback) {
-        try {
-            return requestJson(url, requestName, 6);
-        } catch (Exception e) {
-            System.out.println(requestName + " skipped: " + e.getMessage());
-            return fallback;
-        }
-    }
-
-    private List<SessionManager.LastGameRow> toLastFiveRows(JsonArray games) {
-        List<JsonObject> sortedGames = new ArrayList<>();
-        if (games != null) {
-            for (JsonElement gameElement : games) {
-                sortedGames.add(gameElement.getAsJsonObject());
-            }
-        }
-        sortedGames.sort(Comparator.comparing(this::parseGameDate).reversed());
-
-        List<SessionManager.LastGameRow> rows = new ArrayList<>();
-        for (int i = 0; i < sortedGames.size() && i < 5; i++) {
-            JsonObject game = sortedGames.get(i);
-            rows.add(new SessionManager.LastGameRow(
-                    game.has("date") && !game.get("date").isJsonNull() ? game.get("date").getAsString() : "N/A",
-                    game.has("opponent") && !game.get("opponent").isJsonNull() ? game.get("opponent").getAsString() : "N/A",
-                    game.has("pts") && !game.get("pts").isJsonNull() ? game.get("pts").getAsDouble() : 0.0,
-                    game.has("reb") && !game.get("reb").isJsonNull() ? game.get("reb").getAsDouble() : 0.0,
-                    game.has("ast") && !game.get("ast").isJsonNull() ? game.get("ast").getAsDouble() : 0.0,
-                    game.has("min") && !game.get("min").isJsonNull() ? game.get("min").getAsDouble() : 0.0,
-                    game.has("fg_pct") && !game.get("fg_pct").isJsonNull() ? game.get("fg_pct").getAsDouble() : 0.0,
-                    game.has("result") && !game.get("result").isJsonNull() ? game.get("result").getAsString() : "-"
-            ));
-        }
-        return rows;
-    }
-
-    private record SeasonRequest(String season, Integer seasonStart, Integer seasonEnd) {
     }
 
     private void showError(String message) {
