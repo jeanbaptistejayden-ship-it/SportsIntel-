@@ -256,7 +256,7 @@
 
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="stat-mini-box">
                                                     <children>
-                                                        <Label text="FG%" styleClass="mini-stat-label"/>
+                                                        <Label text="PTS" styleClass="mini-stat-label"/>
                                                         <Label fx:id="fgValueLabel" text="48.5" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
@@ -307,83 +307,29 @@
                                         <Label text="Last 5 Games vs Opponent"
                                                styleClass="last-five-title" />
 
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-header-row">
+                                        <HBox alignment="CENTER_LEFT"
+                                              spacing="0"
+                                              prefWidth="850"
+                                              maxWidth="850"
+                                              minWidth="850"
+                                              styleClass="last-five-header-row">
                                             <children>
-                                                <Label text="Date" prefWidth="140" styleClass="last-five-header-cell" />
-                                                <Label text="Opponent" prefWidth="140" styleClass="last-five-header-cell" />
-                                                <Label text="PTS" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="REB" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="AST" prefWidth="90" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="MIN" prefWidth="110" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="FG%" prefWidth="110" styleClass="last-five-header-cell centered-cell" />
-                                                <Label text="Result" prefWidth="140" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="Date" minWidth="160" prefWidth="160" maxWidth="160" styleClass="last-five-header-cell" />
+                                                <Label text="Opponent" minWidth="120" prefWidth="120" maxWidth="120" styleClass="last-five-header-cell" />
+                                                <Label text="PTS" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="REB" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="AST" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="MIN" minWidth="90" prefWidth="90" maxWidth="90" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="FG%" minWidth="110" prefWidth="110" maxWidth="110" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
+                                                <Label text="3PT%" minWidth="110" prefWidth="110" maxWidth="110" alignment="CENTER" styleClass="last-five-header-cell centered-cell" />
                                             </children>
                                         </HBox>
 
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
-                                            <children>
-                                                <Label text="03/12/2026" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="28" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
-                                                <Label text="8" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="7" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="36" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="51.2%" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="W 112-104" prefWidth="140" styleClass="last-five-cell centered-cell value-green" />
-                                            </children>
-                                        </HBox>
-
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
-                                            <children>
-                                                <Label text="02/05/2026" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="21" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
-                                                <Label text="7" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="5" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="34" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="44.8%" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="L 101-108" prefWidth="140" styleClass="last-five-cell centered-cell value-orange" />
-                                            </children>
-                                        </HBox>
-
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
-                                            <children>
-                                                <Label text="01/18/2026" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="24" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
-                                                <Label text="10" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="6" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="37" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="47.9%" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="W 115-110" prefWidth="140" styleClass="last-five-cell centered-cell value-green" />
-                                            </children>
-                                        </HBox>
-
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
-                                            <children>
-                                                <Label text="12/22/2025" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="19" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
-                                                <Label text="6" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="8" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="33" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="42.1%" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="L 98-103" prefWidth="140" styleClass="last-five-cell centered-cell value-orange" />
-                                            </children>
-                                        </HBox>
-
-                                        <HBox alignment="CENTER_LEFT" spacing="0" styleClass="last-five-data-row">
-                                            <children>
-                                                <Label text="11/30/2025" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="BOS" prefWidth="140" styleClass="last-five-cell" />
-                                                <Label text="20" prefWidth="90" styleClass="last-five-cell centered-cell value-blue" />
-                                                <Label text="9" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="4" prefWidth="90" styleClass="last-five-cell centered-cell" />
-                                                <Label text="35" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="45.0%" prefWidth="110" styleClass="last-five-cell centered-cell" />
-                                                <Label text="W 109-107" prefWidth="140" styleClass="last-five-cell centered-cell value-green" />
-                                            </children>
-                                        </HBox>
+                                        <VBox fx:id="lastFiveRowsBox"
+                                              spacing="12"
+                                              prefWidth="850"
+                                              maxWidth="850"
+                                              minWidth="850" />
 
                                     </children>
 

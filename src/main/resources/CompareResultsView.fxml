@@ -77,18 +77,18 @@
                                       styleClass="compare-results-wrapper">
                                     <children>
 
-                                        <VBox spacing="10"
-                                              alignment="CENTER"
-                                              prefWidth="980"
-                                              styleClass="compare-results-header">
-                                            <children>
+                                        <HBox spacing="60" alignment="CENTER" styleClass="compare-results-header">
+
+                                            <VBox spacing="10" alignment="CENTER">
                                                 <Label text="Player Comparison" styleClass="compare-results-title" />
-                                                <Label fx:id="comparisonSubtitleLabel" text="vs Minnesota Timberwolves" styleClass="compare-results-subtitle" />
-                                            </children>
-                                            <padding>
-                                                <Insets top="24" right="24" bottom="24" left="24"/>
-                                            </padding>
-                                        </VBox>
+                                                <Label fx:id="comparisonSubtitleLabel"
+                                                       text="vs Charlotte Hornets"
+                                                       styleClass="compare-results-subtitle" />
+                                                <Label text="Data: 2014-15 to Present (Career)"
+                                                       styleClass="compare-results-note" />
+                                            </VBox>
+
+                                        </HBox>
 
                                         <HBox spacing="28" alignment="CENTER">
                                             <children>
