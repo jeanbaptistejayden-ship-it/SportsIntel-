@@ -161,6 +161,7 @@ public class HomeController {
                     SessionManager.getFullName(),
                     SessionManager.getUsername()
             );
+            AcessFBData.addSearchData(userSearchHistory(), SessionManager.getFullName());
         }
     }
 
@@ -323,6 +324,8 @@ public class HomeController {
                     readGameValue(summary, "low_game")
             ));
 
+
+            AcessFBData.addSearchData(userSearchHistory(), SessionManager.getUsername());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
             Parent root = loader.load();
 
@@ -339,6 +342,7 @@ public class HomeController {
             e.printStackTrace();
             showError("Could not retrieve player data from backend.");
         }
+       // AcessFBData.addSearchData(userSearchHistory(), SessionManager.getFullName());
     }
 
     public void setLoggedInUser(String fullName, String username) {
@@ -705,6 +709,8 @@ public class HomeController {
             profileNameLabel.setText(SessionManager.getFullName());
             profileUsernameLabel.setText(SessionManager.getUsername());
 
+
+
         } else {
 
             authButtons.setVisible(true);
@@ -716,5 +722,41 @@ public class HomeController {
             profileMenu.setVisible(false);
             profileMenu.setManaged(false);
         }
+    }
+
+    public ArrayList<String> userSearchHistory(){
+        String playerName = playerNameField.getText().toString();
+        String stat = statisticCombo.getValue().toString();
+        String opponent = opponentCombo.getValue().toString();
+        String sport = sportCombo.getValue().toString();
+
+
+
+        ArrayList<String> history = new ArrayList<>();
+        history.add(playerName);
+        history.add(stat);
+        history.add(opponent);
+        history.add(sport);
+
+        return history;
+
+    }
+
+
+
+    public String getSportCombo() {
+        return sportCombo.getValue().toString();
+    }
+
+    public String getOpponentCombo() {
+        return opponentCombo.getValue().toString();
+    }
+
+    public String getPlayerNameField() {
+        return playerNameField.getText();
+    }
+
+    public String getStatisticCombo() {
+        return statisticCombo.getValue().toString();
     }
 }

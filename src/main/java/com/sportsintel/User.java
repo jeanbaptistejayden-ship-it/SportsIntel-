@@ -1,11 +1,13 @@
 package com.sportsintel;
 
+import java.util.ArrayList;
+
 public class User {
     private String username;
     private String fullName;
-private String password;
+    private String password;
     private String email;
-
+    private ArrayList<ArrayList<String>> userSearchHistory;
 
 
     public User(String username, String fullName, String email, String password) {
@@ -13,6 +15,7 @@ private String password;
        this.fullName = fullName;
         this.email = email;
         this.password = password;
+
     }
 
     public String getUsername() {
@@ -29,5 +32,9 @@ private String password;
 
     public String getPassword() {
         return password;
+    }
+
+    public ArrayList<ArrayList<String>> getUserSearchHistory() {
+        return userSearchHistory;
     }
 }

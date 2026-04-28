@@ -73,9 +73,10 @@ public class LoginController {
     @FXML
     private void handleLoginSubmit(ActionEvent event) throws FirebaseAuthException {
         if(verifyUser()) {
-            SessionManager.login(fullName, "@ForeignStage");
+            SessionManager.login(fullName, getUsername_txt() );
             if (homeController != null) {
                 homeController.setLoggedInUser(
+
                         SessionManager.getFullName(),
                         SessionManager.getUsername()
                 );
