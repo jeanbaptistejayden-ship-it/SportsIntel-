@@ -82,7 +82,6 @@
                                             <VBox spacing="10" alignment="CENTER">
                                                 <Label text="Player Comparison" styleClass="compare-results-title" />
                                                 <Label fx:id="comparisonSubtitleLabel"
-                                                       text="vs Charlotte Hornets"
                                                        styleClass="compare-results-subtitle" />
                                                 <Label text="Data: 2014-15 to Present (Career)"
                                                        styleClass="compare-results-note" />

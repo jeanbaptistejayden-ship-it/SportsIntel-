@@ -65,6 +65,7 @@ def get_player_lookup(name: str):
     return {
         "id": int(best_match["id"]),
         "name": best_match["full_name"],
+        "from_year": int(best_match.get("from_year") or best_match.get("FROM_YEAR") or 2003),
     }, None
 
 def get_default_season() -> str:
@@ -133,7 +134,7 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
     frames = []
     errors = []
 
-    with ThreadPoolExecutor(max_workers=2) as executor:
+    with ThreadPoolExecutor(max_workers=5) as executor:
         future_to_season = {
             executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
             for season in seasons
