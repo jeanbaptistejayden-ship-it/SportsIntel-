@@ -77,6 +77,8 @@ def get_player_stats(
 
     player_id = player["id"]
     player_name = player["name"]
+    player_from_year = int(player.get("from_year", 2003))
+    career_start = f"{player_from_year}-{str(player_from_year + 1)[-2:]}"
 
     has_season_filter = bool(season_start or season_end)
 
@@ -99,7 +101,7 @@ def get_player_stats(
                     season_type=season_type,
                 )
         else:
-            chosen_start = "2003-04"
+            chosen_start = career_start
             chosen_end = get_default_season()
             gamelog_data = fetch_gamelog_range(
                 player_id,
