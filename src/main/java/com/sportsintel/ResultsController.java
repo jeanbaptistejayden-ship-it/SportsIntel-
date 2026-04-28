@@ -272,6 +272,37 @@ public class ResultsController {
                 )
         );
 
+        double homeAvg = search.homeAverage();
+        double awayAvg = search.awayAverage();
+        double diff = homeAvg - awayAvg;
+
+        String homeAwayText;
+
+        if (homeAvg == 0.0 && awayAvg == 0.0) {
+            homeAwayText = "Not enough data to determine home/away performance.";
+        } else if (diff > 0) {
+            homeAwayText = String.format(
+                    "Performs better at home: %.1f vs %.1f away (Δ %.1f).",
+                    homeAvg,
+                    awayAvg,
+                    diff
+            );
+        } else if (diff < 0) {
+            homeAwayText = String.format(
+                    "Performs better away: %.1f vs %.1f at home (Δ %.1f).",
+                    awayAvg,
+                    homeAvg,
+                    Math.abs(diff)
+            );
+        } else {
+            homeAwayText = String.format(
+                    "Performs equally at home and away: %.1f.",
+                    homeAvg
+            );
+        }
+
+        updateText(homeAwaySummaryLabel, homeAwayText);
+
         loadPlayerImage(search.playerImageUrl());
         renderRecentGames(search.recentGamesVsOpponent());
     }

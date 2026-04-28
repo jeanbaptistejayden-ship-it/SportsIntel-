@@ -134,12 +134,12 @@
 
                                                 <VBox spacing="10" alignment="CENTER_LEFT">
                                                     <children>
-                                                        <Label fx:id="playerSummaryLabel" text="LeBron James"
+                                                        <Label fx:id="playerSummaryLabel"
                                                                styleClass="result-player-title" />
 
                                                         <HBox spacing="18" alignment="CENTER_LEFT">
                                                             <children>
-                                                                <Label fx:id="opponentSummaryLabel" text="vs New York Knicks"
+                                                                <Label fx:id="opponentSummaryLabel"
                                                                        styleClass="result-subtitle-strong" />
                                                                 <Label text="•"
                                                                        styleClass="result-dot" />
@@ -168,29 +168,29 @@
                                             <children>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label fx:id="averageTitleLabel" text="vs Knicks" styleClass="metric-label" />
-                                                        <Label fx:id="averageValueLabel" text="29.2" styleClass="metric-number-blue" />
+                                                        <Label fx:id="averageTitleLabel" styleClass="metric-label" />
+                                                        <Label fx:id="averageValueLabel" styleClass="metric-number-blue" />
                                                         <Label fx:id="averageUnitLabel" text="PPG average" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
                                                         <Label fx:id="baselineTitleLabel" text="Career Average" styleClass="metric-label" />
-                                                        <Label fx:id="baselineValueLabel" text="26.5" styleClass="metric-number-dark" />
+                                                        <Label fx:id="baselineValueLabel" styleClass="metric-number-dark" />
                                                         <Label fx:id="baselineUnitLabel" text="PPG overall" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
                                                         <Label fx:id="lastFiveTitleLabel" text="Last 5 Games" styleClass="metric-label" />
-                                                        <Label fx:id="lastFiveValueLabel" text="30.4" styleClass="metric-number-green" />
+                                                        <Label fx:id="lastFiveValueLabel" styleClass="metric-number-green" />
                                                         <Label fx:id="lastFiveUnitLabel" text="PPG recent" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
                                                         <Label fx:id="lastTenTitleLabel" text="Last 10 Games" styleClass="metric-label" />
-                                                        <Label fx:id="lastTenValueLabel" text="29.0" styleClass="metric-number-purple" />
+                                                        <Label fx:id="lastTenValueLabel" styleClass="metric-number-purple" />
                                                         <Label fx:id="lastTenUnitLabel" text="PPG L10" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
@@ -366,7 +366,7 @@
                                                                 <Label text="RECENT TREND" styleClass="summary-box-title" />
                                                             </children>
                                                         </HBox>
-                                                        <Label fx:id="trendSummaryLabel" text="Trending upward with last 5 games averaging 31.4 Points Per Game, which is 4.9 points above the career average of 26.5."
+                                                        <Label fx:id="trendSummaryLabel"
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
@@ -388,7 +388,7 @@
                                                             </children>
                                                         </HBox>
 
-                                                        <Label fx:id="matchupStrengthSummaryLabel" text="Detroit Pistons is one of the player's strongest matchups, ranking #3 out of 9 opponents."
+                                                        <Label fx:id="matchupStrengthSummaryLabel"
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
@@ -406,7 +406,7 @@
                                                     <children>
                                                         <Label text="HOME/AWAY SPLIT" styleClass="summary-box-title" />
 
-                                                        <Label fx:id="homeAwaySummaryLabel" text="Performs 16% better at home compared to away games."
+                                                        <Label fx:id="homeAwaySummaryLabel"
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
@@ -423,7 +423,7 @@
                                                     <children>
                                                         <Label text="CAREER OVERVIEW" styleClass="summary-box-title" />
 
-                                                        <Label fx:id="recentFormSummaryLabel" text="Career averages: 27.1 PPG, 7.5 REB, 7.3 AST across 20 seasons."
+                                                        <Label fx:id="recentFormSummaryLabel"
                                                                wrapText="true"
                                                                styleClass="summary-box-text" />
                                                     </children>
