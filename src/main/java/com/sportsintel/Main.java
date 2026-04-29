@@ -1,7 +1,6 @@
 package com.sportsintel;
 
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.storage.Bucket;
 import com.google.firebase.auth.FirebaseAuth;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +21,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         fstore = contxtFirebase.firebase();
         fauth = FirebaseAuth.getInstance();
-        AcessFBData.readFirebase();
+        AcessFBData.readUserInfo();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SplashView.fxml"));
         Parent root = loader.load();
 

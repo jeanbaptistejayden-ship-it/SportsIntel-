@@ -251,7 +251,7 @@ public class SignUpController {
 
             input_error_lbl.setVisible(false);
             AcessFBData.addUserData(getUser_txt(), getFullName(), getEmail_txt(), getPass_txt());
-            AcessFBData.readFirebase();
+            AcessFBData.readUserInfo();
             SessionManager.login(getFullName(), "@ForeignStage");
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();

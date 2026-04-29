@@ -7,14 +7,17 @@ public class User {
     private String fullName;
     private String password;
     private String email;
-    private ArrayList<ArrayList<String>> userSearchHistory;
+    private ArrayList<ArrayList<String>> userHistory;
+    private int trackSearchCount = 0;
+    //private ArrayList<ArrayList<String>> userSearchHistory;
 
 
-    public User(String username, String fullName, String email, String password) {
+    public User(String username, String fullName, String email, String password /*,ArrayList<ArrayList<String>> userSearchHistory*/) {
         this.username = username;
        this.fullName = fullName;
         this.email = email;
         this.password = password;
+        //this.userSearchHistory = userSearchHistory;
 
     }
 
@@ -34,7 +37,15 @@ public class User {
         return password;
     }
 
-    public ArrayList<ArrayList<String>> getUserSearchHistory() {
-        return userSearchHistory;
+    public void setTrackSearchCount(int trackSearchCount) {
+        this.trackSearchCount = trackSearchCount;
     }
+
+    public int getTrackSearchCount() {
+        return trackSearchCount;
+    }
+
+    /*public ArrayList<ArrayList<String>> getUserSearchHistory() {
+        return userSearchHistory;
+    }*/
 }

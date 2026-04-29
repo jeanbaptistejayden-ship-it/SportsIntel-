@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class HomeController {
     private static final String API_BASE_URL = "http://127.0.0.1:8000";
@@ -78,6 +79,9 @@ public class HomeController {
     private HBox authButtons;
 
     @FXML
+    private Label searchHistory_lbl;
+
+    @FXML
     private VBox profileBox;
 
     @FXML
@@ -90,7 +94,7 @@ public class HomeController {
     private Label profileUsernameLabel;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws ExecutionException, InterruptedException {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
         navLogo.setImage(image);
         mainLogo.setImage(image);
@@ -232,7 +236,7 @@ public class HomeController {
         }
     }
     @FXML
-    private void handleSearchClick() {
+    private void handleSearchClick() throws ExecutionException, InterruptedException {
         try {
             String playerName = playerNameField != null ? playerNameField.getText().trim() : "";
             if (playerName.isEmpty()) {
@@ -325,7 +329,7 @@ public class HomeController {
             ));
 
 
-            AcessFBData.addSearchData(userSearchHistory(), SessionManager.getUsername());
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
             Parent root = loader.load();
 
@@ -338,6 +342,10 @@ public class HomeController {
         } catch (IOException e) {
             e.printStackTrace();
             showError("Could not open results page.");
+            AcessFBData.addSearchData(userSearchHistory(), SessionManager.getUsername());
+            searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername()).toString());
+            AcessFBData.readSearchData(SessionManager.getUsername());
+
         } catch (Exception e) {
             e.printStackTrace();
             showError("Could not retrieve player data from backend.");
