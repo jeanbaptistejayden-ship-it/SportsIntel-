@@ -163,9 +163,12 @@ public class HomeController {
         if (SessionManager.isLoggedIn()) {
             setLoggedInUser(
                     SessionManager.getFullName(),
-                    SessionManager.getUsername()
-            );
-            AcessFBData.addSearchData(userSearchHistory(), SessionManager.getFullName());
+                    SessionManager.getUsername());
+            //for(int i = AcessFBData.readSearchCount(SessionManager.getUsername()); i > 0; i--){
+              //  searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername(),AcessFBData.readSearchCount(SessionManager.getUsername())).toString());
+                    printSearchHistory();
+
+            //AcessFBData.addSearchData(userSearchHistory(), SessionManager.getFullName());
         }
     }
 
@@ -343,8 +346,9 @@ public class HomeController {
             e.printStackTrace();
             showError("Could not open results page.");
             AcessFBData.addSearchData(userSearchHistory(), SessionManager.getUsername());
-            searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername()).toString());
-            AcessFBData.readSearchData(SessionManager.getUsername());
+            //searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername(), AcessFBData.readSearchCount(SessionManager.getUsername())).toString());
+            printSearchHistory();
+            AcessFBData.readSearchData(SessionManager.getUsername(), AcessFBData.readSearchCount(SessionManager.getUsername()));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -749,6 +753,23 @@ public class HomeController {
         return history;
 
     }
+
+    public void printSearchHistory() throws ExecutionException, InterruptedException {
+        String user = SessionManager.getUsername().toString();
+        String historyText = "";
+        //searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername(), AcessFBData.readSearchCount(SessionManager.getUsername())).toString());
+        int count = AcessFBData.readSearchCount(user);
+        for(int i = count; i>0; i--){
+            ArrayList<String> userHistory = AcessFBData.readSearchData(user, i);
+            String userHistoryToString = AcessFBData.userDataToString(userHistory);
+            historyText += userHistoryToString + "\n";
+        }
+
+        searchHistory_lbl.setText(historyText);
+
+
+    }
+
 
 
 

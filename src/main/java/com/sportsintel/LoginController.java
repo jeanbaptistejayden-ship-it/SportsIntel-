@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class LoginController {
     private HomeController homeController;
@@ -71,7 +72,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLoginSubmit(ActionEvent event) throws FirebaseAuthException {
+    private void handleLoginSubmit(ActionEvent event) throws FirebaseAuthException, ExecutionException, InterruptedException {
         if(verifyUser()) {
             SessionManager.login(fullName, getUsername_txt() );
             if (homeController != null) {
@@ -80,6 +81,7 @@ public class LoginController {
                         SessionManager.getFullName(),
                         SessionManager.getUsername()
                 );
+                homeController.printSearchHistory();
             }
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
