@@ -331,7 +331,9 @@ public class HomeController {
                     readGameValue(summary, "low_game")
             ));
 
+            AcessFBData.addSearchData(userSearchHistory(), SessionManager.getUsername());
 
+            printSearchHistory();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResultsView.fxml"));
             Parent root = loader.load();
