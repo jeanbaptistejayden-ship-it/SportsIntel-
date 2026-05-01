@@ -81,7 +81,11 @@ public class LoginController {
                         SessionManager.getFullName(),
                         SessionManager.getUsername()
                 );
-                homeController.printSearchHistory();
+                try {
+                    homeController.printSearchHistory();
+                } catch(IndexOutOfBoundsException e){
+                    return;
+                }
             }
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();

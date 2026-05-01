@@ -762,13 +762,35 @@ public class HomeController {
         for(int i = count; i>0; i--){
             ArrayList<String> userHistory = AcessFBData.readSearchData(user, i);
             String userHistoryToString = AcessFBData.userDataToString(userHistory);
-            historyText += userHistoryToString + "\n";
+            historyText = historyText + userHistoryToString + "\n";
+            System.out.println(userHistoryToString);
+            System.out.println(count);
         }
 
-        searchHistory_lbl.setText(historyText);
 
 
-    }
+
+            System.out.println(count);
+            int i = 5;
+            try {
+                while (i <= 5 && i > count) {
+                    System.out.println(i);
+                    ArrayList<String> userHistory = AcessFBData.readSearchData(user, i);
+                    String userHistoryToString = AcessFBData.userDataToString(userHistory);
+                    historyText += userHistoryToString + "\n";
+                    System.out.println(userHistoryToString);
+                    i = i - 1;
+                }
+            } catch (IndexOutOfBoundsException e){
+                System.out.println("");
+            }
+            searchHistory_lbl.setText(historyText);
+        }
+
+
+
+
+
 
 
 
