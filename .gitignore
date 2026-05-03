@@ -1,3 +1,10 @@
+# Firebase secrets
+firebase-service-account.json
+src/main/resources/firebase-service-account.json
+
+# Environment / secrets (future)
+.env
+
 # macOS
 .DS_Store
 
