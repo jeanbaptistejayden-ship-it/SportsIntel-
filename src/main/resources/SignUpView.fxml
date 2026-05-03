@@ -28,42 +28,42 @@
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="First Name" styleClass="signup-label" />
-                        <TextField styleClass="signup-field" prefHeight="46" />
+                        <TextField fx:id="firstNameField" styleClass="signup-field" prefHeight="46" />
                     </children>
                 </VBox>
 
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="Last Name" styleClass="signup-label" />
-                        <TextField styleClass="signup-field" prefHeight="46" />
+                        <TextField fx:id="lastNameField" styleClass="signup-field" prefHeight="46" />
                     </children>
                 </VBox>
 
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="Email" styleClass="signup-label" />
-                        <TextField styleClass="signup-field" prefHeight="46" />
+                        <TextField fx:id="emailField" styleClass="signup-field" prefHeight="46" />
                     </children>
                 </VBox>
 
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="Username" styleClass="signup-label" />
-                        <TextField styleClass="signup-field" prefHeight="46" />
+                        <TextField fx:id="usernameField" styleClass="signup-field" prefHeight="46" />
                     </children>
                 </VBox>
 
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="Password" styleClass="signup-label" />
-                        <PasswordField styleClass="signup-field" prefHeight="46" />
+                        <PasswordField fx:id="passwordField" styleClass="signup-field" prefHeight="46" />
                     </children>
                 </VBox>
 
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="Confirm Password" styleClass="signup-label" />
-                        <PasswordField styleClass="signup-field" prefHeight="46" />
+                        <PasswordField fx:id="confirmPasswordField" styleClass="signup-field" prefHeight="46" />
                     </children>
                 </VBox>
 
