@@ -6,11 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 public class LoginController {
@@ -19,6 +22,13 @@ public class LoginController {
     public void setHomeController(HomeController homeController) {
         this.homeController = homeController;
     }
+
+    @FXML
+    private TextField emailField;
+
+    @FXML
+    private PasswordField passwordField;
+
     @FXML
     private ImageView loginLogo;
 
@@ -38,15 +48,31 @@ public class LoginController {
 
     @FXML
     private void handleLoginSubmit(ActionEvent event) {
-        SessionManager.login("Dan Gron", "@ForeignStage");
+        try {
+            String email = emailField.getText();
+            String password = passwordField.getText();
 
-        if (homeController != null) {
-            homeController.setLoggedInUser(
-                    SessionManager.getFullName(),
-                    SessionManager.getUsername()
-            );
+            Map<String, String> userData = FirebaseService.login(email, password);
+
+            String uid = userData.get("uid");
+            String fullName = userData.get("fullName");
+            String realUsername = userData.get("username");
+
+            SessionManager.login(uid, fullName, realUsername);
+
+            if (homeController != null) {
+                homeController.setLoggedInUser(
+                        SessionManager.getFullName(),
+                        SessionManager.getUsername()
+                );
+            }
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Login failed");
         }
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
     }
 }

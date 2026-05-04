@@ -345,7 +345,6 @@
                                     <children>
                                         <HBox spacing="12" alignment="CENTER_LEFT">
                                             <children>
-                                                <Label text="◎" styleClass="intelligence-icon" />
                                                 <Label text="Intelligence Summary" styleClass="intelligence-title" />
                                             </children>
                                         </HBox>
@@ -472,9 +471,13 @@
 
                                 <Separator />
 
-                                <Label text="No search history yet. Start searching to see your history here!"
-                                       wrapText="true"
-                                       styleClass="profile-history" />
+                                <VBox fx:id="searchHistoryBox" spacing="8">
+                                    <children>
+                                        <Label text="No search history yet. Start searching to see your history here!"
+                                               wrapText="true"
+                                               styleClass="profile-history" />
+                                    </children>
+                                </VBox>
 
                                 <Separator />
 

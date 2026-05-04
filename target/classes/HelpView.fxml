@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sportsintel.HelpController"
+      styleClass="help-root">
+
+    <children>
+
+        <HBox styleClass="help-header" alignment="CENTER_LEFT">
+            <children>
+                <Label text="Help &amp; Support" styleClass="help-header-title" />
+                <VBox HBox.hgrow="ALWAYS" />
+                <Button text="✕" styleClass="close-btn" onAction="#handleClose" />
+            </children>
+            <padding>
+                <Insets top="18" right="20" bottom="18" left="20"/>
+            </padding>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" styleClass="help-scroll">
+            <content>
+                <VBox spacing="24" styleClass="help-content">
+                    <children>
+
+                        <VBox spacing="16">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label text="○" styleClass="getting-started-icon" />
+                                        <Label text="Getting Started Guide" styleClass="getting-started-title" />
+                                    </children>
+                                </HBox>
+
+                                <VBox spacing="18" styleClass="getting-started-card">
+                                    <children>
+
+                                        <Label text="Follow these simple steps to analyze player performance:"
+                                               styleClass="getting-started-subtitle" />
+
+                                        <VBox spacing="16">
+                                            <children>
+                                                <Label text="1. Enter a player name - Type the full name of the player you want to analyze"
+                                                       styleClass="getting-started-step" wrapText="true" />
+                                                <Label text="2. Select a sport - Choose from Basketball, Football, Soccer, or Baseball"
+                                                       styleClass="getting-started-step" wrapText="true" />
+                                                <Label text="3. Choose an opponent - Select the team you want to compare against"
+                                                       styleClass="getting-started-step" wrapText="true" />
+                                                <Label text="4. Select a statistic - Pick the performance metric you want to analyze"
+                                                       styleClass="getting-started-step" wrapText="true" />
+                                                <Label text="5. Click &quot;Search&quot; - View detailed performance results"
+                                                       styleClass="getting-started-step" wrapText="true" />
+                                            </children>
+                                        </VBox>
+
+                                    </children>
+
+                                    <padding>
+                                        <Insets top="26" right="28" bottom="26" left="28"/>
+                                    </padding>
+                                </VBox>
+
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="16">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label text="📄" styleClass="example-icon" />
+                                        <Label text="Example Queries" styleClass="example-title" />
+                                    </children>
+                                </HBox>
+
+                                <VBox spacing="18" styleClass="example-section">
+                                    <children>
+                                        <Label text="Here are some example searches to help you get started:"
+                                               styleClass="example-subtitle" />
+
+                                        <VBox spacing="10" styleClass="example-card">
+                                            <children>
+                                                <Label text="Basketball Example:" styleClass="example-card-title" />
+                                                <Label text="Player: LeBron James → Opponent: New York Knicks → Statistic: Points Per Game"
+                                                       styleClass="example-text" wrapText="true" />
+                                            </children>
+                                        </VBox>
+
+                                        <VBox spacing="10" styleClass="example-card">
+                                            <children>
+                                                <Label text="Basketball Example:" styleClass="example-card-title" />
+                                                <Label text="Player: Stephen Curry → Opponent: Los Angeles Lakers → Statistic: Assists Per Game"
+                                                       styleClass="example-text" wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="10" styleClass="example-card">
+                                            <children>
+                                                <Label text="Basketball Example:" styleClass="example-card-title" />
+                                                <Label text="Player: Giannis Antetokounmpo → Opponent: Miami Heat → Statistic: Rebounds Per Game"
+                                                       styleClass="example-text" wrapText="true" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <padding>
+                                        <Insets top="22" right="24" bottom="22" left="24"/>
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </VBox>
+                        <VBox spacing="16">
+                            <children>
+
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label text="📄" styleClass="stat-icon" />
+                                        <Label text="Statistic Definitions" styleClass="stat-title" />
+                                    </children>
+                                </HBox>
+
+                                <VBox spacing="18" styleClass="stat-section">
+                                    <children>
+                                        <Label text="Understanding the statistics:"
+                                               styleClass="stat-subtitle" />
+
+                                        <VBox spacing="14">
+                                            <children>
+                                                <Label text="Points Per Game (PPG) – Average number of points scored per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Assists Per Game (APG) – Average number of assists made per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Rebounds Per Game (RPG) – Average number of rebounds collected per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Games Played – Total number of games played against the selected opponent"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Highest Game – Best performance (highest stat value) in a single game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Lowest Game – Worst performance (lowest stat value) in a single game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <padding>
+                                        <Insets top="22" right="24" bottom="22" left="24"/>
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </VBox>
+                        <VBox spacing="16">
+                            <children>
+
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label text="⏷" styleClass="filter-icon" />
+                                        <Label text="Filter Explanations" styleClass="filter-title" />
+                                    </children>
+                                </HBox>
+
+                                <VBox spacing="18" styleClass="filter-section">
+                                    <children>
+                                        <Label text="Use filters to refine your search:"
+                                               styleClass="filter-subtitle" />
+
+                                        <VBox spacing="14">
+                                            <children>
+
+                                                <Label text="Season Range – Limits data to selected years (e.g., 2018-2026)"
+                                                       styleClass="filter-card" wrapText="true"/>
+                                                <Label text="Season Type – Choose Regular Season, Playoffs, or Both"
+                                                       styleClass="filter-card" wrapText="true"/>
+                                                <Label text="Location – Filter games by Home, Away, or Both locations"
+                                                       styleClass="filter-card" wrapText="true"/>
+                                                <Label text="Last N Games vs Opponent – Only includes the most recent games against the selected opponent"
+                                                       styleClass="filter-card" wrapText="true"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <padding>
+                                        <Insets top="22" right="24" bottom="22" left="24"/>
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="16">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                    <children>
+                                        <Label text="❗" styleClass="trouble-icon" />
+                                        <Label text="Troubleshooting" styleClass="trouble-title" />
+                                    </children>
+                                </HBox>
+                                <VBox spacing="18" styleClass="trouble-section">
+                                    <children>
+                                        <Label text="Common issues and solutions:"
+                                               styleClass="trouble-subtitle" />
+
+                                        <VBox spacing="14">
+                                            <children>
+                                                <Label text="Issue: &quot;Player not found&quot;&#10;Solution: Try entering the player's full name (e.g., &quot;LeBron James&quot; instead of &quot;Lebron&quot;)"
+                                                       styleClass="trouble-card" wrapText="true"/>
+                                                <Label text="Issue: &quot;No data available&quot;&#10;Solution: Check your filter settings or try a different opponent. The player may not have played against this team in the selected time period."
+                                                       styleClass="trouble-card" wrapText="true"/>
+                                                <Label text="Issue: &quot;Invalid input&quot; or &quot;Please fill in all fields&quot;&#10;Solution: Make sure all required fields are filled out: Player Name, Sport, Opponent, and Statistic."
+                                                       styleClass="trouble-card" wrapText="true"/>
+                                                <Label text="Issue: Results look incorrect&#10;Solution: Double-check your filters (Season Range, Location, etc.) to ensure you're viewing the correct data subset."
+                                                       styleClass="trouble-card" wrapText="true"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <padding>
+                                        <Insets top="22" right="24" bottom="22" left="24"/>
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                    </children>
+
+                    <padding>
+                        <Insets top="20" right="24" bottom="20" left="24"/>
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+    </children>
+</VBox>

@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -18,6 +20,24 @@ public class SignUpController {
 
     @FXML
     private ImageView signUpLogo;
+
+    @FXML
+    private TextField firstNameField;
+
+    @FXML
+    private TextField lastNameField;
+
+    @FXML
+    private TextField usernameField;
+
+    @FXML
+    private TextField emailField;
+
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private PasswordField confirmPasswordField;
 
     @FXML
     public void initialize() {
@@ -33,9 +53,29 @@ public class SignUpController {
 
     @FXML
     private void handleSignUpSubmit(ActionEvent event) {
-        SessionManager.login("Dan Gron", "@ForeignStage");
+        try {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String fullName = firstName + " " + lastName;
+            String username = usernameField.getText();
+            String email = emailField.getText();
+            String password = passwordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+            if (!password.equals(confirmPassword)) {
+                System.out.println("Passwords do not match");
+                return;
+            }
+
+            String uid = FirebaseService.signUp(email, password, fullName, username);
+
+            SessionManager.login(uid, fullName, username);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
