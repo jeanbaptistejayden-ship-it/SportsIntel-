@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 public class CompareResultsController {
@@ -151,6 +153,9 @@ public class CompareResultsController {
 
     @FXML
     private Label analysisPlayerTwoTextLabel;
+
+    @FXML
+    private VBox searchHistoryBox;
 
     @FXML
     public void initialize() {
@@ -345,11 +350,12 @@ public class CompareResultsController {
     @FXML
     private void toggleProfileMenu() {
         boolean show = !profileMenu.isVisible();
+
         profileMenu.setVisible(show);
         profileMenu.setManaged(show);
 
-        if (show) {
-            profileMenu.toFront();
+        if (show && SessionManager.isLoggedIn()) {
+            loadSearchHistory();
         }
     }
 
@@ -469,6 +475,62 @@ public class CompareResultsController {
             currentScene.setRoot(root);
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadSearchHistory() {
+        if (!SessionManager.isLoggedIn() || searchHistoryBox == null) {
+            return;
+        }
+
+        try {
+            searchHistoryBox.getChildren().clear();
+
+            var history = FirebaseService.getSearchHistory(SessionManager.getUid());
+
+            if (history.isEmpty()) {
+                Label empty = new Label("No search history yet...");
+                empty.setWrapText(true);
+                searchHistoryBox.getChildren().add(empty);
+                return;
+            }
+
+            for (Map<String, Object> search : history) {
+                String type = String.valueOf(search.getOrDefault("type", "single"));
+
+                Label row;
+
+                if (type.equals("compare")) {
+                    String p1 = String.valueOf(search.getOrDefault("playerOne", "Player 1"));
+                    String p2 = String.valueOf(search.getOrDefault("playerTwo", "Player 2"));
+                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
+
+                    row = new Label("Compare: " + p1 + " vs " + p2 + " • " + opponent);
+                } else {
+                    String player = String.valueOf(search.getOrDefault("player", "Unknown Player"));
+                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
+                    String stat = String.valueOf(search.getOrDefault("stat", "Stat"));
+
+                    row = new Label(player + " vs " + opponent + " • " + stat);
+                }
+
+                row.setWrapText(false);
+                row.getStyleClass().add("history-row");
+
+                String fullText = row.getText();
+
+                row.setOnMouseClicked(event -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Search History");
+                    alert.setHeaderText("Full Search Details");
+                    alert.setContentText(fullText);
+                    alert.showAndWait();
+                });
+                searchHistoryBox.getChildren().add(row);
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
