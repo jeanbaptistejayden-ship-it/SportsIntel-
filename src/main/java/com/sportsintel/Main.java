@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 import java.util.Objects;
-import com.sportsintel.FirebaseService;
 
 public class Main extends Application {
 
@@ -19,14 +18,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        try {
-            FirebaseService.initialize();
-            System.out.println("✅ Firebase connected successfully");
-        } catch (Exception e) {
-            System.out.println("❌ Firebase failed to connect");
-            e.printStackTrace();
-        }
+        fstore = contxtFirebase.firebase();
+        fauth = FirebaseAuth.getInstance();
+        AcessFBData.readUserInfo();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SplashView.fxml"));
         Parent root = loader.load();

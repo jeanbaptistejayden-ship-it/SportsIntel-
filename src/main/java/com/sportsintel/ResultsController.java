@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +19,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Map;
 import java.util.Objects;
 
 public class ResultsController {
@@ -160,9 +158,6 @@ public class ResultsController {
 
     @FXML
     private VBox lastFiveRowsBox;
-
-    @FXML
-    private VBox searchHistoryBox;
 
     @FXML
     public void initialize() {
@@ -439,8 +434,6 @@ public class ResultsController {
 
             profileNameLabel.setText(SessionManager.getFullName());
             profileUsernameLabel.setText(SessionManager.getUsername());
-
-            loadSearchHistory();
         } else {
             authButtons.setVisible(true);
             authButtons.setManaged(true);
@@ -629,61 +622,5 @@ public class ResultsController {
 
         label.getStyleClass().addAll(styleClasses);
         return label;
-    }
-
-    private void loadSearchHistory() {
-        if (!SessionManager.isLoggedIn()) {
-            return;
-        }
-
-        try {
-            searchHistoryBox.getChildren().clear();
-
-            var history = FirebaseService.getSearchHistory(SessionManager.getUid());
-
-            if (history.isEmpty()) {
-                Label emptyLabel = new Label("No search history yet. Start searching to see your history here!");
-                emptyLabel.setWrapText(true);
-                searchHistoryBox.getChildren().add(emptyLabel);
-                return;
-            }
-
-            for (Map<String, Object> search : history) {
-                String type = String.valueOf(search.getOrDefault("type", "single"));
-
-                Label row;
-
-                if (type.equals("compare")) {
-                    String p1 = String.valueOf(search.getOrDefault("playerOne", "Player 1"));
-                    String p2 = String.valueOf(search.getOrDefault("playerTwo", "Player 2"));
-                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
-
-                    row = new Label("Compare: " + p1 + " vs " + p2 + " • " + opponent);
-                } else {
-                    String player = String.valueOf(search.getOrDefault("player", "Unknown Player"));
-                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
-                    String stat = String.valueOf(search.getOrDefault("stat", "Stat"));
-
-                    row = new Label(player + " vs " + opponent + " • " + stat);
-                }
-
-                row.setWrapText(false);
-                row.getStyleClass().add("history-row");
-
-                String fullText = row.getText();
-
-                row.setOnMouseClicked(event -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Search History");
-                    alert.setHeaderText("Full Search Details");
-                    alert.setContentText(fullText);
-                    alert.showAndWait();
-                });
-                searchHistoryBox.getChildren().add(row);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

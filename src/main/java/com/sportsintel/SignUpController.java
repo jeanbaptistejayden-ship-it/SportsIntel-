@@ -5,14 +5,13 @@ import com.google.firebase.auth.UserRecord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
 
 import java.util.Objects;
 
@@ -40,22 +39,22 @@ public class SignUpController {
     private ImageView signUpLogo;
 
     @FXML
-    private TextField firstNameField;
+    private TextField email_txt;
 
     @FXML
-    private TextField lastNameField;
+    private PasswordField pass_txt;
 
     @FXML
-    private TextField usernameField;
+    private TextField phone_txt;
 
     @FXML
-    private TextField emailField;
+    private TextField user_txt;
 
     @FXML
-    private PasswordField passwordField;
+    private TextField first_name_txt;
 
     @FXML
-    private PasswordField confirmPasswordField;
+    private TextField last_name_txt;
 
     @FXML
     public void initialize() {
@@ -246,30 +245,19 @@ public class SignUpController {
     }
 
     @FXML
-    private void handleSignUpSubmit(ActionEvent event) {
-        try {
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String fullName = firstName + " " + lastName;
-            String username = usernameField.getText();
-            String email = emailField.getText();
-            String password = passwordField.getText();
-            String confirmPassword = confirmPasswordField.getText();
+    private void handleSignUpSubmit(ActionEvent event) throws FirebaseAuthException {
+        if(verifyUserInput()==0) {
+            userSignup();
 
-            if (!password.equals(confirmPassword)) {
-                System.out.println("Passwords do not match");
-                return;
-            }
-
-            String uid = FirebaseService.signUp(email, password, fullName, username);
-
-            SessionManager.login(uid, fullName, username);
-
+            input_error_lbl.setVisible(false);
+            AcessFBData.addUserData(getUser_txt(), getFullName(), getEmail_txt(), getPass_txt());
+            AcessFBData.readUserInfo();
+            SessionManager.login(getFullName(), "@ForeignStage");
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        else{
+            input_error_lbl.setVisible(true);
         }
     }
 }

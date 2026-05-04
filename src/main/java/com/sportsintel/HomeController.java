@@ -97,10 +97,7 @@ public class HomeController {
 
 
     @FXML
-    private VBox searchHistoryBox;
-
-    @FXML
-    public void initialize() {
+    public void initialize() throws ExecutionException, InterruptedException {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
         navLogo.setImage(image);
         mainLogo.setImage(image);
@@ -381,19 +378,6 @@ public class HomeController {
                     parseRecentGames(recentVsOpponentGames)
             ));
 
-            if (SessionManager.isLoggedIn()) {
-                try {
-                    FirebaseService.saveSearchHistory(
-                            SessionManager.getUid(),
-                            SessionManager.getLatestSearch()
-                    );
-                    System.out.println("✅ Search saved to Firebase");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("❌ Failed to save search");
-                }
-            }
-
             navigateTo("/ResultsView.fxml");
 
         } catch (IllegalArgumentException e) {
@@ -426,13 +410,8 @@ public class HomeController {
     @FXML
     private void toggleProfileMenu() {
         boolean show = !profileMenu.isVisible();
-
         profileMenu.setVisible(show);
         profileMenu.setManaged(show);
-
-        if (show && SessionManager.isLoggedIn()) {
-            loadSearchHistory();
-        }
     }
 
     @FXML
@@ -1003,59 +982,50 @@ public class HomeController {
         return rows;
     }
 
-    private void loadSearchHistory() {
-        if (!SessionManager.isLoggedIn() || searchHistoryBox == null) {
-            return;
+    public ArrayList<String> userSearchHistory(){
+        String playerName = playerNameField.getText().toString();
+        String stat = statisticCombo.getValue().toString();
+        String opponent = opponentCombo.getValue().toString();
+        String sport = sportCombo.getValue().toString();
+
+        ArrayList<String> history = new ArrayList<>();
+        history.add(playerName);
+        history.add(stat);
+        history.add(opponent);
+        history.add(sport);
+
+        return history;
+    }
+
+    public void setSearchHistoryText() throws ExecutionException, InterruptedException {
+        String user = SessionManager.getUsername().toString();
+        String historyText = "";
+        //searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername(), AcessFBData.readSearchCount(SessionManager.getUsername())).toString());
+        int count = AcessFBData.readSearchCount(user) ;
+        int i = count;
+        while( i>=0){
+            ArrayList<String> userHistory = AcessFBData.readSearchData(user, i);
+            String userHistoryToString = AcessFBData.userDataToString(userHistory);
+            historyText = historyText + userHistoryToString + "\n";
+            System.out.println(userHistoryToString);
+            System.out.println(count);
+            i = i -1;
         }
 
+        System.out.println(count);
+        i = 5;
         try {
-            searchHistoryBox.getChildren().clear();
-
-            var history = FirebaseService.getSearchHistory(SessionManager.getUid());
-
-            if (history.isEmpty()) {
-                Label empty = new Label("No search history yet...");
-                empty.setWrapText(true);
-                searchHistoryBox.getChildren().add(empty);
-                return;
+            while (i <= 5 && i > count) {
+                System.out.println(i);
+                ArrayList<String> userHistory = AcessFBData.readSearchData(user, i);
+                String userHistoryToString = AcessFBData.userDataToString(userHistory);
+                historyText += userHistoryToString + "\n";
+                System.out.println(userHistoryToString);
+                i = i - 1;
             }
-
-            for (Map<String, Object> search : history) {
-                String type = String.valueOf(search.getOrDefault("type", "single"));
-
-                Label row;
-
-                if (type.equals("compare")) {
-                    String p1 = String.valueOf(search.getOrDefault("playerOne", "Player 1"));
-                    String p2 = String.valueOf(search.getOrDefault("playerTwo", "Player 2"));
-                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
-
-                    row = new Label("Compare: " + p1 + " vs " + p2 + " • " + opponent);
-                } else {
-                    String player = String.valueOf(search.getOrDefault("player", "Unknown Player"));
-                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
-                    String stat = String.valueOf(search.getOrDefault("stat", "Stat"));
-
-                    row = new Label(player + " vs " + opponent + " • " + stat);
-                }
-
-                row.setWrapText(false);
-                row.getStyleClass().add("history-row");
-
-                String fullText = row.getText();
-
-                row.setOnMouseClicked(event -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Search History");
-                    alert.setHeaderText("Full Search Details");
-                    alert.setContentText(fullText);
-                    alert.showAndWait();
-                });
-                searchHistoryBox.getChildren().add(row);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e){
+            System.out.println("");
         }
+        searchHistory_lbl.setText(historyText);
     }
 }
