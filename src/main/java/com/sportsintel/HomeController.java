@@ -92,6 +92,9 @@ public class HomeController {
     private Label profileUsernameLabel;
 
     @FXML
+    private VBox searchHistoryBox;
+
+    @FXML
     public void initialize() {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
         navLogo.setImage(image);
@@ -362,6 +365,19 @@ public class HomeController {
                     parseRecentGames(recentVsOpponentGames)
             ));
 
+            if (SessionManager.isLoggedIn()) {
+                try {
+                    FirebaseService.saveSearchHistory(
+                            SessionManager.getUid(),
+                            SessionManager.getLatestSearch()
+                    );
+                    System.out.println("✅ Search saved to Firebase");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("❌ Failed to save search");
+                }
+            }
+
             navigateTo("/ResultsView.fxml");
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
@@ -387,8 +403,13 @@ public class HomeController {
     @FXML
     private void toggleProfileMenu() {
         boolean show = !profileMenu.isVisible();
+
         profileMenu.setVisible(show);
         profileMenu.setManaged(show);
+
+        if (show && SessionManager.isLoggedIn()) {
+            loadSearchHistory();
+        }
     }
 
     @FXML
@@ -958,5 +979,61 @@ public class HomeController {
         }
 
         return rows;
+    }
+
+    private void loadSearchHistory() {
+        if (!SessionManager.isLoggedIn() || searchHistoryBox == null) {
+            return;
+        }
+
+        try {
+            searchHistoryBox.getChildren().clear();
+
+            var history = FirebaseService.getSearchHistory(SessionManager.getUid());
+
+            if (history.isEmpty()) {
+                Label empty = new Label("No search history yet...");
+                empty.setWrapText(true);
+                searchHistoryBox.getChildren().add(empty);
+                return;
+            }
+
+            for (Map<String, Object> search : history) {
+                String type = String.valueOf(search.getOrDefault("type", "single"));
+
+                Label row;
+
+                if (type.equals("compare")) {
+                    String p1 = String.valueOf(search.getOrDefault("playerOne", "Player 1"));
+                    String p2 = String.valueOf(search.getOrDefault("playerTwo", "Player 2"));
+                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
+
+                    row = new Label("Compare: " + p1 + " vs " + p2 + " • " + opponent);
+                } else {
+                    String player = String.valueOf(search.getOrDefault("player", "Unknown Player"));
+                    String opponent = String.valueOf(search.getOrDefault("opponent", "Any Opponent"));
+                    String stat = String.valueOf(search.getOrDefault("stat", "Stat"));
+
+                    row = new Label(player + " vs " + opponent + " • " + stat);
+                }
+
+                row.setWrapText(false);
+                row.getStyleClass().add("history-row");
+
+                String fullText = row.getText();
+
+                row.setOnMouseClicked(event -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Search History");
+                    alert.setHeaderText("Full Search Details");
+                    alert.setContentText(fullText);
+                    alert.showAndWait();
+                });
+                searchHistoryBox.getChildren().add(row);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
