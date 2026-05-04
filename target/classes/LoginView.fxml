@@ -22,15 +22,15 @@
 
                 <VBox maxWidth="350" spacing="8">
                     <children>
-                        <Label fx:id="username_lbl" styleClass="login-label" text="Username" />
-                        <TextField fx:id="username_txt" prefHeight="48" promptText="" styleClass="login-field" />
+                        <Label fx:id="username_lbl" text="Username" styleClass="login-label" />
+                        <TextField fx:id="username_txt" promptText="" styleClass="login-field" prefHeight="48" />
                     </children>
                 </VBox>
 
                 <VBox maxWidth="350" spacing="8">
                     <children>
-                        <Label fx:id="pass_lbl" styleClass="login-label" text="Password" />
-                        <PasswordField fx:id="pass_txt" prefHeight="48" promptText="" styleClass="login-field" />
+                        <Label fx:id="pass_lbl" text="Password" styleClass="login-label" />
+                        <PasswordField fx:id="pass_txt" promptText="" styleClass="login-field" prefHeight="48" />
                     </children>
                 </VBox>
 

@@ -14,7 +14,7 @@ public class User {
 
     public User(String username, String fullName, String email, String password /*,ArrayList<ArrayList<String>> userSearchHistory*/) {
         this.username = username;
-       this.fullName = fullName;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         //this.userSearchHistory = userSearchHistory;

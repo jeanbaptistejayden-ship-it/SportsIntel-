@@ -35,16 +35,6 @@ public class LoginController {
 
     private String fullName;
 
-    @FXML
-    private TextField username_txt;
-
-    @FXML
-    private Label user_error;
-
-    @FXML
-    private PasswordField pass_txt;
-
-    private String fullName;
 
 
     @FXML

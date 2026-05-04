@@ -203,7 +203,7 @@
                                 text="No search history yet. Start searching to see your history here!"
                                wrapText="true"
                                styleClass="profile-history"
-                               fx:id="searchHistory_lbl"
+
                         />
 
                         <Separator />

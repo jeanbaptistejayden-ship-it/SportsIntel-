@@ -95,8 +95,6 @@ public class HomeController {
     @FXML
     private Label profileUsernameLabel;
 
-    @FXML
-    private Label searchHistory_lbl;
 
     @FXML
     public void initialize() throws ExecutionException, InterruptedException {
