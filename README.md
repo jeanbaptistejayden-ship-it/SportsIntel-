@@ -120,6 +120,9 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000,http://127.0.0.
 ### 3. Backend Setup (Django REST Framework)
 
 ```bash
+# Go to project root
+cd /path/to/SportsIntel-
+
 # Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
