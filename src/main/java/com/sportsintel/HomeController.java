@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class HomeController {
     private static final String API_BASE_URL = "http://127.0.0.1:8000";
@@ -80,6 +81,9 @@ public class HomeController {
     private HBox authButtons;
 
     @FXML
+    private Label searchHistory_lbl;
+
+    @FXML
     private VBox profileBox;
 
     @FXML
@@ -91,6 +95,7 @@ public class HomeController {
     @FXML
     private Label profileUsernameLabel;
 
+
     @FXML
     private VBox searchHistoryBox;
 
@@ -99,6 +104,17 @@ public class HomeController {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
         navLogo.setImage(image);
         mainLogo.setImage(image);
+
+        if (SessionManager.isLoggedIn()) {
+            setLoggedInUser(
+                    SessionManager.getFullName(),
+                    SessionManager.getUsername());
+            //for(int i = AcessFBData.readSearchCount(SessionManager.getUsername()); i > 0; i--){
+            //  searchHistory_lbl.setText(AcessFBData.readSearchData(SessionManager.getUsername(),AcessFBData.readSearchCount(SessionManager.getUsername())).toString());
+            setSearchHistoryText();
+
+            //AcessFBData.addSearchData(userSearchHistory(), SessionManager.getFullName());
+        }
 
         initializeCombos();
         updateLoggedInUI();
@@ -239,7 +255,7 @@ public class HomeController {
     }
 
     @FXML
-    private void handleSearchClick() {
+    private void handleSearchClick() throws ExecutionException, InterruptedException {
         try {
             String playerName = getTrimmedText(playerNameField);
             if (playerName.isEmpty()) {
@@ -379,15 +395,22 @@ public class HomeController {
             }
 
             navigateTo("/ResultsView.fxml");
+
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
             showError("Could not open results page.");
+
+
         } catch (Exception e) {
             e.printStackTrace();
             showError("Could not retrieve player data from backend: " + e.getMessage());
+
         }
+        AcessFBData.addSearchData(userSearchHistory(), SessionManager.getUsername());
+        setSearchHistoryText();
+
     }
 
     @FXML
@@ -977,7 +1000,6 @@ public class HomeController {
                     getJsonDouble(game, "fg3_pct", 0.0)
             ));
         }
-
         return rows;
     }
 

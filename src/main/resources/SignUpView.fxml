@@ -25,6 +25,12 @@
 
                 <Label text="Sign Up" styleClass="signup-title" />
 
+                <VBox maxWidth="360" spacing="8">
+                    <children>
+                        <Label fx:id="input_error_lbl" styleClass="signup-label" text="User input invalid. Please make sure all fields are correct" textFill="RED" />
+                    </children>
+                </VBox>
+
                 <VBox spacing="8" maxWidth="360">
                     <children>
                         <Label text="First Name" styleClass="signup-label" />

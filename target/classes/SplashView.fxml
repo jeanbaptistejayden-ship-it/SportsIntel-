@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.sportsintel.SplashController"
+           styleClass="splash-root">
+    <children>
+        <VBox alignment="CENTER" spacing="18">
+            <children>
+                <ImageView fx:id="logoImage"
+                           fitWidth="500"
+                           fitHeight="500"
+                           pickOnBounds="true"
+                           preserveRatio="true" />
+
+                <Label text="Where Sports Data Becomes&#10;Intelligence"
+                       styleClass="splash-title"
+                       wrapText="true" />
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+</StackPane>

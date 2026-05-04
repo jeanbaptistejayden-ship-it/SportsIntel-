@@ -198,13 +198,13 @@
 
                         <Separator />
 
-                        <VBox fx:id="searchHistoryBox" spacing="8">
-                            <children>
-                                <Label text="No search history yet. Start searching to see your history here!"
-                                       wrapText="true"
-                                       styleClass="profile-history" />
-                            </children>
-                        </VBox>
+                        <Label
+                                fx:id="searchHistory_lbl"
+                                text="No search history yet. Start searching to see your history here!"
+                               wrapText="true"
+                               styleClass="profile-history"
+                               
+                        />
 
                         <Separator />
 
