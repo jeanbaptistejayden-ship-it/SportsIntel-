@@ -9,6 +9,7 @@ public class SessionManager {
     private static String username = "";
     private static SearchResult latestSearch;
     private static CompareResult latestCompare;
+    private static String userID = "";
 
     private SessionManager() {
     }

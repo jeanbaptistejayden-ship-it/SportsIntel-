@@ -81,6 +81,9 @@ public class HomeController {
     private HBox authButtons;
 
     @FXML
+    private Label searchHistory_lbl;
+
+    @FXML
     private VBox profileBox;
 
     @FXML

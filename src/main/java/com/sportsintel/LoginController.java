@@ -36,6 +36,18 @@ public class LoginController {
     private String fullName;
 
     @FXML
+    private TextField username_txt;
+
+    @FXML
+    private Label user_error;
+
+    @FXML
+    private PasswordField pass_txt;
+
+    private String fullName;
+
+
+    @FXML
     public void initialize() {
         Image image = new Image(
                 Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm()
