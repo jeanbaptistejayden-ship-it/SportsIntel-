@@ -250,19 +250,15 @@ public class CompareController {
     }
 
     private JsonObject fetchCompareData(String playerOne, String playerTwo, String opponentAbbr) throws Exception {
-        StringBuilder requestUrl = new StringBuilder(API_BASE_URL)
-                .append("/api/players/compare/")
-                .append("?player1=").append(URLEncoder.encode(playerOne, StandardCharsets.UTF_8).replace("+", "%20"))
-                .append("&player2=").append(URLEncoder.encode(playerTwo, StandardCharsets.UTF_8).replace("+", "%20"));
-        
-        if (opponentAbbr != null && !opponentAbbr.isEmpty()) {
-            requestUrl.append("&opponent=").append(URLEncoder.encode(opponentAbbr, StandardCharsets.UTF_8));
-        }
-        
-        String url = requestUrl.toString();
+        String requestUrl = new StringBuilder(API_BASE_URL)
+                .append("/compare")
+                .append("?player_one=").append(URLEncoder.encode(playerOne, StandardCharsets.UTF_8).replace("+", "%20"))
+                .append("&player_two=").append(URLEncoder.encode(playerTwo, StandardCharsets.UTF_8).replace("+", "%20"))
+                .append("&opponent=").append(URLEncoder.encode(opponentAbbr, StandardCharsets.UTF_8))
+                .toString();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
+                .uri(URI.create(requestUrl))
                 .GET()
                 .build();
 

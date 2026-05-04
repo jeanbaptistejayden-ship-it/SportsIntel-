@@ -11,28 +11,5 @@ __pycache__/
 
 # IDE/build artifacts
 out/
-target/
+
 .idea/
-.run/
-*.iml
-.classpath
-.project
-
-# Django sensitive files
-API/sportsintel_backend/settings.py
-.env
-.env.local
-.env.*.local
-
-# Database files
-*.sqlite3
-db.sqlite3
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-*.swp
-*.swo
-*~

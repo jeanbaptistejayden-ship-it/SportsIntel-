@@ -688,8 +688,16 @@ public class HomeController {
             String stat
     ) {
         StringBuilder url = new StringBuilder(API_BASE_URL)
-                .append("/api/players/search/")
-                .append("?name=").append(URLEncoder.encode(playerName, StandardCharsets.UTF_8).replace("+", "%20"));
+                .append("/player/")
+                .append(URLEncoder.encode(playerName, StandardCharsets.UTF_8).replace("+", "%20"));
+
+        if (seasonType != null) {
+            url.append("?season_type=").append(URLEncoder.encode(seasonType, StandardCharsets.UTF_8));
+        } else {
+            url.append("?");
+        }
+        url.append("&location=").append(URLEncoder.encode(location, StandardCharsets.UTF_8));
+        url.append("&stat=").append(URLEncoder.encode(stat, StandardCharsets.UTF_8));
 
         if (seasonStart != null) {
             url.append("&season_start=").append(URLEncoder.encode(seasonStart, StandardCharsets.UTF_8));
@@ -697,20 +705,11 @@ public class HomeController {
         if (seasonEnd != null) {
             url.append("&season_end=").append(URLEncoder.encode(seasonEnd, StandardCharsets.UTF_8));
         }
-        if (seasonType != null) {
-            url.append("&season_type=").append(URLEncoder.encode(seasonType, StandardCharsets.UTF_8));
-        }
-        if (location != null) {
-            url.append("&location=").append(URLEncoder.encode(location, StandardCharsets.UTF_8));
-        }
         if (opponent != null) {
             url.append("&opponent=").append(URLEncoder.encode(opponent, StandardCharsets.UTF_8));
         }
         if (lastN != null) {
             url.append("&last_n=").append(lastN);
-        }
-        if (stat != null) {
-            url.append("&stat=").append(URLEncoder.encode(stat, StandardCharsets.UTF_8));
         }
 
         return url.toString();
