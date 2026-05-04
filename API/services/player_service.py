@@ -1,6 +1,7 @@
 from datetime import datetime
 from functools import lru_cache
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
 
 import pandas as pd
 from nba_api.stats.endpoints import playergamelog
@@ -79,14 +80,29 @@ def get_default_season() -> str:
 
 @lru_cache(maxsize=512)
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
-    endpoint = playergamelog.PlayerGameLog(
-        player_id=player_id,
-        season=season,
-        season_type_all_star=season_type,
-        timeout=60,
-    )
-    data_frames = endpoint.get_data_frames()
-    return data_frames[0] if data_frames else None
+    """Fetch gamelog with retry logic for NBA API timeouts."""
+    max_retries = 2
+    
+    for attempt in range(max_retries):
+        try:
+            endpoint = playergamelog.PlayerGameLog(
+                player_id=player_id,
+                season=season,
+                season_type_all_star=season_type,
+                timeout=30,
+            )
+            data_frames = endpoint.get_data_frames()
+            return data_frames[0] if data_frames else None
+        except Exception as e:
+            if attempt < max_retries - 1:
+                # Retry once with short delay: 0.5s
+                wait_time = 0.5
+                print(f"API timeout for season {season}, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+                time.sleep(wait_time)
+            else:
+                # Last attempt failed, log and return None
+                print(f"Failed to fetch {season} after {max_retries} attempts: {str(e)}")
+                return None
 
 
 def normalize_season_type(season_type: str) -> str:
@@ -134,7 +150,7 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
     frames = []
     errors = []
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         future_to_season = {
             executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
             for season in seasons
@@ -289,8 +305,8 @@ def build_summary(player_name: str, player_id: int, games: list[dict], stat: str
         "stat": selected_stat,
         "games_played": len(games),
         "average": avg,
-        "high": max(values),
-        "low": min(values),
+        "high": max(values) if values else 0.0,
+        "low": min(values) if values else 0.0,
         "high_game": high_low["high_game"],
         "low_game": high_low["low_game"],
     }
@@ -353,7 +369,21 @@ def restore_games(serialized_games):
 def average_stat(games: list[dict], stat_key: str) -> float:
     if not games:
         return 0.0
-    return round(
-        sum(float(g.get(stat_key, 0.0)) for g in games) / len(games),
-        1
-    )
+    try:
+        values = []
+        for g in games:
+            val = g.get(stat_key)
+            if val is not None:
+                values.append(float(val))
+        
+        if not values:
+            return 0.0
+        
+        avg = sum(values) / len(values)
+        # Handle NaN values
+        import math
+        if math.isnan(avg):
+            return 0.0
+        return round(avg, 1)
+    except (ValueError, TypeError):
+        return 0.0
