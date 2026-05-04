@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -24,6 +25,13 @@ public class LoginController {
     public void setHomeController(HomeController homeController) {
         this.homeController = homeController;
     }
+
+    @FXML
+    private TextField emailField;
+
+    @FXML
+    private PasswordField passwordField;
+
     @FXML
     private ImageView loginLogo;
     @FXML
@@ -69,27 +77,38 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLoginSubmit(ActionEvent event) throws ExecutionException, InterruptedException, FirebaseAuthException {
-        if(verifyUser()) {
-            SessionManager.login(fullName, getUsername_txt() );
+    private void handleLoginSubmit(ActionEvent event) {
+        try {
+            String email = emailField.getText();
+            String password = passwordField.getText();
+
+            Map<String, String> userData = FirebaseService.login(email, password);
+
+            String uid = userData.get("uid");
+            String fullName = userData.get("fullName");
+            String realUsername = userData.get("username");
+
+            SessionManager.login(uid, fullName, realUsername);
+
             if (homeController != null) {
                 homeController.setLoggedInUser(
-
                         SessionManager.getFullName(),
                         SessionManager.getUsername()
                 );
-                try {
-                    homeController.setSearchHistoryText();
-                } catch(IndexOutOfBoundsException e){
-                    return;
-                }
             }
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
-        }
-    }
 
-    public String getUsername_txt() {
-        return username_txt.getText();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText("Invalid Login");
+            alert.setContentText("Email or password is incorrect.");
+
+            alert.showAndWait();
+        }
     }
 }
