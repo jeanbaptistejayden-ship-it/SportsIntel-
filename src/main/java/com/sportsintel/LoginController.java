@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -72,7 +73,13 @@ public class LoginController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Login failed");
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText("Invalid Login");
+            alert.setContentText("Email or password is incorrect.");
+
+            alert.showAndWait();
         }
     }
 }
