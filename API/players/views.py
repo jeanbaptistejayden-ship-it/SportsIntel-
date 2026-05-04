@@ -134,16 +134,13 @@ def player_search(request):
         player_id = player_info.get('id')
         player_name = player_info.get('name')
         
-        # If opponent is specified, always show career wide games vs that opponent
-        if opponent:
-            # Whole career for opponent filtering on home page
-            games_df = fetch_gamelog_range(player_id, "2010", "2025", season_type)
-            display_season = "Career"
-        elif not season_start or not season_end:
-            # Use whole career by default on home page
+        # Determine season range to fetch
+        if not season_start or not season_end:
+            # Use whole career by default if no season specified
             games_df = fetch_gamelog_range(player_id, "2010", "2025", season_type)
             display_season = "Career"
         else:
+            # Use specified season range (even if opponent is specified)
             games_df = fetch_gamelog_range(player_id, season_start, season_end, season_type)
             display_season = f"{season_start}-{season_end}"
         
@@ -200,7 +197,11 @@ def player_search(request):
             "meta": {
                 "season_range": display_season,
                 "season": display_season,
-                "player": player_name
+                "player": player_name,
+                "season_type": season_type,
+                "location": location,
+                "opponent": opponent if opponent else "all",
+                "stat": stat
             },
             "games": games_sorted,
             "career_vs_opponent_summary": career_vs_opponent_summary,
