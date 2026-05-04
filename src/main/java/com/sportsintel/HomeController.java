@@ -736,6 +736,7 @@ public class HomeController {
             case "min" -> getJsonDouble(careerOverviewSummary, "mpg", 0.0);
             case "fg_pct" -> getJsonDouble(careerOverviewSummary, "fg_pct", 0.0);
             case "fg3_pct" -> getJsonDouble(careerOverviewSummary, "fg3_pct", 0.0);
+            case "ft_pct" -> getJsonDouble(careerOverviewSummary, "ft_pct", 0.0);
             case "tov" -> getJsonDouble(careerOverviewSummary, "tov", 0.0);
             case "blk" -> getJsonDouble(careerOverviewSummary, "blk", 0.0);
             case "stl" -> getJsonDouble(careerOverviewSummary, "stl", 0.0);

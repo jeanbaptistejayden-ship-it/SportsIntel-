@@ -1,6 +1,7 @@
 from datetime import datetime
 from functools import lru_cache
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
 
 import pandas as pd
 from nba_api.stats.endpoints import playergamelog
@@ -79,14 +80,30 @@ def get_default_season() -> str:
 
 @lru_cache(maxsize=512)
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
-    endpoint = playergamelog.PlayerGameLog(
-        player_id=player_id,
-        season=season,
-        season_type_all_star=season_type,
-        timeout=60,
-    )
-    data_frames = endpoint.get_data_frames()
-    return data_frames[0] if data_frames else None
+    """Fetch gamelog with retry logic for NBA API timeouts."""
+    max_retries = 3
+    retry_delay = 1  # Start with 1 second
+    
+    for attempt in range(max_retries):
+        try:
+            endpoint = playergamelog.PlayerGameLog(
+                player_id=player_id,
+                season=season,
+                season_type_all_star=season_type,
+                timeout=60,
+            )
+            data_frames = endpoint.get_data_frames()
+            return data_frames[0] if data_frames else None
+        except Exception as e:
+            if attempt < max_retries - 1:
+                # Exponential backoff: 1s, 2s, 4s
+                wait_time = retry_delay * (2 ** attempt)
+                print(f"API timeout for season {season}, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+                time.sleep(wait_time)
+            else:
+                # Last attempt failed, log and return None
+                print(f"Failed to fetch {season} after {max_retries} attempts: {str(e)}")
+                return None
 
 
 def normalize_season_type(season_type: str) -> str:
@@ -289,8 +306,8 @@ def build_summary(player_name: str, player_id: int, games: list[dict], stat: str
         "stat": selected_stat,
         "games_played": len(games),
         "average": avg,
-        "high": max(values),
-        "low": min(values),
+        "high": max(values) if values else 0.0,
+        "low": min(values) if values else 0.0,
         "high_game": high_low["high_game"],
         "low_game": high_low["low_game"],
     }

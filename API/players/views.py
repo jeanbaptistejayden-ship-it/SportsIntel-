@@ -46,8 +46,14 @@ def parse_season_range(season_string: str) -> tuple[str, str]:
     return parts[0], parts[1]
 
 
-def format_summary_for_java(summary: dict) -> dict:
-    """Converts service summary to Java compatible format with ppg, rpg, apg fields"""
+def format_summary_for_java(summary: dict, include_all_stats: bool = False, games: list = None) -> dict:
+    """Converts service summary to Java compatible format with ppg, rpg, apg fields
+    
+    Args:
+        summary: The summary dict from build_summary
+        include_all_stats: If True, compute all major stats (ppg, rpg, apg, mpg, etc.) regardless of requested stat
+        games: List of game dicts, required if include_all_stats is True
+    """
     stat_key = summary.get('stat', 'pts')
     average = summary.get('average', 0.0)
     
@@ -70,6 +76,34 @@ def format_summary_for_java(summary: dict) -> dict:
         formatted["rpg"] = average
     elif stat_key == "ast":
         formatted["apg"] = average
+    elif stat_key == "min":
+        formatted["mpg"] = average
+    elif stat_key == "fg_pct":
+        formatted["fg_pct"] = average
+    elif stat_key == "fg3_pct":
+        formatted["fg3_pct"] = average
+    elif stat_key == "ft_pct":
+        formatted["ft_pct"] = average
+    elif stat_key == "tov":
+        formatted["tov"] = average
+    elif stat_key == "blk":
+        formatted["blk"] = average
+    elif stat_key == "stl":
+        formatted["stl"] = average
+    
+    # If requested, also add all other major stats for career summaries
+    if include_all_stats and games is not None:
+        # Always add the main stats that frontend expects
+        formatted["ppg"] = average_stat(games, "pts")
+        formatted["rpg"] = average_stat(games, "reb")
+        formatted["apg"] = average_stat(games, "ast")
+        formatted["mpg"] = average_stat(games, "min")
+        formatted["spg"] = average_stat(games, "stl")
+        formatted["bpg"] = average_stat(games, "blk")
+        formatted["topg"] = average_stat(games, "tov")
+        formatted["fg_pct"] = average_stat(games, "fg_pct")
+        formatted["fg3_pct"] = average_stat(games, "fg3_pct")
+        formatted["ft_pct"] = average_stat(games, "ft_pct")
     
     return formatted
 
@@ -151,12 +185,12 @@ def player_search(request):
         games_career_filtered = filter_games_by_opponent(games_career_filtered, opponent)
         
         career_vs_opponent_summary = build_summary(player_name, player_id, games_career_filtered, stat)
-        career_vs_opponent_summary = format_summary_for_java(career_vs_opponent_summary)
+        career_vs_opponent_summary = format_summary_for_java(career_vs_opponent_summary, include_all_stats=True, games=games_career_filtered)
         
         # Career overview (all games, all opponents, whole career, all season types)
         # Use the same stat parameter for career overview so it matches what user searched for
         career_overview_summary = build_summary(player_name, player_id, games_career_parsed, stat)
-        career_overview_summary = format_summary_for_java(career_overview_summary)
+        career_overview_summary = format_summary_for_java(career_overview_summary, include_all_stats=True, games=games_career_parsed)
         
         # Get recent vs opponent games (first 5 games)
         recent_vs_opponent_games = games_sorted[:5] if games_sorted else []
