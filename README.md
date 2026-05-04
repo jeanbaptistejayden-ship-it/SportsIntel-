@@ -26,8 +26,7 @@ SportsIntel/
 │   └── SportsIntel [javafx_run].run.xml
 ├── API/                          # Django REST Backend
 │   ├── sportsintel_backend/      # Django project config
-│   │   ├── settings.py           # ⚠️  SENSITIVE - use settings.example.py as template
-│   │   ├── settings.example.py   # Template for settings configuration
+│   │   ├── settings.py           # Django configuration (loads from .env)
 │   │   ├── urls.py
 │   │   ├── wsgi.py
 │   │   └── asgi.py
@@ -43,8 +42,7 @@ SportsIntel/
 │   ├── data/
 │   │   ├── __init__.py
 │   │   └── players.py            # Player lookup data
-│   ├── manage.py
-│   └── requirements.txt
+│   └── manage.py
 ├── archived_fastapi/             # Previous FastAPI implementation (preserved)
 │   ├── app.py
 │   ├── main.py
@@ -70,12 +68,15 @@ SportsIntel/
 │       ├── ResultsView.fxml
 │       ├── SignUpView.fxml
 │       ├── SplashView.fxml
+│       ├── firebase-service-account.json  # Firebase credentials (not committed)
 │       ├── lebron.png
 │       ├── newlogo.png
 │       └── styles.css
+├── .env.example                  # Template for environment variables
 ├── .gitignore
 ├── README.md
 ├── pom.xml
+├── package.json
 └── requirements.txt
 ```
 
@@ -85,65 +86,94 @@ SportsIntel/
 - Java 17+
 - Python 3.12+
 - Maven
-- Virtual environment (venv)
+- Node.js 16+
+- Virtual environment (venv) — recommended for Python
+- Firebase service account key (for authentication)
 
-### Backend Setup (Django)
+### 1. Firebase Configuration
 
-1. **Create environment file:**
-   ```bash
-   cd API
-   cp sportsintel_backend/settings.example.py sportsintel_backend/settings.py
-   ```
+Obtain your Firebase service account key from the Firebase Console:
+1. Go to Firebase Console → Project Settings → Service Accounts
+2. Click "Generate New Private Key"
+3. Save the JSON file as `src/main/resources/firebase-service-account.json`
 
-2. **Generate a secure SECRET_KEY:**
-   ```bash
-   python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-   ```
-   Update the `SECRET_KEY` in `API/sportsintel_backend/settings.py` with this value.
+### 2. Backend Environment Setup
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+Copy the example env file:
+```bash
+cp API/sportsintel_backend/.env.example API/sportsintel_backend/.env
+```
 
-4. **Run the Django server:**
-   ```bash
-   python manage.py runserver 0.0.0.0:8000
-   ```
-   The backend will be available at `http://127.0.0.1:8000`
+Generate a secure SECRET_KEY:
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
 
-### Frontend Setup (JavaFX)
+Update `API/sportsintel_backend/.env` with your values:
+```env
+SECRET_KEY=your-generated-secret-key-here
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000,http://127.0.0.1:8000,http://127.0.0.1:3000
+```
+
+### 3. Backend Setup (Django REST Framework)
+
+```bash
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install all dependencies
+pip install -r requirements.txt
+
+# Run Django server
+cd API
+python manage.py runserver 0.0.0.0:8000
+```
+Backend available at `http://127.0.0.1:8000`
+
+### 4. Frontend Setup (JavaFX)
 
 1. Open the project in IntelliJ IDEA
-2. Ensure the Django backend is running on port 8000
-3. Run `Main.java` to launch the JavaFX application
+2. Ensure Firebase key exists in `src/main/resources/firebase-service-account.json`
+3. Ensure Django backend is running on port 8000
+4. Run `src/main/java/com/sportsintel/Main.java`
+
+### 5. Node.js Dependencies
+
+```bash
+npm install
+```
 
 ### Running Both Services
-
-**Terminal 1 - Backend:**
+**Terminal 1 — Backend:**
 ```bash
-cd /path/to/SportsIntel-/SportsIntel-
 source venv/bin/activate
 cd API
 python manage.py runserver 0.0.0.0:8000
 ```
-
-**Terminal 2 - Frontend:**
+**Terminal 2 — Frontend:**
 ```bash
 # In IntelliJ IDEA, run Main.java
 ```
 
-## Environment Configuration
+### Troubleshooting
 
-The project uses a `.env`-style configuration. Edit `API/sportsintel_backend/settings.py` to customize:
+**"ModuleNotFoundError: No module named 'django'"**
+- Activate virtual environment: `source venv/bin/activate`
+- Reinstall: `pip install -r requirements.txt`
 
-```python
-SECRET_KEY = 'your-secure-secret-key-here'  # Generate with Django's get_random_secret_key()
-DEBUG = True                                  # Set to False in production
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # Add your domain in production
-```
+**"No such file or directory: '.env'"**
+- Copy example: `cp API/sportsintel_backend/.env.example API/sportsintel_backend/.env`
 
-⚠️ **IMPORTANT:** Never commit `settings.py` to version control. Use `settings.example.py` as a template.
+**Firebase initialization error**
+- Verify `src/main/resources/firebase-service-account.json` exists and is valid
+- Check Firebase Console project matches your key
+
+**Frontend can't connect to backend**
+- Verify Django is running on port 8000
+- Check `ALLOWED_HOSTS` and `CORS_ALLOWED_ORIGINS` in `.env`
 
 ## API Endpoints (Django REST)
 
