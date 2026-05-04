@@ -94,16 +94,23 @@ def format_summary_for_java(summary: dict, include_all_stats: bool = False, game
     # If requested, also add all other major stats for career summaries
     if include_all_stats and games is not None:
         # Always add the main stats that frontend expects
-        formatted["ppg"] = average_stat(games, "pts")
-        formatted["rpg"] = average_stat(games, "reb")
-        formatted["apg"] = average_stat(games, "ast")
-        formatted["mpg"] = average_stat(games, "min")
-        formatted["spg"] = average_stat(games, "stl")
-        formatted["bpg"] = average_stat(games, "blk")
-        formatted["topg"] = average_stat(games, "tov")
-        formatted["fg_pct"] = average_stat(games, "fg_pct")
-        formatted["fg3_pct"] = average_stat(games, "fg3_pct")
-        formatted["ft_pct"] = average_stat(games, "ft_pct")
+        if include_all_stats and games is not None:
+            formatted["ppg"] = average_stat(games, "pts")
+            formatted["rpg"] = average_stat(games, "reb")
+            formatted["apg"] = average_stat(games, "ast")
+            formatted["mpg"] = average_stat(games, "min")
+            steals = average_stat(games, "stl")
+            blocks = average_stat(games, "blk")
+            turnovers = average_stat(games, "tov")
+            formatted["stl"] = steals
+            formatted["blk"] = blocks
+            formatted["tov"] = turnovers
+            formatted["spg"] = steals
+            formatted["bpg"] = blocks
+            formatted["topg"] = turnovers
+            formatted["fg_pct"] = average_stat(games, "fg_pct")
+            formatted["fg3_pct"] = average_stat(games, "fg3_pct")
+            formatted["ft_pct"] = average_stat(games, "ft_pct")
     
     return formatted
 
@@ -152,28 +159,28 @@ def player_search(request):
             season_type
         )
 
-        career_all_games = parse_games(career_df)
-        career_all_games = filter_games_by_location(career_all_games, location)
+        career_games = parse_games(career_df)
+        career_games = filter_games_by_location(career_games, location)
 
-        career_overview_summary = build_summary(
+        career_overview_raw_summary = build_summary(
             player_name,
             player_id,
-            career_all_games,
+            career_games,
             stat
         )
 
         career_overview_summary = format_summary_for_java(
-            career_overview_summary,
+            career_overview_raw_summary,
             include_all_stats=True,
-            games=career_all_games
+            games=career_games
         )
 
         career_vs_opponent_games = filter_games_by_opponent(
-            career_all_games,
+            career_games,
             opponent
         )
 
-        career_vs_opponent_summary = build_summary(
+        career_vs_opponent_raw_summary = build_summary(
             player_name,
             player_id,
             career_vs_opponent_games,
@@ -181,14 +188,14 @@ def player_search(request):
         )
 
         career_vs_opponent_summary = format_summary_for_java(
-            career_vs_opponent_summary,
+            career_vs_opponent_raw_summary,
             include_all_stats=True,
             games=career_vs_opponent_games
         )
 
         if career_mode:
             display_season = "Career"
-            games = career_vs_opponent_games.copy()
+            displayed_games = career_vs_opponent_games.copy()
         else:
             if not season_start:
                 season_start = season_end
@@ -202,32 +209,32 @@ def player_search(request):
                 season_type
             )
 
-            games = parse_games(range_df)
-            games = filter_games_by_location(games, location)
-            games = filter_games_by_opponent(games, opponent)
+            displayed_games = parse_games(range_df)
+            displayed_games = filter_games_by_location(displayed_games, location)
+            displayed_games = filter_games_by_opponent(displayed_games, opponent)
 
             display_season = f"{season_start}-{season_end}"
 
         if last_n:
-            games = limit_last_n_games(games, int(last_n))
+            displayed_games = limit_last_n_games(displayed_games, int(last_n))
 
-        games_sorted = sort_games_desc(games)
+        displayed_games_sorted = sort_games_desc(displayed_games)
 
-        summary = build_summary(
+        displayed_raw_summary = build_summary(
             player_name,
             player_id,
-            games,
+            displayed_games,
             stat
         )
 
-        formatted_summary = format_summary_for_java(
-            summary,
+        displayed_summary = format_summary_for_java(
+            displayed_raw_summary,
             include_all_stats=True,
-            games=games
+            games=displayed_games
         )
 
         return Response({
-            "summary": formatted_summary,
+            "summary": displayed_summary,
             "meta": {
                 "season_range": display_season,
                 "season": display_season,
@@ -239,13 +246,13 @@ def player_search(request):
                 "last_n": last_n if last_n else "All",
                 "career_mode": career_mode,
             },
-            "games": games_sorted,
+            "games": displayed_games_sorted,
 
             "career_vs_opponent_summary": career_vs_opponent_summary,
 
             "career_overview_summary": career_overview_summary,
 
-            "recent_vs_opponent_games": games_sorted[:5] if games_sorted else []
+            "recent_vs_opponent_games": displayed_games_sorted[:5] if displayed_games_sorted else []
         })
 
     except Exception as e:
@@ -253,8 +260,6 @@ def player_search(request):
             {"error": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
-
-
 
 @api_view(['GET'])
 def player_summary(request):
