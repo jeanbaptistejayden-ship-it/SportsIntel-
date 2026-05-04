@@ -292,7 +292,7 @@ public class HomeController {
             String displayedOpponent = opponentCombo.getValue();
 
             double filteredAverageForSelectedStat = getAverageForSelectedStat(games, selectedStatKey);
-            double careerAverageForSelectedStat = getCareerAverageForSelectedStat(careerOverviewSummary, selectedStatKey);
+            double careerAverageForSelectedStat = getCareerAverageForSelectedStat(careerVsOpponentSummary, selectedStatKey);
             double recentFiveAverageForSelectedStat = getRecentAverageForSelectedStat(games, selectedStatKey, 5);
             double recentTenAverageForSelectedStat = getRecentAverageForSelectedStat(games, selectedStatKey, 10);
 
