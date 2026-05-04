@@ -161,9 +161,16 @@ def player_search(request):
         # Also include career summaries (unfiltered for accurate career stats)
         # Career data should include both regular and playoff games for accurate career stats
         # nba_api doesn't support season_type='both', so it has to be done separately
+        # Fetch both regular and playoff games in parallel for speed
         try:
-            games_career_regular = fetch_gamelog_range(player_id, "2010", "2025", "regular")
-            games_career_playoffs = fetch_gamelog_range(player_id, "2010", "2025", "playoffs")
+            from concurrent.futures import ThreadPoolExecutor
+            
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                future_regular = executor.submit(fetch_gamelog_range, player_id, "2010", "2025", "regular")
+                future_playoffs = executor.submit(fetch_gamelog_range, player_id, "2010", "2025", "playoffs")
+                
+                games_career_regular = future_regular.result()
+                games_career_playoffs = future_playoffs.result()
             
             # Safely combine - check if both are DataFrames and not empty
             if games_career_regular is not None and games_career_playoffs is not None and not games_career_playoffs.empty:

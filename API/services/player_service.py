@@ -81,8 +81,7 @@ def get_default_season() -> str:
 @lru_cache(maxsize=512)
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
     """Fetch gamelog with retry logic for NBA API timeouts."""
-    max_retries = 3
-    retry_delay = 1  # Start with 1 second
+    max_retries = 2
     
     for attempt in range(max_retries):
         try:
@@ -90,14 +89,14 @@ def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Seaso
                 player_id=player_id,
                 season=season,
                 season_type_all_star=season_type,
-                timeout=60,
+                timeout=30,
             )
             data_frames = endpoint.get_data_frames()
             return data_frames[0] if data_frames else None
         except Exception as e:
             if attempt < max_retries - 1:
-                # Exponential backoff: 1s, 2s, 4s
-                wait_time = retry_delay * (2 ** attempt)
+                # Retry once with short delay: 0.5s
+                wait_time = 0.5
                 print(f"API timeout for season {season}, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
                 time.sleep(wait_time)
             else:
@@ -151,7 +150,7 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
     frames = []
     errors = []
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         future_to_season = {
             executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
             for season in seasons
@@ -370,7 +369,15 @@ def restore_games(serialized_games):
 def average_stat(games: list[dict], stat_key: str) -> float:
     if not games:
         return 0.0
-    return round(
-        sum(float(g.get(stat_key, 0.0)) for g in games) / len(games),
-        1
-    )
+    try:
+        values = [float(g.get(stat_key, 0.0)) for g in games]
+        if not values:
+            return 0.0
+        avg = sum(values) / len(values)
+        # Handle NaN values
+        import math
+        if math.isnan(avg):
+            return 0.0
+        return round(avg, 1)
+    except (ValueError, TypeError):
+        return 0.0
