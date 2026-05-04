@@ -370,9 +370,15 @@ def average_stat(games: list[dict], stat_key: str) -> float:
     if not games:
         return 0.0
     try:
-        values = [float(g.get(stat_key, 0.0)) for g in games]
+        values = []
+        for g in games:
+            val = g.get(stat_key)
+            if val is not None:
+                values.append(float(val))
+        
         if not values:
             return 0.0
+        
         avg = sum(values) / len(values)
         # Handle NaN values
         import math
