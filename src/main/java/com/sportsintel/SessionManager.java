@@ -9,21 +9,19 @@ public class SessionManager {
     private static String username = "";
     private static SearchResult latestSearch;
     private static CompareResult latestCompare;
-    private static String uid = "";
+    private static String userID = "";
 
     private SessionManager() {
     }
 
-    public static void login(String uidValue,String fullNameValue, String usernameValue) {
+    public static void login(String fullNameValue, String usernameValue) {
         loggedIn = true;
-        uid = uidValue;
         fullName = fullNameValue;
         username = usernameValue;
     }
 
     public static void logout() {
         loggedIn = false;
-        uid = "";
         fullName = "";
         username = "";
         latestSearch = null;
@@ -56,10 +54,6 @@ public class SessionManager {
 
     public static CompareResult getLatestCompare() {
         return latestCompare;
-    }
-
-    public static String getUid() {
-        return uid;
     }
 
     public record RecentGame(
