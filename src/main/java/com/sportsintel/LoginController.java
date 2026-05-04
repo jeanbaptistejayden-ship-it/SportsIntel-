@@ -1,7 +1,6 @@
 package com.sportsintel;
 
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.UserRecord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +26,14 @@ public class LoginController {
     }
     @FXML
     private ImageView loginLogo;
+    @FXML
+    private TextField username_txt;
+    @FXML
+    private Label user_error;
+    @FXML
+    private PasswordField pass_txt;
+
+    private String fullName;
 
     @FXML
     private TextField username_txt;
@@ -52,17 +59,17 @@ public class LoginController {
         boolean verified = false;
         System.out.println(AcessFBData.getUserList().size());
 
-            for (int i = 0; i < AcessFBData.getUserList().size(); i++) {
-                if (AcessFBData.getUserList().get(i).getUsername().equals(username_txt.getText())) {
-                    fullName = AcessFBData.getUserList().get(i).getFullName();
-                    verified = true;
-                } else {
-                    System.out.println("Not veridied");
-                   // user_error.setVisible(true);
-                }
+        for (int i = 0; i < AcessFBData.getUserList().size(); i++) {
+            if (AcessFBData.getUserList().get(i).getUsername().equals(username_txt.getText())) {
+                fullName = AcessFBData.getUserList().get(i).getFullName();
+                verified = true;
+            } else {
+                System.out.println("Not veridied");
+                // user_error.setVisible(true);
             }
-            return verified;
-            //String url = user.getPassword()
+        }
+        return verified;
+        //String url = user.getPassword()
     }
 
     @FXML
@@ -72,7 +79,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLoginSubmit(ActionEvent event) throws FirebaseAuthException, ExecutionException, InterruptedException {
+    private void handleLoginSubmit(ActionEvent event) throws ExecutionException, InterruptedException, FirebaseAuthException {
         if(verifyUser()) {
             SessionManager.login(fullName, getUsername_txt() );
             if (homeController != null) {
@@ -82,7 +89,7 @@ public class LoginController {
                         SessionManager.getUsername()
                 );
                 try {
-                    homeController.printSearchHistory();
+                    homeController.setSearchHistoryText();
                 } catch(IndexOutOfBoundsException e){
                     return;
                 }

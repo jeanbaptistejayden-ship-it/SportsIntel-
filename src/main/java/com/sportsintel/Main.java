@@ -16,12 +16,12 @@ public class Main extends Application {
     public static FirebaseAuth fauth;
     private final FirestoneContext contxtFirebase = new FirestoneContext();
 
-
     @Override
     public void start(Stage stage) throws Exception {
         fstore = contxtFirebase.firebase();
         fauth = FirebaseAuth.getInstance();
         AcessFBData.readUserInfo();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SplashView.fxml"));
         Parent root = loader.load();
 

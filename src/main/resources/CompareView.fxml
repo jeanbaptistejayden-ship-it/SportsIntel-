@@ -79,8 +79,11 @@
                         <Label text="Compare Players"
                                styleClass="compare-title" />
 
-                        <Label text="Side-by-side performance analysis against the same opponent"
+                        <Label text="Modern NBA comparison against the same opponent"
                                styleClass="compare-subtitle" />
+
+                        <Label text="Stats include regular season games from 2014–15 through the current season."
+                               styleClass="compare-note" />
 
                         <HBox spacing="40" alignment="CENTER">
                             <children>

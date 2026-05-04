@@ -1,5 +1,7 @@
 package com.sportsintel;
 
+import java.util.List;
+
 public class SessionManager {
 
     private static boolean loggedIn = false;
@@ -54,21 +56,38 @@ public class SessionManager {
         return latestCompare;
     }
 
+    public record RecentGame(
+            String date,
+            String opponent,
+            double points,
+            double rebounds,
+            double assists,
+            double minutes,
+            double fieldGoalPct,
+            double threePointPct
+    ) {
+    }
+
     public record SearchResult(
             String player,
+            String playerImageUrl,
             String opponent,
             String stat,
             String season,
             String seasonType,
             String location,
             String lastN,
+
             int gamesPlayed,
             double average,
             double high,
             double low,
+
             double seasonBaseline,
             double lastFiveAverage,
             double lastTenAverage,
+
+            double pointsAverage,
             double fieldGoalPct,
             double minutes,
             double assists,
@@ -76,10 +95,32 @@ public class SessionManager {
             double turnovers,
             double homeAverage,
             double awayAverage,
+
             String bestGameOpponent,
             double bestGameValue,
             String toughestGameOpponent,
-            double toughestGameValue
+            double toughestGameValue,
+
+            int careerVsOpponentGamesPlayed,
+            double careerVsOpponentPpg,
+            double careerVsOpponentApg,
+            double careerVsOpponentRpg,
+            double careerVsOpponentMpg,
+            double careerVsOpponentBpg,
+            double careerVsOpponentSpg,
+            double careerVsOpponentTopg,
+
+            double careerPpg,
+            double careerApg,
+            double careerRpg,
+            double careerMpg,
+            double careerFgPct,
+            double careerThreePtPct,
+            double careerTopg,
+            double careerBpg,
+            double careerSpg,
+
+            List<RecentGame> recentGamesVsOpponent
     ) {
     }
 

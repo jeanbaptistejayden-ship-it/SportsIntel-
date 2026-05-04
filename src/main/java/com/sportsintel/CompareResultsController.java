@@ -267,7 +267,7 @@ public class CompareResultsController {
     }
 
     private String formatPercent(double value) {
-        return String.format("%.1f%%", value * 100.0);
+        return String.format("%.1f%%", value );
     }
 
     private void applyWinLoseStyles(
