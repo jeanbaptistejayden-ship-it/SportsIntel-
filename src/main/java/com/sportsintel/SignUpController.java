@@ -4,20 +4,15 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class SignUpController {
@@ -39,26 +34,42 @@ public class SignUpController {
     private PasswordField confirm_pass_txt;
     @FXML
     private Label first_name_lbl;
-    @FXML
-    private TextField email_txt;
-    @FXML
-    private PasswordField pass_txt;
-    @FXML
-    private TextField phone_txt;
-    @FXML
-    private TextField user_txt;
-    @FXML
-    private TextField first_name_txt;
-    @FXML
-    private TextField last_name_txt;
+
     @FXML
     private ImageView signUpLogo;
 
     @FXML
+    private TextField email_txt;
+
+    @FXML
+    private PasswordField pass_txt;
+
+    @FXML
+    private TextField phone_txt;
+
+    @FXML
+    private TextField user_txt;
+
+    @FXML
+    private TextField first_name_txt;
+
+    @FXML
+    private TextField last_name_txt;
+
+    @FXML
     public void initialize() {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/newlogo.png")).toExternalForm());
+        input_error_lbl.setVisible(false);
         signUpLogo.setImage(image);
     }
+
+    public void setTextRed(Label label){
+        label.setTextFill(Color.RED);
+    }
+    public void setTextBlack(Label label){
+        label.setTextFill(Color.BLACK);
+    }
+
 
     public int verifyUserInput(){
         int count = 0;
@@ -88,8 +99,8 @@ public class SignUpController {
             setTextBlack(email_lbl);
         }
         if (!verifyPhone(phone_txt.getText())){
-            setTextRed(phone_lbl);
-            count = 1;
+                setTextRed(phone_lbl);
+                count = 1;
         }
         else{
             setTextBlack(phone_lbl);
@@ -122,34 +133,37 @@ public class SignUpController {
     public boolean verifyPhone(String phone){
 
         if (phone.length()==12 & phone.startsWith("+")){
-            return true;
+                return true;
         }
         else {
             return false;
         }
     }
 
-    public void userSignup(){
-        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                .setEmail(getEmail_txt())
-                .setEmailVerified(false)
-                .setPassword(getPass_txt())
-                .setPhoneNumber(getPhone_txt())
-                .setDisplayName(getUser_txt())
-                .setDisabled(false);
-        UserRecord userRecord;
+    public boolean verifyUniqueness() throws FirebaseAuthException {
+        boolean unique = true;
+        String email = email_txt.getText();
+        String phone = phone_txt.getText();
+        String user = user_txt.getText();
         try {
-            userRecord = Main.fauth.createUser(request);
+            if (Main.fauth.getUserByEmail(email).getEmail() == null) {
+                System.out.println("Email already in use");
 
-            System.out.println("Successfully created new user: " + userRecord.getUid());
-
-
-        } catch (FirebaseAuthException ex) {
-            System.out.println("FAIL");
-            System.out.println(getPass_txt());
-
+            }
         }
-        // Logger.getLogger(FirestoreContext.class.getName()).log(Level.SEVERE, null, ex);
+        catch (FirebaseAuthException e){
+            unique = false;
+        }
+        try{
+                if (Main.fauth.getUserByPhoneNumber(phone).getPhoneNumber() == null) {
+                    System.out.println("Phone number already in use");
+                }
+            }
+        catch (FirebaseAuthException e){
+            unique = false;
+        }
+
+        return unique;
     }
 
     public boolean verifyPassword(){
@@ -168,18 +182,29 @@ public class SignUpController {
 
     }
 
-    public void setTextRed(Label label){
-        label.setTextFill(Color.RED);
-    }
-    public void setTextBlack(Label label){
-        label.setTextFill(Color.BLACK);
-    }
+    public void userSignup(){
+                UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+                        .setEmail(getEmail_txt())
+                        .setEmailVerified(false)
+                        .setPassword(getPass_txt())
+                        .setPhoneNumber(getPhone_txt())
+                        .setDisplayName(getUser_txt())
+                        .setDisabled(false);
+            UserRecord userRecord;
+            try {
+                userRecord = Main.fauth.createUser(request);
 
-    @FXML
-    private void handleBackToHome(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
-    }
+                System.out.println("Successfully created new user: " + userRecord.getUid());
+
+
+            } catch (FirebaseAuthException ex) {
+                System.out.println("FAIL");
+                System.out.println(getPass_txt());
+
+            }
+            // Logger.getLogger(FirestoreContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
 
     public String getEmail_txt() {
         return email_txt.getText();
@@ -214,7 +239,13 @@ public class SignUpController {
     }
 
     @FXML
-    private void handleSignUpSubmit(ActionEvent event) {
+    private void handleBackToHome(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void handleSignUpSubmit(ActionEvent event) throws FirebaseAuthException {
         if(verifyUserInput()==0) {
             userSignup();
 
