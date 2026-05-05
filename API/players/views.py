@@ -137,7 +137,7 @@ def player_search(request):
         # Determine season range to fetch
         if not season_start or not season_end:
             # Use whole career by default if no season specified
-            games_df = fetch_gamelog_range(player_id, "2010", "2025", season_type)
+            games_df = fetch_gamelog_range(player_id, "2003", "2025", season_type)
             display_season = "Career"
         else:
             # Use specified season range (even if opponent is specified)
@@ -166,8 +166,8 @@ def player_search(request):
             from concurrent.futures import ThreadPoolExecutor
             
             with ThreadPoolExecutor(max_workers=2) as executor:
-                future_regular = executor.submit(fetch_gamelog_range, player_id, "2010", "2025", "regular")
-                future_playoffs = executor.submit(fetch_gamelog_range, player_id, "2010", "2025", "playoffs")
+                future_regular = executor.submit(fetch_gamelog_range, player_id, "2003", "2025", "regular")
+                future_playoffs = executor.submit(fetch_gamelog_range, player_id, "2003", "2025", "playoffs")
                 
                 games_career_regular = future_regular.result()
                 games_career_playoffs = future_playoffs.result()
