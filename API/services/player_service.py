@@ -5,6 +5,7 @@ import time
 
 import pandas as pd
 from nba_api.stats.endpoints import playergamelog
+from nba_api.stats.endpoints import commonplayerinfo
 from nba_api.stats.static import players as nba_players
 
 SEASON_TYPE_MAP = {
@@ -58,16 +59,40 @@ def player_image_url(player_id: int) -> str:
 @lru_cache(maxsize=256)
 def get_player_lookup(name: str):
     matches = nba_players.find_players_by_full_name(name)
+
     if not matches:
         return None, {"error": f"Could not find player '{name}' in nba_api player index."}
 
     best_match = next((p for p in matches if p.get("is_active")), matches[0])
 
+    player_id = int(best_match["id"])
+    player_name = best_match["full_name"]
+
+    from_year = get_player_from_year(player_id)
+
     return {
-        "id": int(best_match["id"]),
-        "name": best_match["full_name"],
-        "from_year": int(best_match.get("from_year") or best_match.get("FROM_YEAR") or 2003),
+        "id": player_id,
+        "name": player_name,
+        "from_year": from_year,
     }, None
+
+@lru_cache(maxsize=512)
+def get_player_from_year(player_id: int) -> int:
+    try:
+        info = commonplayerinfo.CommonPlayerInfo(
+            player_id=player_id,
+            timeout=20
+        )
+
+        df = info.get_data_frames()[0]
+
+        if not df.empty and "FROM_YEAR" in df.columns:
+            return int(df.iloc[0]["FROM_YEAR"])
+
+    except Exception as e:
+        print(f"Could not fetch FROM_YEAR for player {player_id}: {e}")
+
+    return 2003
 
 def get_default_season() -> str:
     now = datetime.utcnow()
@@ -80,29 +105,42 @@ def get_default_season() -> str:
 
 @lru_cache(maxsize=512)
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
-    """Fetch gamelog with retry logic for NBA API timeouts."""
-    max_retries = 2
-    
+    """Fetch gamelog with stronger retries. Do not silently fail."""
+    max_retries = 5
+    wait_times = [2, 4, 8, 12, 16]
+
+    last_error = None
+
     for attempt in range(max_retries):
         try:
             endpoint = playergamelog.PlayerGameLog(
                 player_id=player_id,
                 season=season,
                 season_type_all_star=season_type,
-                timeout=30,
+                timeout=45,
             )
+
             data_frames = endpoint.get_data_frames()
-            return data_frames[0] if data_frames else None
+
+            if data_frames and data_frames[0] is not None:
+                return data_frames[0]
+
+            raise RuntimeError(f"No data returned for {season}")
+
         except Exception as e:
+            last_error = e
+
             if attempt < max_retries - 1:
-                # Retry once with short delay: 0.5s
-                wait_time = 0.5
-                print(f"API timeout for season {season}, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+                wait_time = wait_times[attempt]
+                print(
+                    f"API failed for season {season}, retrying in {wait_time}s... "
+                    f"(attempt {attempt + 1}/{max_retries})"
+                )
                 time.sleep(wait_time)
             else:
-                # Last attempt failed, log and return None
-                print(f"Failed to fetch {season} after {max_retries} attempts: {str(e)}")
-                return None
+                raise RuntimeError(
+                    f"Failed to fetch required season {season} after {max_retries} attempts: {last_error}"
+                )
 
 
 def normalize_season_type(season_type: str) -> str:
@@ -160,13 +198,16 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
             season = future_to_season[future]
             try:
                 df = future.result()
-                if df is not None and not df.empty:
+
+                if df is None:
+                    errors.append(f"{season}: No data returned")
+                else:
                     frames.append(df)
             except Exception as exc:
                 errors.append(f"{season}: {exc}")
 
     if errors:
-        print("WARNING: Some seasons failed to load:", " | ".join(errors))
+        raise RuntimeError("Could not fetch all required seasons: " + " | ".join(errors))
 
     if frames:
         return pd.concat(frames, ignore_index=True)

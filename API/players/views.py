@@ -133,70 +133,83 @@ def player_search(request):
         
         player_id = player_info.get('id')
         player_name = player_info.get('name')
-        
-        # Determine season range to fetch
+        print("PLAYER INFO:", player_info)
+
+        # Determine what to fetch
         if not season_start or not season_end:
-            # Use whole career by default if no season specified
-            games_df = fetch_gamelog_range(player_id, "2003", "2025", season_type)
+            # No filter entered: show career regular season stats only
+            career_start = f"{player_info.get('from_year', 2003)}-{str(player_info.get('from_year', 2003) + 1)[-2:]}"
+            career_end = get_default_season()
+
+            games_df = fetch_gamelog_range(
+                player_id,
+                career_start,
+                career_end,
+                "regular"
+            )
+
             display_season = "Career"
+            season_type = "regular"
+
         else:
-            # Use specified season range (even if opponent is specified)
-            games_df = fetch_gamelog_range(player_id, season_start, season_end, season_type)
+            # User selected a specific filter/range
+            games_df = fetch_gamelog_range(
+                player_id,
+                season_start,
+                season_end,
+                season_type
+            )
+
             display_season = f"{season_start}-{season_end}"
-        
+
+
         games = parse_games(games_df)
-        
+
         # Apply filters
         games = filter_games_by_location(games, location)
         games = filter_games_by_opponent(games, opponent)
+
         if last_n:
             games = limit_last_n_games(games, int(last_n))
-        
+
         games_sorted = sort_games_desc(games)
-        
-        # Build summary with stats
+
+        # Main summary
         summary = build_summary(player_name, player_id, games, stat)
         summary = format_summary_for_java(summary)
-        
-        # Also include career summaries (unfiltered for accurate career stats)
-        # Career data should include both regular and playoff games for accurate career stats
-        # nba_api doesn't support season_type='both', so it has to be done separately
-        # Fetch both regular and playoff games in parallel for speed
-        try:
-            from concurrent.futures import ThreadPoolExecutor
-            
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                future_regular = executor.submit(fetch_gamelog_range, player_id, "2003", "2025", "regular")
-                future_playoffs = executor.submit(fetch_gamelog_range, player_id, "2003", "2025", "playoffs")
-                
-                games_career_regular = future_regular.result()
-                games_career_playoffs = future_playoffs.result()
-            
-            # Safely combine - check if both are DataFrames and not empty
-            if games_career_regular is not None and games_career_playoffs is not None and not games_career_playoffs.empty:
-                games_career_combined = pd.concat([games_career_regular, games_career_playoffs], ignore_index=True)
-            else:
-                games_career_combined = games_career_regular if games_career_regular is not None else pd.DataFrame()
-        except Exception as e:
-            # If career data fetch fails, use regular season only
-            games_career_combined = games_df if 'games_df' in locals() else pd.DataFrame()
-        
-        games_career_parsed = parse_games(games_career_combined)
-        
-        # Apply same filters to career data for career_vs_opponent
+
+# For career summaries, use the same fetched data.
+# Do not fetch both regular season and playoffs.
+        games_career_parsed = parse_games(games_df)
+
         games_career_filtered = games_career_parsed.copy()
         games_career_filtered = filter_games_by_location(games_career_filtered, location)
         games_career_filtered = filter_games_by_opponent(games_career_filtered, opponent)
-        
-        career_vs_opponent_summary = build_summary(player_name, player_id, games_career_filtered, stat)
-        career_vs_opponent_summary = format_summary_for_java(career_vs_opponent_summary, include_all_stats=True, games=games_career_filtered)
-        
-        # Career overview (all games, all opponents, whole career, all season types)
-        # Use the same stat parameter for career overview so it matches what user searched for
-        career_overview_summary = build_summary(player_name, player_id, games_career_parsed, stat)
-        career_overview_summary = format_summary_for_java(career_overview_summary, include_all_stats=True, games=games_career_parsed)
-        
-        # Get recent vs opponent games (first 5 games)
+
+        career_vs_opponent_summary = build_summary(
+            player_name,
+            player_id,
+            games_career_filtered,
+            stat
+        )
+        career_vs_opponent_summary = format_summary_for_java(
+            career_vs_opponent_summary,
+            include_all_stats=True,
+            games=games_career_filtered
+        )
+
+        career_overview_summary = build_summary(
+            player_name,
+            player_id,
+            games_career_parsed,
+            stat
+        )
+        career_overview_summary = format_summary_for_java(
+            career_overview_summary,
+            include_all_stats=True,
+            games=games_career_parsed
+        )
+
         recent_vs_opponent_games = games_sorted[:5] if games_sorted else []
         
         return Response({
