@@ -69,7 +69,6 @@ SportsIntel/
 │       ├── SignUpView.fxml
 │       ├── SplashView.fxml
 │       ├── firebase-service-account.json  # Firebase credentials (not committed)
-│       ├── lebron.png
 │       ├── newlogo.png
 │       └── styles.css
 ├── .env.example                  # Template for environment variables
