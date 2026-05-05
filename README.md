@@ -141,7 +141,14 @@ Backend available at `http://127.0.0.1:8000`
 1. Open the project in IntelliJ IDEA
 2. Ensure Firebase key exists in `src/main/resources/firebase-service-account.json`
 3. Ensure Django backend is running on port 8000
-4. Run `src/main/java/com/sportsintel/Main.java`
+4. Run the JavaFX application using Maven:
+
+   **Option A (IntelliJ):** Click the run button and select "Maven: javafx:run"
+   
+   **Option B (Terminal):**
+   ```bash
+   mvn clean javafx:run
+   ```
 
 ### 5. Node.js Dependencies
 
