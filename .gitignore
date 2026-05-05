@@ -22,8 +22,7 @@ target/
 .classpath
 .project
 
-# Django sensitive files
-API/sportsintel_backend/settings.py
+# Django sensitive files - ONLY .env files, settings.py is safe to commit
 .env
 .env.local
 .env.*.local
