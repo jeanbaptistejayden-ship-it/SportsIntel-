@@ -89,10 +89,10 @@ def get_player_from_year(player_id: int) -> int:
         if not df.empty and "FROM_YEAR" in df.columns:
             return int(df.iloc[0]["FROM_YEAR"])
 
-    except Exception as e:
-        print(f"Could not fetch FROM_YEAR for player {player_id}: {e}")
+        raise RuntimeError("FROM_YEAR column missing or dataframe empty")
 
-    return 2003
+    except Exception as e:
+        raise RuntimeError(f"Could not fetch FROM_YEAR for player {player_id}: {e}")
 
 def get_default_season() -> str:
     now = datetime.utcnow()
@@ -188,7 +188,7 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
     frames = []
     errors = []
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=2) as executor:
         future_to_season = {
             executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
             for season in seasons
