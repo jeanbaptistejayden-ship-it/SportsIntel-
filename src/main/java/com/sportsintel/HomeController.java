@@ -289,7 +289,11 @@ public class HomeController {
             String displayedLastN = getNullableJsonString(meta, "last_n", "All");
             String displayedPlayer = getJsonString(summary, "player", playerName);
             String displayedStatLabel = formatStatLabel(selectedStatKey);
-            String displayedOpponent = opponentCombo.getValue();
+            String displayedOpponent = (opponentCombo != null
+                    && opponentCombo.getValue() != null
+                    && !opponentCombo.getValue().isBlank())
+                    ? opponentCombo.getValue()
+                    : "Any Opponent";
 
             double filteredAverageForSelectedStat = getAverageForSelectedStat(games, selectedStatKey);
             double careerAverageForSelectedStat = getCareerAverageForSelectedStat(careerVsOpponentSummary, selectedStatKey);
