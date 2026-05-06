@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import lru_cache
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
+from threading import Lock
 
 import pandas as pd
 from nba_api.stats.endpoints import playergamelog
@@ -50,6 +51,14 @@ STAT_MAP = {
     "+/-": "plus_minus",
 }
 
+API_TIMEOUT_SECONDS = 45
+API_MAX_RETRIES = 4
+API_REQUEST_SPACING_SECONDS = 0.6
+RANGE_FETCH_MAX_WORKERS = 3
+
+_last_api_request_at = 0.0
+_api_request_lock = Lock()
+
 
 def player_image_url(player_id: int) -> str:
     return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
@@ -80,29 +89,34 @@ def get_default_season() -> str:
 
 @lru_cache(maxsize=512)
 def fetch_gamelog(player_id: int, season: str, season_type: str = "Regular Season"):
-    """Fetch gamelog with retry logic for NBA API timeouts."""
-    max_retries = 2
-    
-    for attempt in range(max_retries):
+    """Fetch gamelog with retry and light rate limiting for NBA API timeouts."""
+    global _last_api_request_at
+
+    for attempt in range(1, API_MAX_RETRIES + 1):
         try:
+            with _api_request_lock:
+                elapsed = time.monotonic() - _last_api_request_at
+                if elapsed < API_REQUEST_SPACING_SECONDS:
+                    time.sleep(API_REQUEST_SPACING_SECONDS - elapsed)
+                _last_api_request_at = time.monotonic()
+
             endpoint = playergamelog.PlayerGameLog(
                 player_id=player_id,
                 season=season,
                 season_type_all_star=season_type,
-                timeout=30,
+                timeout=API_TIMEOUT_SECONDS,
             )
             data_frames = endpoint.get_data_frames()
             return data_frames[0] if data_frames else None
         except Exception as e:
-            if attempt < max_retries - 1:
-                # Retry once with short delay: 0.5s
-                wait_time = 0.5
-                print(f"API timeout for season {season}, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+            if attempt < API_MAX_RETRIES:
+                wait_time = min(6.0, 0.75 * (2 ** (attempt - 1)))
+                print(f"API timeout for season {season}, retrying in {wait_time:.2f}s... (attempt {attempt}/{API_MAX_RETRIES})")
                 time.sleep(wait_time)
             else:
-                # Last attempt failed, log and return None
-                print(f"Failed to fetch {season} after {max_retries} attempts: {str(e)}")
-                return None
+                raise RuntimeError(
+                    f"Failed to fetch season {season} after {API_MAX_RETRIES} attempts: {e}"
+                ) from e
 
 
 def normalize_season_type(season_type: str) -> str:
@@ -148,10 +162,12 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
         raise ValueError("Season range cannot include future seasons.")
 
     seasons = [f"{y}-{str(y + 1)[-2:]}" for y in range(start, end + 1)]
-    frames = []
+    frames = {}
     errors = []
+    failed_seasons = []
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    max_workers = min(RANGE_FETCH_MAX_WORKERS, len(seasons)) or 1
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_season = {
             executor.submit(fetch_gamelog_by_type, player_id, season, season_type): season
             for season in seasons
@@ -162,17 +178,30 @@ def fetch_gamelog_range(player_id: int, start_season: str, end_season: str, seas
             try:
                 df = future.result()
                 if df is not None and not df.empty:
-                    frames.append(df)
+                    frames[season] = df
             except Exception as exc:
                 errors.append(f"{season}: {exc}")
+                failed_seasons.append(season)
+
+    # Second pass: retry failures sequentially (less likely to trigger upstream throttling)
+    for season in failed_seasons:
+        try:
+            df = fetch_gamelog_by_type(player_id, season, season_type)
+            if df is not None and not df.empty:
+                frames[season] = df
+        except Exception as exc:
+            errors.append(f"{season} (sequential retry): {exc}")
 
     if errors:
         print("WARNING: Some seasons failed to load:", " | ".join(errors))
+    
+    ordered_frames = [frames[s] for s in seasons if s in frames]
+    if not ordered_frames:
+        print(f"DEBUG: No frames returned for player {player_id} in range {start_season}-{end_season}")
+        print(f"DEBUG: Requested seasons: {seasons}")
+        return None
 
-    if frames:
-        return pd.concat(frames, ignore_index=True)
-
-    return None
+    return pd.concat(ordered_frames, ignore_index=True)
 
 
 def parse_games(gamelog_frame):
