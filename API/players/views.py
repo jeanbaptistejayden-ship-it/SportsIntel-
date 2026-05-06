@@ -4,6 +4,7 @@ from rest_framework import status
 import sys
 import os
 import pandas as pd
+from functools import lru_cache
 
 # Add parent directory to path to import services
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

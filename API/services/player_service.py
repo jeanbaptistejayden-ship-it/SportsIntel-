@@ -117,6 +117,7 @@ def normalize_season_type(season_type: str) -> str:
     raise ValueError(f"Invalid season_type '{season_type}'. Use regular or playoffs.")
 
 
+@lru_cache(maxsize=512)
 def fetch_gamelog_by_type(player_id: int, season: str, season_type: str = "regular"):
     normalized = normalize_season_type(season_type)
     mapped = SEASON_TYPE_MAP.get(normalized)
