@@ -420,7 +420,7 @@
                                                       prefHeight="120"
                                                       styleClass="intelligence-box">
                                                     <children>
-                                                        <Label text="CAREER OVERVIEW" styleClass="summary-box-title" />
+                                                        <Label text="CAREER OVERVIEW (Within Season Average)" styleClass="summary-box-title" />
 
                                                         <Label fx:id="recentFormSummaryLabel"
                                                                wrapText="true"

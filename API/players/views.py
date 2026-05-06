@@ -95,15 +95,23 @@ def format_summary_for_java(summary: dict, include_all_stats: bool = False, game
     if include_all_stats and games is not None:
         # Always add the main stats that frontend expects
         formatted["ppg"] = average_stat(games, "pts")
-        formatted["rpg"] = average_stat(games, "reb")
-        formatted["apg"] = average_stat(games, "ast")
-        formatted["mpg"] = average_stat(games, "min")
-        formatted["spg"] = average_stat(games, "stl")
-        formatted["bpg"] = average_stat(games, "blk")
-        formatted["topg"] = average_stat(games, "tov")
-        formatted["fg_pct"] = average_stat(games, "fg_pct")
-        formatted["fg3_pct"] = average_stat(games, "fg3_pct")
-        formatted["ft_pct"] = average_stat(games, "ft_pct")
+    formatted["rpg"] = average_stat(games, "reb")
+    formatted["apg"] = average_stat(games, "ast")
+    formatted["mpg"] = average_stat(games, "min")
+
+    steals = average_stat(games, "stl")
+    blocks = average_stat(games, "blk")
+    turnovers = average_stat(games, "tov")
+    formatted["spg"] = steals
+    formatted["bpg"] = blocks
+    formatted["topg"] = turnovers
+    formatted["stl"] = steals
+    formatted["blk"] = blocks
+    formatted["tov"] = turnovers
+
+    formatted["fg_pct"] = average_stat(games, "fg_pct")
+    formatted["fg3_pct"] = average_stat(games, "fg3_pct")
+    formatted["ft_pct"] = average_stat(games, "ft_pct")
     
     return formatted
 

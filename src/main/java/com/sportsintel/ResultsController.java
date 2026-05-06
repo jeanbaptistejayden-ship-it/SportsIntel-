@@ -201,7 +201,9 @@ public class ResultsController {
         updateText(averageValueLabel, formatOneDecimal(search.average()));
         updateText(averageUnitLabel, shortStat + " Average");
 
-        updateText(baselineTitleLabel, "Career Average");
+        updateText(baselineTitleLabel, "Career Average \n(Within Season Range)");
+        baselineTitleLabel.setWrapText(true);
+        baselineTitleLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         updateText(baselineValueLabel, formatOneDecimal(search.seasonBaseline()));
         updateText(baselineUnitLabel, shortStat + " Average");
 
