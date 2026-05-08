@@ -75,22 +75,22 @@
 
                         <VBox spacing="6">
                             <Label text="Season Range" styleClass="field-label" />
-                            <Label fx:id="seasonFilterLabel" text="2018 - 2026" styleClass="filter-value" />
+                            <Label fx:id="seasonFilterLabel" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Season Type" styleClass="field-label" />
-                            <Label fx:id="seasonTypeFilterLabel" text="Both" styleClass="filter-value" />
+                            <Label fx:id="seasonTypeFilterLabel" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Location" styleClass="field-label" />
-                            <Label fx:id="locationFilterLabel" text="Home" styleClass="filter-value" />
+                            <Label fx:id="locationFilterLabel" styleClass="filter-value" />
                         </VBox>
 
                         <VBox spacing="6">
                             <Label text="Last N Games vs Opponent" styleClass="field-label" />
-                            <Label fx:id="lastNFilterLabel" text="10" styleClass="filter-value" />
+                            <Label fx:id="lastNFilterLabel" styleClass="filter-value" />
                         </VBox>
                     </children>
 
@@ -143,7 +143,7 @@
                                                                        styleClass="result-subtitle-strong" />
                                                                 <Label text="•"
                                                                        styleClass="result-dot" />
-                                                                <Label fx:id="statSummaryLabel" text="Points Per Game"
+                                                                <Label fx:id="statSummaryLabel"
                                                                        styleClass="result-subtitle" />
                                                             </children>
                                                         </HBox>
@@ -170,28 +170,28 @@
                                                     <children>
                                                         <Label fx:id="averageTitleLabel" styleClass="metric-label" />
                                                         <Label fx:id="averageValueLabel" styleClass="metric-number-blue" />
-                                                        <Label fx:id="averageUnitLabel" text="PPG average" styleClass="metric-subtext" />
+                                                        <Label fx:id="averageUnitLabel" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label fx:id="baselineTitleLabel" text="Career Average" styleClass="metric-label" />
+                                                        <Label fx:id="baselineTitleLabel" styleClass="metric-label" />
                                                         <Label fx:id="baselineValueLabel" styleClass="metric-number-dark" />
-                                                        <Label fx:id="baselineUnitLabel" text="PPG overall" styleClass="metric-subtext" />
+                                                        <Label fx:id="baselineUnitLabel" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label fx:id="lastFiveTitleLabel" text="Last 5 Games" styleClass="metric-label" />
+                                                        <Label fx:id="lastFiveTitleLabel" styleClass="metric-label" />
                                                         <Label fx:id="lastFiveValueLabel" styleClass="metric-number-green" />
-                                                        <Label fx:id="lastFiveUnitLabel" text="PPG recent" styleClass="metric-subtext" />
+                                                        <Label fx:id="lastFiveUnitLabel"  styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                                 <VBox spacing="6" alignment="CENTER" prefWidth="180">
                                                     <children>
-                                                        <Label fx:id="lastTenTitleLabel" text="Last 10 Games" styleClass="metric-label" />
+                                                        <Label fx:id="lastTenTitleLabel"  styleClass="metric-label" />
                                                         <Label fx:id="lastTenValueLabel" styleClass="metric-number-purple" />
-                                                        <Label fx:id="lastTenUnitLabel" text="PPG L10" styleClass="metric-subtext" />
+                                                        <Label fx:id="lastTenUnitLabel" styleClass="metric-subtext" />
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -222,70 +222,70 @@
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="GAMES" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="gamesPlayedLabel" text="10" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="gamesPlayedLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="HIGH" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="highValueLabel" text="33" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="highValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="LOW" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="lowValueLabel" text="25" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="lowValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="3" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="HOME" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="homeValueLabel" text="30.5" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="homeValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="0" GridPane.columnIndex="4" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="AWAY" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="awayValueLabel" text="26.2" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="awayValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="PTS" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="fgValueLabel" text="48.5" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="fgValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="AST" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="astValueLabel" text="7.0" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="astValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="REB" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="rebValueLabel" text="8.1" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="rebValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="3" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="TO" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="tovValueLabel" text="3.1" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="tovValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
                                                 <VBox GridPane.rowIndex="1" GridPane.columnIndex="4" styleClass="stat-mini-box">
                                                     <children>
                                                         <Label text="MIN" styleClass="mini-stat-label"/>
-                                                        <Label fx:id="minValueLabel" text="35.5" styleClass="mini-stat-number"/>
+                                                        <Label fx:id="minValueLabel" styleClass="mini-stat-number"/>
                                                     </children>
                                                 </VBox>
 
@@ -461,10 +461,8 @@
                                 <VBox spacing="4">
                                     <children>
                                         <Label fx:id="profileNameLabel"
-                                               text="Dan Gron"
                                                styleClass="profile-name" />
                                         <Label fx:id="profileUsernameLabel"
-                                               text="@ForeignStage"
                                                styleClass="profile-username" />
                                     </children>
                                 </VBox>

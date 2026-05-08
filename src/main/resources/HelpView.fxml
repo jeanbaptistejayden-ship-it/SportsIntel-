@@ -135,6 +135,20 @@
                                                        styleClass="stat-card" wrapText="true"/>
                                                 <Label text="Rebounds Per Game (RPG) – Average number of rebounds collected per game"
                                                        styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Steals Per Game (SPG) – Average number of steals collected per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Blocks Per Game (BPG) – Average number of blocks collected per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Turnovers Per Game (TPG) – Average number of turnovers collected per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Minutes Per Game (MPG) – Average number of minutes played per game"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="3pt Percentage (3pt%) – Total number of 3s made / total number of 3s attempted"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Field Goal Percentage (FG%) – Total number of shots made / total number of shots attempted"
+                                                       styleClass="stat-card" wrapText="true"/>
+                                                <Label text="Plus/Minus (+/-) – How a player is doing on and off the court"
+                                                       styleClass="stat-card" wrapText="true"/>
                                                 <Label text="Games Played – Total number of games played against the selected opponent"
                                                        styleClass="stat-card" wrapText="true"/>
                                                 <Label text="Highest Game – Best performance (highest stat value) in a single game"
@@ -168,9 +182,9 @@
                                         <VBox spacing="14">
                                             <children>
 
-                                                <Label text="Season Range – Limits data to selected years (e.g., 2018-2026)"
+                                                <Label text="Season Range – Ranges from 2003 to 2025"
                                                        styleClass="filter-card" wrapText="true"/>
-                                                <Label text="Season Type – Choose Regular Season, Playoffs, or Both"
+                                                <Label text="Season Type – Choose Regular Season or Playoffs"
                                                        styleClass="filter-card" wrapText="true"/>
                                                 <Label text="Location – Filter games by Home, Away, or Both locations"
                                                        styleClass="filter-card" wrapText="true"/>

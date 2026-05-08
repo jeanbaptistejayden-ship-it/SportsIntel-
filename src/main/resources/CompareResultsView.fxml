@@ -96,7 +96,7 @@
                                                            prefHeight="84"
                                                            styleClass="player-name-card,left-player-card">
                                                     <children>
-                                                        <Label fx:id="playerOneNameLabel" text="Lebron James" styleClass="player-name-title" />
+                                                        <Label fx:id="playerOneNameLabel" styleClass="player-name-title" />
                                                     </children>
                                                 </StackPane>
 
@@ -104,7 +104,7 @@
                                                            prefHeight="84"
                                                            styleClass="player-name-card,right-player-card">
                                                     <children>
-                                                        <Label fx:id="playerTwoNameLabel" text="Kevin Durant" styleClass="player-name-title" />
+                                                        <Label fx:id="playerTwoNameLabel" styleClass="player-name-title" />
                                                     </children>
                                                 </StackPane>
 
@@ -130,7 +130,7 @@
                                                                            styleClass="stat-box,stat-win">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="pointsLeftLabel" text="29.2" styleClass="stat-number"/>
+                                                                            <Label fx:id="pointsLeftLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="pointsLeftArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -140,7 +140,7 @@
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="pointsRightLabel" text="25.2" styleClass="stat-number"/>
+                                                                            <Label fx:id="pointsRightLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="pointsRightArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -148,7 +148,7 @@
                                                             </children>
                                                         </HBox>
 
-                                                        <Label fx:id="pointsDiffLabel" text="Difference: 4.0"
+                                                        <Label fx:id="pointsDiffLabel"
                                                                styleClass="stat-diff"
                                                                alignment="CENTER"
                                                                maxWidth="Infinity"/>
@@ -169,7 +169,7 @@
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="assistsLeftLabel" text="7.0" styleClass="stat-number"/>
+                                                                            <Label fx:id="assistsLeftLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="assistsLeftArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -179,7 +179,7 @@
                                                                            styleClass="stat-box,stat-win">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="assistsRightLabel" text="7.1" styleClass="stat-number"/>
+                                                                            <Label fx:id="assistsRightLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="assistsRightArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -204,7 +204,7 @@
                                                                            styleClass="stat-box,stat-win">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="reboundsLeftLabel" text="8.2" styleClass="stat-number"/>
+                                                                            <Label fx:id="reboundsLeftLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="reboundsLeftArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -214,7 +214,7 @@
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="reboundsRightLabel" text="7.6" styleClass="stat-number"/>
+                                                                            <Label fx:id="reboundsRightLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="reboundsRightArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -222,7 +222,7 @@
                                                             </children>
                                                         </HBox>
 
-                                                        <Label fx:id="reboundsDiffLabel" text="Difference: 0.6"
+                                                        <Label fx:id="reboundsDiffLabel"
                                                                styleClass="stat-diff"
                                                                alignment="CENTER"
                                                                maxWidth="Infinity"/>
@@ -239,7 +239,7 @@
                                                                            styleClass="stat-box,stat-win">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="fgPctLeftLabel" text="50.3%" styleClass="stat-number"/>
+                                                                            <Label fx:id="fgPctLeftLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="fgPctLeftArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -249,7 +249,7 @@
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="fgPctRightLabel" text="49.0%" styleClass="stat-number"/>
+                                                                            <Label fx:id="fgPctRightLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="fgPctRightArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -257,7 +257,7 @@
                                                             </children>
                                                         </HBox>
 
-                                                        <Label fx:id="fgPctDiffLabel" text="Difference: 1.4pp"
+                                                        <Label fx:id="fgPctDiffLabel"
                                                                styleClass="stat-diff"
                                                                alignment="CENTER"
                                                                maxWidth="Infinity"/>
@@ -274,7 +274,7 @@
                                                                            styleClass="stat-box,stat-win">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="minutesLeftLabel" text="35.5" styleClass="stat-number"/>
+                                                                            <Label fx:id="minutesLeftLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="minutesLeftArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
@@ -283,14 +283,14 @@
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
-                                                                            <Label fx:id="minutesRightLabel" text="34.4" styleClass="stat-number"/>
+                                                                            <Label fx:id="minutesRightLabel" styleClass="stat-number"/>
                                                                             <Label fx:id="minutesRightArrow" text="↗" styleClass="stat-arrow"/>
                                                                         </VBox>
                                                                     </children>
                                                                 </StackPane>
                                                             </children>
                                                         </HBox>
-                                                        <Label fx:id="minutesDiffLabel" text="Difference: 1.1"
+                                                        <Label fx:id="minutesDiffLabel"
                                                                styleClass="stat-diff"
                                                                alignment="CENTER"
                                                                maxWidth="Infinity"/>
@@ -306,14 +306,14 @@
                                                                 <StackPane fx:id="gamesLeftBox" prefWidth="440" prefHeight="80"
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
-                                                                        <Label fx:id="gamesLeftLabel" text="10.0" styleClass="stat-number"/>
+                                                                        <Label fx:id="gamesLeftLabel" styleClass="stat-number"/>
                                                                     </children>
                                                                 </StackPane>
 
                                                                 <StackPane fx:id="gamesRightBox" prefWidth="440" prefHeight="80"
                                                                            styleClass="stat-box,stat-lose">
                                                                     <children>
-                                                                        <Label fx:id="gamesRightLabel" text="10.0" styleClass="stat-number"/>
+                                                                        <Label fx:id="gamesRightLabel" styleClass="stat-number"/>
                                                                     </children>
                                                                 </StackPane>
                                                             </children>
@@ -339,20 +339,20 @@
                                                     <children>
                                                         <VBox spacing="10" prefWidth="440">
                                                             <children>
-                                                                <Label fx:id="analysisPlayerOneLabel" text="Lebron James"
+                                                                <Label fx:id="analysisPlayerOneLabel"
                                                                        styleClass="analysis-player-name"/>
 
-                                                                <Label fx:id="analysisPlayerOneTextLabel" text="Averages 29.2 PPG vs Bucks, which is 2.7 points above career average of 26.5 PPG."
+                                                                <Label fx:id="analysisPlayerOneTextLabel"
                                                                        wrapText="true"
                                                                        styleClass="analysis-box-left"/>
                                                             </children>
                                                         </VBox>
                                                         <VBox spacing="10" prefWidth="440">
                                                             <children>
-                                                                <Label fx:id="analysisPlayerTwoLabel" text="Kevin Durant"
+                                                                <Label fx:id="analysisPlayerTwoLabel"
                                                                        styleClass="analysis-player-name"/>
 
-                                                                <Label fx:id="analysisPlayerTwoTextLabel" text="Averages 25.2 PPG vs Bucks, which is 2.7 points above career average of 22.5 PPG."
+                                                                <Label fx:id="analysisPlayerTwoTextLabel"
                                                                        wrapText="true"
                                                                        styleClass="analysis-box-right"/>
                                                             </children>
@@ -400,11 +400,9 @@
                 <VBox spacing="2">
                     <children>
                         <Label fx:id="profileNameLabel"
-                               text="Dan Gron"
                                styleClass="profile-name"/>
 
                         <Label fx:id="profileUsernameLabel"
-                               text="@ForeignStage"
                                styleClass="profile-username"/>
                     </children>
                 </VBox>
