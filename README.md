@@ -102,6 +102,10 @@ Copy the example env file:
 ```bash
 cp API/sportsintel_backend/.env.example API/sportsintel_backend/.env
 ```
+If that doesn't work then try this:
+```bash
+cp API/.env.example API/.env
+```
 
 Generate a secure SECRET_KEY:
 ```bash
@@ -124,7 +128,10 @@ cd /path/to/SportsIntel-
 
 # Create and activate virtual environment
 python3 -m venv venv
-source venv/bin/activate
+
+source venv/bin/activate 
+#if that doesn't, then use this: 
+venv\Scripts\activate
 
 # Install all dependencies
 pip install -r requirements.txt
