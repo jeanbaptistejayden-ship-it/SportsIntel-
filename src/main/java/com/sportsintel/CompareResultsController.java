@@ -258,12 +258,23 @@ public class CompareResultsController {
             analysisPlayerTwoLabel.setText(compare.playerTwo());
         }
         if (analysisPlayerOneTextLabel != null) {
-            analysisPlayerOneTextLabel.setText(compare.playerOne() + " averages " + formatOneDecimal(compare.playerOnePoints())
-                    + " PPG vs " + compare.opponent() + " across " + compare.playerOneGames() + " games.");
+            analysisPlayerOneTextLabel.setText(compare.playerOne() + " averages "
+                    + formatOneDecimal(compare.playerOnePoints()) + " PPG, "
+                    + formatOneDecimal(compare.playerOneAssists()) + " APG, "
+                    + formatOneDecimal(compare.playerOneRebounds()) + " RPG, "
+                    + formatPercent(compare.playerOneFgPct()) + " FG%, and "
+                    + formatOneDecimal(compare.playerOneMinutes()) + " minutes vs "
+                    + compare.opponent() + " across " + compare.playerOneGames() + " games.");
         }
+
         if (analysisPlayerTwoTextLabel != null) {
-            analysisPlayerTwoTextLabel.setText(compare.playerTwo() + " averages " + formatOneDecimal(compare.playerTwoPoints())
-                    + " PPG vs " + compare.opponent() + " across " + compare.playerTwoGames() + " games.");
+            analysisPlayerTwoTextLabel.setText(compare.playerTwo() + " averages "
+                    + formatOneDecimal(compare.playerTwoPoints()) + " PPG, "
+                    + formatOneDecimal(compare.playerTwoAssists()) + " APG, "
+                    + formatOneDecimal(compare.playerTwoRebounds()) + " RPG, "
+                    + formatPercent(compare.playerTwoFgPct()) + " FG%, and "
+                    + formatOneDecimal(compare.playerTwoMinutes()) + " minutes vs "
+                    + compare.opponent() + " across " + compare.playerTwoGames() + " games.");
         }
     }
 
